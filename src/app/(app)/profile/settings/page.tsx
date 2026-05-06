@@ -26,6 +26,17 @@ export default async function ProfileSettingsPage() {
       </div>
 
       <SettingsForm email={email} />
+
+      <p className="border-t pt-4 text-xs text-muted-foreground">
+        See our{' '}
+        <Link
+          href="/privacy"
+          className="text-foreground underline-offset-4 hover:underline"
+        >
+          Privacy Policy
+        </Link>
+        .
+      </p>
     </div>
   );
 }

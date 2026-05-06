@@ -83,9 +83,17 @@ export async function deleteMyAccount(): Promise<void> {
     const client = await getAuthClient();
     const user = await getCurrentUser(client);
 
+    // Soft-delete + anonymize personal fields so past chats no longer
+    // expose this user's name, avatar, bio, or room number to the other party.
     await client.database
       .from('profiles')
-      .update({ deleted_at: new Date().toISOString() })
+      .update({
+        deleted_at: new Date().toISOString(),
+        display_name: 'Deleted user',
+        bio: null,
+        avatar_url: null,
+        room_number: null,
+      })
       .eq('id', user.id);
 
     await client.auth.signOut();

@@ -4,6 +4,9 @@ export const SignupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8).max(72),
   display_name: z.string().min(2).max(40),
+  accept_privacy: z.literal(true, {
+    message: 'You must accept the Privacy Policy.',
+  }),
 });
 
 export const LoginSchema = z.object({

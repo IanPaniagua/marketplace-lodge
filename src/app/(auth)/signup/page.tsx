@@ -200,6 +200,33 @@ export default function SignupPage() {
           )}
         </div>
 
+        <div className="space-y-2">
+          <label className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-input accent-primary"
+              {...signupForm.register('accept_privacy')}
+            />
+            <span className="text-muted-foreground">
+              I have read and accept the{' '}
+              <Link
+                href="/privacy"
+                target="_blank"
+                rel="noopener"
+                className="text-foreground underline underline-offset-4"
+              >
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </label>
+          {signupForm.formState.errors.accept_privacy && (
+            <p className="text-xs text-destructive">
+              {signupForm.formState.errors.accept_privacy.message}
+            </p>
+          )}
+        </div>
+
         <Button
           type="submit"
           size="lg"

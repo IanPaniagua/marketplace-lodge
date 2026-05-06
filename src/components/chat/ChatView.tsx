@@ -237,6 +237,12 @@ export default function ChatView({
         </div>
       </div>
 
+      {/* Privacy notice */}
+      <p className="border-b bg-muted/40 px-4 py-2 text-center text-[11px] leading-snug text-muted-foreground">
+        Messages are private between you and {otherUser.display_name}. Admins may read them only
+        when reviewing a report.
+      </p>
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {messages.length === 0 && (
