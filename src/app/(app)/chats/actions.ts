@@ -153,6 +153,80 @@ export async function blockUser(
   return { error: null };
 }
 
+export interface BlockedUser {
+  id: string;
+  display_name: string;
+  avatar_url: string | null;
+  blocked_at: string;
+}
+
+export async function getBlockedUsers(): Promise<{
+  data: BlockedUser[] | null;
+  error: string | null;
+}> {
+  const { client, userId } = await getClientAndUser();
+  if (!client || !userId) return { data: null, error: 'Not authenticated' };
+
+  const { data: blocksRaw, error: blocksError } = await client.database
+    .from('blocks')
+    .select('blocked_id,created_at')
+    .eq('blocker_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (blocksError) return { data: null, error: 'Failed to load blocks' };
+
+  const blocks = (blocksRaw ?? []) as Array<{
+    blocked_id: string;
+    created_at: string;
+  }>;
+
+  if (blocks.length === 0) return { data: [], error: null };
+
+  const blockedIds = blocks.map((b) => b.blocked_id);
+
+  const { data: profilesRaw, error: profilesError } = await client.database
+    .from('profiles')
+    .select('id,display_name,avatar_url')
+    .in('id', blockedIds);
+
+  if (profilesError) return { data: null, error: 'Failed to load profiles' };
+
+  const profiles = (profilesRaw ?? []) as Array<{
+    id: string;
+    display_name: string;
+    avatar_url: string | null;
+  }>;
+  const profileMap = new Map(profiles.map((p) => [p.id, p]));
+
+  const result: BlockedUser[] = blocks.map((b) => {
+    const p = profileMap.get(b.blocked_id);
+    return {
+      id: b.blocked_id,
+      display_name: p?.display_name ?? 'Unknown user',
+      avatar_url: p?.avatar_url ?? null,
+      blocked_at: b.created_at,
+    };
+  });
+
+  return { data: result, error: null };
+}
+
+export async function unblockUser(
+  targetUserId: string,
+): Promise<{ error: string | null }> {
+  const { client, userId } = await getClientAndUser();
+  if (!client || !userId) return { error: 'Not authenticated' };
+
+  const { error } = await client.database
+    .from('blocks')
+    .delete()
+    .eq('blocker_id', userId)
+    .eq('blocked_id', targetUserId);
+
+  if (error) return { error: 'Failed to unblock user' };
+  return { error: null };
+}
+
 export async function reportConversation(
   conversationId: string,
   reason: string,
