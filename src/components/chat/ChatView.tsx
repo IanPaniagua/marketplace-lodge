@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Flag, ShieldX } from 'lucide-react';
+import { ArrowLeft, Flag, ShieldX, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { insforge } from '@/lib/insforge';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { sendMessage, markMessagesRead, blockUser, reportConversation, getMessagesSince } from '@/app/(app)/chats/actions';
-import type { Message } from '@/types/db';
+import RatingDialog from '@/components/rating/RatingDialog';
+import type { Message, Rating } from '@/types/db';
 
 interface Props {
   conversationId: string;
@@ -27,6 +28,7 @@ interface Props {
   listingTitle: string;
   initialMessages: Message[];
   listingId: string;
+  existingRating?: Rating | null;
 }
 
 export default function ChatView({
@@ -35,6 +37,8 @@ export default function ChatView({
   otherUser,
   listingTitle,
   initialMessages,
+  listingId,
+  existingRating,
 }: Props) {
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>(initialMessages);
@@ -42,6 +46,7 @@ export default function ChatView({
   const [sending, setSending] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [blockOpen, setBlockOpen] = useState(false);
+  const [rateOpen, setRateOpen] = useState(false);
   const [reportReason, setReportReason] = useState('');
   const [reportSending, setReportSending] = useState(false);
   const [blockSending, setBlockSending] = useState(false);
@@ -219,6 +224,15 @@ export default function ChatView({
           <Button
             variant="ghost"
             size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-primary"
+            onClick={() => setRateOpen(true)}
+            title={existingRating ? 'Edit rating' : 'Rate user'}
+          >
+            <Star className={`h-4 w-4 ${existingRating ? 'fill-primary text-primary' : ''}`} />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
             onClick={() => setReportOpen(true)}
             title="Report conversation"
@@ -309,6 +323,16 @@ export default function ChatView({
           </Button>
         </div>
       </div>
+
+      {/* Rate dialog */}
+      <RatingDialog
+        open={rateOpen}
+        onOpenChange={setRateOpen}
+        rateeId={otherUser.id}
+        rateeName={otherUser.display_name}
+        listingId={listingId}
+        existingRating={existingRating}
+      />
 
       {/* Report dialog */}
       <Dialog open={reportOpen} onOpenChange={setReportOpen}>

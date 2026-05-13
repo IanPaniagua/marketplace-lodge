@@ -5,6 +5,7 @@ import { SESSION_COOKIE } from '@/lib/insforge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
 import { Star } from 'lucide-react';
+import RatingsList from '@/components/rating/RatingsList';
 import type { Profile } from '@/types/db';
 
 interface Props {
@@ -90,7 +91,7 @@ export default async function PublicProfilePage({ params }: Props) {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats grid */}
       <div className="grid grid-cols-3 divide-x rounded-lg border bg-card">
         <div className="flex flex-col items-center gap-0.5 py-4">
           <span className="text-lg font-semibold tabular-nums">
@@ -123,6 +124,13 @@ export default async function PublicProfilePage({ params }: Props) {
           <span className="text-center text-xs font-medium">{memberSince}</span>
         </div>
       </div>
+      {/* Ratings list */}
+      {ratings.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold tracking-tight">Ratings</h2>
+          <RatingsList rateeId={p.id} rateeName={p.display_name} />
+        </section>
+      )}
     </div>
   );
 }

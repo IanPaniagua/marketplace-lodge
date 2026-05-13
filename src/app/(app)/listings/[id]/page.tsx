@@ -9,7 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ListingGallery from '@/components/listing/ListingGallery';
 import OwnerActions from '@/components/listing/OwnerActions';
 import MessageSellerButton from '@/components/chat/MessageSellerButton';
-import type { Listing, ListingPhoto, Profile, ListingStatus } from '@/types/db';
+import RateSellerButton from '@/components/listing/RateSellerButton';
+import type { Listing, ListingPhoto, Profile, ListingStatus, Rating } from '@/types/db';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -80,6 +81,43 @@ export default async function ListingDetailPage({ params }: Props) {
   const isOwner = currentUserId === listing.owner_id;
   const status = listing.status as ListingStatus;
   const timeAgo = formatDistanceToNow(new Date(listing.created_at), { addSuffix: true });
+
+  // Check if the current user (buyer) has a conversation with messages → show rate CTA
+  let canRateSeller = false;
+  let existingRatingForSeller: Rating | null = null;
+
+  if (!isOwner && currentUserId && seller) {
+    // Eligible when: listing is sold OR buyer has exchanged at least 1 message
+    if (status === 'sold') {
+      canRateSeller = true;
+    } else {
+      const { data: conv } = await client.database
+        .from('conversations')
+        .select('id')
+        .eq('listing_id', id)
+        .eq('buyer_id', currentUserId)
+        .maybeSingle();
+      const convRow = conv as unknown as { id: string } | null;
+      if (convRow) {
+        const { count } = await client.database
+          .from('messages')
+          .select('id', { count: 'exact', head: true })
+          .eq('conversation_id', convRow.id);
+        canRateSeller = (count ?? 0) > 0;
+      }
+    }
+
+    if (canRateSeller) {
+      const { data: myRatingRaw } = await client.database
+        .from('ratings')
+        .select('id,rater_id,ratee_id,listing_id,stars,comment,created_at,edit_locked_at')
+        .eq('rater_id', currentUserId)
+        .eq('ratee_id', seller.id)
+        .eq('listing_id', id)
+        .maybeSingle();
+      existingRatingForSeller = myRatingRaw as unknown as Rating | null;
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -152,9 +190,19 @@ export default async function ListingDetailPage({ params }: Props) {
             </div>
           </Link>
 
-          {status === 'live' && (
-            <MessageSellerButton listingId={id} sellerId={seller.id} />
-          )}
+          <div className="flex items-center gap-2">
+            {status === 'live' && (
+              <MessageSellerButton listingId={id} sellerId={seller.id} />
+            )}
+            {canRateSeller && (
+              <RateSellerButton
+                rateeId={seller.id}
+                rateeName={seller.display_name}
+                listingId={id}
+                existingRating={existingRatingForSeller}
+              />
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
+import RatingsList from '@/components/rating/RatingsList';
 
 export const metadata = { title: 'My Profile — Lodge' };
 
@@ -26,6 +27,15 @@ export default async function ProfilePage() {
       </div>
 
       <ProfileEditForm profile={profile} />
+
+      <section className="space-y-3 border-t pt-6">
+        <h2 className="text-xl font-semibold tracking-tight">My ratings</h2>
+        <RatingsList
+          rateeId={profile.id}
+          rateeName={profile.display_name}
+          currentUserId={profile.id}
+        />
+      </section>
     </div>
   );
 }

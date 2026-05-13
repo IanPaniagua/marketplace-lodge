@@ -4,7 +4,7 @@ import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { markMessagesRead } from '@/app/(app)/chats/actions';
 import ChatView from '@/components/chat/ChatView';
-import type { Conversation, Message, Profile, Listing } from '@/types/db';
+import type { Conversation, Message, Profile, Listing, Rating } from '@/types/db';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -65,6 +65,16 @@ export default async function ChatPage({ params }: Props) {
 
   const initialMessages = ((msgsRaw ?? []) as unknown as Message[]).reverse();
 
+  // Fetch current user's existing rating for the other party about this listing
+  const { data: myRatingRaw } = await client.database
+    .from('ratings')
+    .select('id,rater_id,ratee_id,listing_id,stars,comment,created_at,edit_locked_at')
+    .eq('rater_id', me)
+    .eq('ratee_id', otherId)
+    .eq('listing_id', conv.listing_id)
+    .maybeSingle();
+  const existingRating = myRatingRaw as unknown as Rating | null;
+
   // Mark unread messages from the other party as read
   await markMessagesRead(id);
 
@@ -80,6 +90,7 @@ export default async function ChatPage({ params }: Props) {
       listingTitle={listing?.title ?? 'Listing'}
       initialMessages={initialMessages}
       listingId={conv.listing_id}
+      existingRating={existingRating}
     />
   );
 }
