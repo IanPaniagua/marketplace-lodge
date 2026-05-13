@@ -10,7 +10,7 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-export const metadata = { title: 'Edit listing — Lodge' };
+export const metadata = { title: 'Edit listing — Lodge Market' };
 
 export default async function EditListingPage({ params }: Props) {
   const { id } = await params;

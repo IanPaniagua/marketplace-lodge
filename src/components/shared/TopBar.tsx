@@ -21,8 +21,8 @@ interface TopBarProps {
 }
 
 const desktopNav = [
-  { href: '/', label: 'Browse', Icon: ShoppingBag },
-  { href: '/listings/new', label: 'New listing', Icon: PlusSquare },
+  { href: '/', label: 'Search', Icon: ShoppingBag },
+  { href: '/listings/new', label: 'Post item', Icon: PlusSquare },
   { href: '/chats', label: 'Chats', Icon: MessageCircle },
 ];
 
@@ -41,7 +41,7 @@ export default function TopBar({ profile }: TopBarProps) {
     <header className="sticky top-0 z-40 h-14 border-b bg-background">
       <div className="mx-auto flex h-full max-w-4xl items-center justify-between px-4">
         <Link href="/" className="text-lg font-semibold tracking-tight">
-          Lodge<span className="text-primary">.</span>
+          Lodge<span className="text-primary"> Market</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">

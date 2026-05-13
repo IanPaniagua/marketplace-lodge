@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Privacy — Lodge' };
+export const metadata = { title: 'Privacy — Lodge Market' };
 
 export default function PrivacyPage() {
   return (
@@ -11,9 +11,9 @@ export default function PrivacyPage() {
       </header>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Who runs Lodge</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Who runs Lodge Market</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Lodge is a private marketplace built for residents of a single student lodge. It is
+          Lodge Market is a private marketplace built for residents of a single student lodge. It is
           operated by the lodge admin (Ian) for the residents&apos; benefit and is not a commercial
           service. There are no payments processed on the platform.
         </p>

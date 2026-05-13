@@ -14,7 +14,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
-  return { title: `Profile ${id} — Lodge` };
+  return { title: `Profile ${id} — Lodge Market` };
 }
 
 export default async function PublicProfilePage({ params }: Props) {

@@ -6,7 +6,7 @@ import SettingsForm from '@/components/profile/SettingsForm';
 import BlockedUsersList from '@/components/profile/BlockedUsersList';
 import { getCurrentUserEmail } from '@/app/(app)/profile/actions';
 
-export const metadata = { title: 'Settings — Lodge' };
+export const metadata = { title: 'Settings — Lodge Market' };
 
 export default async function ProfileSettingsPage() {
   const email = await getCurrentUserEmail();

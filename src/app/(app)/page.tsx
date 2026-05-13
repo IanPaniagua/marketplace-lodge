@@ -117,8 +117,6 @@ export default async function FeedPage({ searchParams }: Props) {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Browse</h1>
-
       <Suspense fallback={null}>
         <FeedFilters />
       </Suspense>

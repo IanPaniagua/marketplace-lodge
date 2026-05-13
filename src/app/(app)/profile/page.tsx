@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import RatingsList from '@/components/rating/RatingsList';
 
-export const metadata = { title: 'My Profile — Lodge' };
+export const metadata = { title: 'My Profile — Lodge Market' };
 
 export default async function ProfilePage() {
   const profile = await getServerProfile();
