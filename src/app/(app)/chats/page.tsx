@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import ConversationRow from '@/components/chat/ConversationRow';
-import type { Conversation, Message, Profile, Listing } from '@/types/db';
+import type { Profile, Listing } from '@/types/db';
 
 interface ConversationRow_ {
   id: string;

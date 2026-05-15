@@ -4,7 +4,7 @@ import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { formatDistanceToNow } from 'date-fns';
 import ReportActions from '@/components/admin/ReportActions';
-import type { Report, Profile } from '@/types/db';
+import type { Profile } from '@/types/db';
 
 interface ReportRow {
   id: string;

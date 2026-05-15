@@ -15,7 +15,6 @@ import { Label } from '@/components/ui/label';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [forgotSent, setForgotSent] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotCode, setForgotCode] = useState('');
   const [forgotToken, setForgotToken] = useState('');
@@ -66,16 +65,6 @@ export default function LoginPage() {
     } finally {
       setBusy(false);
     }
-  }
-
-  // ── Forgot: step 1 — send code ───────────────────────────────────────────
-  async function sendForgot() {
-    setBusy(true);
-    const { error } = await insforge.auth.sendResetPasswordEmail({ email: forgotEmail });
-    setBusy(false);
-    if (error) { toast.error('Could not send reset email.'); return; }
-    toast.success('Code sent — check your email.');
-    setStep('code');
   }
 
   // ── Forgot: step 2 — verify code ────────────────────────────────────────
@@ -154,7 +143,6 @@ export default function LoginPage() {
               className="text-xs text-muted-foreground underline-offset-4 hover:underline"
               onClick={() => {
                 setForgotEmail(form.getValues('email') ?? '');
-                setForgotSent(false);
                 setStep('code');
                 const email = form.getValues('email');
                 if (email) {
