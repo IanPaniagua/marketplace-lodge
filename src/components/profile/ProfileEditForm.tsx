@@ -9,8 +9,8 @@ import { Pencil } from 'lucide-react';
 import { ProfileEditSchema, type ProfileEditInput } from '@/lib/schemas';
 import { updateProfile, updateAvatarUrl } from '@/app/(app)/profile/actions';
 import { insforge } from '@/lib/insforge';
-import { compressToWebp } from '@/lib/image';
 import type { Profile } from '@/types/db';
+import AvatarCropModal from '@/components/profile/AvatarCropModal';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,6 +35,7 @@ export default function ProfileEditForm({ profile }: Props) {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [isPending, startTransition] = useTransition();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
 
   const form = useForm<ProfileEditInput>({
     resolver: zodResolver(ProfileEditSchema),
@@ -45,18 +46,25 @@ export default function ProfileEditForm({ profile }: Props) {
     },
   });
 
-  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Reset input so the same file can be re-selected after cancel
+    e.target.value = '';
+    const reader = new FileReader();
+    reader.addEventListener('load', () => setCropSrc(reader.result as string));
+    reader.readAsDataURL(file);
+  }
 
+  async function handleCropped(croppedFile: File) {
+    setCropSrc(null);
     setUploadingAvatar(true);
     try {
-      const compressed = await compressToWebp(file);
       const path = `avatars/${profile.id}.webp`;
 
       const { error: uploadError } = await insforge.storage
         .from('listing-photos')
-        .upload(path, compressed);
+        .upload(path, croppedFile);
 
       if (uploadError) {
         toast.error('Failed to upload avatar.');
@@ -95,6 +103,15 @@ export default function ProfileEditForm({ profile }: Props) {
 
   return (
     <div className="space-y-8">
+      {cropSrc && (
+        <AvatarCropModal
+          imageSrc={cropSrc}
+          open={true}
+          onClose={() => setCropSrc(null)}
+          onCropped={handleCropped}
+        />
+      )}
+
       {/* Avatar */}
       <div className="flex flex-col items-center gap-3">
         <div className="relative">
