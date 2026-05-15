@@ -36,7 +36,7 @@ export async function createListingRecord(
       .insert({
         owner_id: user.id,
         title: fields.title,
-        description: fields.description,
+        description: fields.description?.trim() || null,
         category: fields.category,
         condition: fields.condition,
         is_gift: fields.is_gift,
@@ -46,7 +46,10 @@ export async function createListingRecord(
       .select('id')
       .single();
 
-    if (error || !data) return { data: null, error: 'Failed to create listing.' };
+    if (error || !data) {
+      console.error('[createListing] DB error:', error);
+      return { data: null, error: 'Failed to create listing.' };
+    }
     return { data: { listingId: (data as { id: string }).id }, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };
@@ -113,7 +116,7 @@ export async function updateListingRecord(
       .from('listings')
       .update({
         title: fields.title,
-        description: fields.description,
+        description: fields.description?.trim() || null,
         category: fields.category,
         condition: fields.condition,
         is_gift: fields.is_gift,
