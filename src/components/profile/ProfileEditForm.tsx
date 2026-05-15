@@ -60,14 +60,16 @@ export default function ProfileEditForm({ profile }: Props) {
     setCropSrc(null);
     setUploadingAvatar(true);
     try {
-      const path = `avatars/${profile.id}.webp`;
+      // Use a timestamped path so each upload is a fresh URL — avoids
+      // both "file already exists" errors and CDN cache serving old content.
+      const path = `avatars/${profile.id}-${Date.now()}.webp`;
 
       const { error: uploadError } = await insforge.storage
         .from('listing-photos')
         .upload(path, croppedFile);
 
       if (uploadError) {
-        toast.error('Failed to upload avatar.');
+        toast.error('Failed to upload avatar. Try again.');
         return;
       }
 
@@ -81,9 +83,10 @@ export default function ProfileEditForm({ profile }: Props) {
         return;
       }
 
-      setAvatarUrl(`${publicUrl}?t=${Date.now()}`);
+      setAvatarUrl(publicUrl);
       toast.success('Avatar updated.');
-    } catch {
+    } catch (err) {
+      console.error('[avatar upload]', err);
       toast.error('Something went wrong uploading the avatar.');
     } finally {
       setUploadingAvatar(false);

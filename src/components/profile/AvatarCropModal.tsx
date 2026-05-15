@@ -37,7 +37,8 @@ export default function AvatarCropModal({ imageSrc, open, onClose, onCropped }: 
     try {
       const file = await getCroppedFile(imageSrc, croppedAreaPixels);
       onCropped(file);
-    } finally {
+    } catch (err) {
+      console.error('[crop]', err);
       setBusy(false);
     }
   }
