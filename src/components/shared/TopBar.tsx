@@ -5,7 +5,8 @@ import { LogOutIcon, UserIcon, ShieldIcon, ShoppingBag, PlusSquare, MessageCircl
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { insforge, SESSION_COOKIE } from '@/lib/insforge';
+import { insforge } from '@/lib/insforge';
+import { clearSessionCookies } from '@/lib/session-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -32,7 +33,7 @@ export default function TopBar({ profile }: TopBarProps) {
 
   async function handleSignOut() {
     await insforge.auth.signOut();
-    document.cookie = `${SESSION_COOKIE}=; path=/; max-age=0`;
+    await clearSessionCookies();
     toast.success('Signed out.');
     router.replace('/login');
   }

@@ -5,7 +5,7 @@ import { createServerClient } from '@/lib/insforge-server';
 import { ProfileEditSchema } from '@/lib/schemas';
 import type { ProfileEditInput } from '@/lib/schemas';
 import { redirect } from 'next/navigation';
-import { SESSION_COOKIE } from '@/lib/insforge';
+import { SESSION_COOKIE, REFRESH_COOKIE } from '@/lib/insforge';
 
 async function getAuthClient() {
   const cookieStore = await cookies();
@@ -102,5 +102,6 @@ export async function deleteMyAccount(): Promise<void> {
   }
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE);
+  cookieStore.delete(REFRESH_COOKIE);
   redirect('/login');
 }

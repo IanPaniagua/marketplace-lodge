@@ -6,7 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { insforge, SESSION_COOKIE } from '@/lib/insforge';
+import { insforge } from '@/lib/insforge';
+import { setSessionCookies } from '@/lib/session-client';
 import { LoginSchema, type LoginInput } from '@/lib/schemas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -50,7 +51,14 @@ export default function LoginPage() {
         return;
       }
 
-      document.cookie = `${SESSION_COOKIE}=${data.accessToken}; path=/; max-age=2592000; SameSite=Lax`;
+      const ok = await setSessionCookies({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      });
+      if (!ok) {
+        toast.error('Could not persist your session. Please try again.');
+        return;
+      }
       window.location.href = '/';
     } catch (e) {
       console.error('[login] unexpected error', e);

@@ -3,7 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { ClockIcon } from 'lucide-react';
 import { toast } from 'sonner';
-import { insforge, SESSION_COOKIE } from '@/lib/insforge';
+import { insforge } from '@/lib/insforge';
+import { clearSessionCookies } from '@/lib/session-client';
 import { Button } from '@/components/ui/button';
 
 export default function PendingPage() {
@@ -11,7 +12,7 @@ export default function PendingPage() {
 
   async function handleSignOut() {
     await insforge.auth.signOut();
-    document.cookie = `${SESSION_COOKIE}=; path=/; max-age=0`;
+    await clearSessionCookies();
     toast.success('Signed out.');
     router.replace('/login');
   }

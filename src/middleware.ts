@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 const SESSION_COOKIE = 'insforge_token';
+const REFRESH_COOKIE = 'insforge_refresh';
 const INSFORGE_URL = process.env.NEXT_PUBLIC_INSFORGE_URL!;
 
 async function getUser(token: string) {
@@ -28,28 +29,40 @@ async function getProfile(token: string, userId: string) {
   return rows[0] ?? null;
 }
 
+function redirectToRefresh(request: NextRequest) {
+  const refreshUrl = new URL('/session-refresh', request.url);
+  refreshUrl.searchParams.set('next', request.nextUrl.pathname + request.nextUrl.search);
+  return NextResponse.redirect(refreshUrl);
+}
+
+function redirectToLogin(request: NextRequest) {
+  const res = NextResponse.redirect(new URL('/login', request.url));
+  res.cookies.delete(SESSION_COOKIE);
+  res.cookies.delete(REFRESH_COOKIE);
+  return res;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(SESSION_COOKIE)?.value;
+  const refresh = request.cookies.get(REFRESH_COOKIE)?.value;
 
   if (!token) {
+    if (refresh) return redirectToRefresh(request);
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
   const user = await getUser(token);
   if (!user) {
-    const refreshUrl = new URL('/session-refresh', request.url);
-    refreshUrl.searchParams.set('next', pathname);
-    return NextResponse.redirect(refreshUrl);
+    if (refresh) return redirectToRefresh(request);
+    return redirectToLogin(request);
   }
 
   const profile = await getProfile(token, user.id);
 
-  // No profile or soft-deleted → login
+  // No profile or soft-deleted → login (also clear refresh — the account is gone)
   if (!profile || profile.deleted_at) {
-    const res = NextResponse.redirect(new URL('/login', request.url));
-    res.cookies.delete(SESSION_COOKIE);
-    return res;
+    return redirectToLogin(request);
   }
 
   // Not approved → pending
@@ -70,6 +83,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!login|signup|pending|verify-email|privacy|session-refresh|_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js).*)',
+    '/((?!login|signup|pending|verify-email|privacy|session-refresh|api/auth|_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js).*)',
   ],
 };

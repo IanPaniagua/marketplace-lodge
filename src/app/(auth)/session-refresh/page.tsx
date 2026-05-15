@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
-import { insforge, SESSION_COOKIE } from '@/lib/insforge';
 import { Loader2 } from 'lucide-react';
 
 function SessionRefreshInner() {
@@ -11,19 +9,29 @@ function SessionRefreshInner() {
 
   useEffect(() => {
     const next = params.get('next') ?? '/';
+    let cancelled = false;
 
-    async function attemptRefresh() {
-      const { data, error } = await insforge.auth.refreshSession();
-      if (!error && data?.accessToken) {
-        document.cookie = `${SESSION_COOKIE}=${data.accessToken}; path=/; max-age=2592000; SameSite=Lax`;
-        window.location.href = next;
-      } else {
-        document.cookie = `${SESSION_COOKIE}=; path=/; max-age=0`;
-        window.location.href = '/login';
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+        });
+        if (cancelled) return;
+        if (res.ok) {
+          window.location.href = next;
+        } else {
+          window.location.href = '/login';
+        }
+      } catch {
+        if (!cancelled) window.location.href = '/login';
       }
-    }
+    })();
 
-    attemptRefresh();
+    return () => {
+      cancelled = true;
+    };
   }, [params]);
 
   return (

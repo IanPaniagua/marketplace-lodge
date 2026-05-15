@@ -6,7 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { insforge, SESSION_COOKIE } from '@/lib/insforge';
+import { insforge } from '@/lib/insforge';
+import { setSessionCookies } from '@/lib/session-client';
 import { SignupSchema, VerifyEmailSchema, type SignupInput, type VerifyEmailInput } from '@/lib/schemas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,7 +49,7 @@ export default function SignupPage() {
 
     // Email verification not required — insert profile and continue
     if (data?.accessToken && data.user) {
-      await insertProfileAndRedirect(data.user.id, data.accessToken, values.display_name);
+      await insertProfileAndRedirect(data.user.id, data.accessToken, data.refreshToken, values.display_name);
     }
   }
 
@@ -64,12 +65,16 @@ export default function SignupPage() {
     }
 
     const signupValues = signupForm.getValues();
-    await insertProfileAndRedirect(data.user.id, data.accessToken, signupValues.display_name);
+    await insertProfileAndRedirect(data.user.id, data.accessToken, data.refreshToken, signupValues.display_name);
   }
 
-  async function insertProfileAndRedirect(userId: string, accessToken: string, displayName: string) {
-    // Store access token so middleware can read it
-    document.cookie = `${SESSION_COOKIE}=${accessToken}; path=/; max-age=2592000; SameSite=Lax`;
+  async function insertProfileAndRedirect(userId: string, accessToken: string, refreshToken: string | undefined, displayName: string) {
+    // Persist session via same-origin HttpOnly cookies (set by Route Handler).
+    const ok = await setSessionCookies({ accessToken, refreshToken });
+    if (!ok) {
+      toast.error('Could not persist your session. Please try again.');
+      return;
+    }
 
     const { error: profileError } = await insforge.database
       .from('profiles')

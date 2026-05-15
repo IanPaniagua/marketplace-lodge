@@ -4,7 +4,8 @@ import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { insforge, SESSION_COOKIE } from '@/lib/insforge';
+import { insforge } from '@/lib/insforge';
+import { setSessionCookies } from '@/lib/session-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +27,14 @@ function VerifyEmailInner() {
         return;
       }
 
-      document.cookie = `${SESSION_COOKIE}=${data.accessToken}; path=/; max-age=2592000; SameSite=Lax`;
+      const sessionOk = await setSessionCookies({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      });
+      if (!sessionOk) {
+        toast.error('Could not persist your session. Please try again.');
+        return;
+      }
 
       const displayName =
         (data.user.profile && typeof data.user.profile.name === 'string' && data.user.profile.name) ||
