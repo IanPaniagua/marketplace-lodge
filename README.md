@@ -114,6 +114,66 @@ vercel --prod             # production deploy
 
 ---
 
+## Backups & data export
+
+All application data lives in two places:
+
+- **PostgreSQL tables** (via Insforge): `profiles`, `listings`, `listing_photos`, `conversations`, `messages`, `ratings`, `reports`, `blocks`
+- **Storage buckets** (via Insforge): `listing-photos`, `avatars`
+
+### Recommended cadence
+
+Monthly manual export is sufficient for ~40 residents. Do it before any major schema change or platform migration.
+
+### Exporting database tables
+
+**Option A — Insforge dashboard (easiest)**
+
+1. Open [your Insforge project dashboard](https://app.insforge.dev).
+2. Go to **Database → Table Editor**.
+3. Select a table → click **Export CSV**.
+4. Repeat for each table above.
+
+**Option B — SQL dump via Insforge MCP (more complete)**
+
+In a Claude session with the Insforge MCP connected, run a `run-raw-sql` call for each table you want to back up. Example for `profiles`:
+
+```
+mcp: run-raw-sql
+query: SELECT * FROM profiles
+```
+
+Copy the JSON result to a local file.
+
+### Exporting storage files
+
+1. Open **Storage** in the Insforge dashboard.
+2. Browse each bucket (`listing-photos`, `avatars`).
+3. Select all files → Download.
+
+### Where to store exports
+
+Save dumps to a local folder **outside** this repository, e.g.:
+
+```
+~/Documents/lodge-backups/YYYY-MM-DD/
+  profiles.csv
+  listings.csv
+  ... (one file per table)
+  listing-photos/   (downloaded bucket contents)
+  avatars/
+```
+
+Never commit exports — they contain PII (names, email addresses, room numbers).
+
+### Restore
+
+Restoring from a CSV export: **Database → Table Editor → Import CSV** in the Insforge dashboard, or use `run-raw-sql` with `INSERT` statements. Restore storage files by re-uploading to the relevant bucket via the dashboard.
+
+> **Privacy note:** Exports fall under the app's privacy policy. Only the admin (Ian) should handle them.
+
+---
+
 ## Seeding the database
 
 Creates Ian as admin + 2 sample listings. Safe to run multiple times (idempotent).
