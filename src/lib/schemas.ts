@@ -24,7 +24,6 @@ export const ListingFieldsSchema = z
     title: z.string().min(3, 'At least 3 characters').max(80, 'Max 80 characters'),
     description: z
       .string()
-      .min(10, 'At least 10 characters')
       .max(2000, 'Max 2000 characters'),
     category: z.enum([
       'furniture',
@@ -46,7 +45,7 @@ export const ListingFieldsSchema = z
 export const ListingSchema = z
   .object({
     title: z.string().min(3).max(80),
-    description: z.string().min(10).max(2000),
+    description: z.string().max(2000),
     category: z.enum(['furniture', 'kitchen', 'electronics', 'books', 'clothes', 'other']),
     condition: z.enum(['new', 'like_new', 'used', 'worn']),
     is_gift: z.boolean(),
