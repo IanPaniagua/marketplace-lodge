@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { LogOutIcon, UserIcon, ShieldIcon, ShoppingBag, PlusSquare, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
@@ -19,6 +20,7 @@ import type { Profile } from '@/types/db';
 
 interface TopBarProps {
   profile: Profile;
+  initialPendingCount?: number;
 }
 
 const desktopNav = [
@@ -27,9 +29,49 @@ const desktopNav = [
   { href: '/chats', label: 'Chats', Icon: MessageCircle },
 ];
 
-export default function TopBar({ profile }: TopBarProps) {
+const PENDING_REFRESH_MS = 60 * 1000;
+
+export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const [pendingCount, setPendingCount] = useState(initialPendingCount);
+
+  useEffect(() => {
+    if (!profile.is_admin) return;
+    let cancelled = false;
+
+    async function fetchCount() {
+      try {
+        const res = await fetch('/api/admin/pending-count', { cache: 'no-store', credentials: 'same-origin' });
+        if (!res.ok) return;
+        const json: unknown = await res.json();
+        if (
+          !cancelled
+          && json !== null
+          && typeof json === 'object'
+          && 'total' in json
+          && typeof (json as Record<string, unknown>).total === 'number'
+        ) {
+          setPendingCount((json as { total: number }).total);
+        }
+      } catch {
+        // Non-fatal.
+      }
+    }
+
+    fetchCount();
+    const id = setInterval(fetchCount, PENDING_REFRESH_MS);
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') fetchCount();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [profile.is_admin, pathname]);
 
   async function handleSignOut() {
     await insforge.auth.signOut();
@@ -37,6 +79,8 @@ export default function TopBar({ profile }: TopBarProps) {
     toast.success('Signed out.');
     router.replace('/login');
   }
+
+  const showBadge = profile.is_admin && pendingCount > 0;
 
   return (
     <header className="sticky top-0 z-40 h-14 border-b bg-background">
@@ -68,13 +112,22 @@ export default function TopBar({ profile }: TopBarProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button type="button" className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <button
+              type="button"
+              className="relative rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label={showBadge ? `Admin: ${pendingCount} pending` : 'Account menu'}
+            >
               <Avatar className="h-9 w-9">
                 {profile.avatar_url && <AvatarImage src={profile.avatar_url} alt={profile.display_name} />}
                 <AvatarFallback className="bg-muted text-muted-foreground text-sm">
                   {profile.display_name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
+              {showBadge && (
+                <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-none text-white ring-2 ring-background">
+                  {pendingCount > 99 ? '99+' : pendingCount}
+                </span>
+              )}
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
