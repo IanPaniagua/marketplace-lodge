@@ -38,9 +38,9 @@ export async function middleware(request: NextRequest) {
 
   const user = await getUser(token);
   if (!user) {
-    const res = NextResponse.redirect(new URL('/login', request.url));
-    res.cookies.delete(SESSION_COOKIE);
-    return res;
+    const refreshUrl = new URL('/session-refresh', request.url);
+    refreshUrl.searchParams.set('next', pathname);
+    return NextResponse.redirect(refreshUrl);
   }
 
   const profile = await getProfile(token, user.id);
@@ -70,6 +70,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!login|signup|pending|verify-email|privacy|_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js).*)',
+    '/((?!login|signup|pending|verify-email|privacy|session-refresh|_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js).*)',
   ],
 };

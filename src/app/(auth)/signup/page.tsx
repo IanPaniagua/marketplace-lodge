@@ -69,7 +69,7 @@ export default function SignupPage() {
 
   async function insertProfileAndRedirect(userId: string, accessToken: string, displayName: string) {
     // Store access token so middleware can read it
-    document.cookie = `${SESSION_COOKIE}=${accessToken}; path=/; max-age=3600; SameSite=Lax`;
+    document.cookie = `${SESSION_COOKIE}=${accessToken}; path=/; max-age=2592000; SameSite=Lax`;
 
     const { error: profileError } = await insforge.database
       .from('profiles')

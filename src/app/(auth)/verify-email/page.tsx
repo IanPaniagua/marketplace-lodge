@@ -26,7 +26,7 @@ function VerifyEmailInner() {
         return;
       }
 
-      document.cookie = `${SESSION_COOKIE}=${data.accessToken}; path=/; max-age=3600; SameSite=Lax`;
+      document.cookie = `${SESSION_COOKIE}=${data.accessToken}; path=/; max-age=2592000; SameSite=Lax`;
 
       const displayName =
         (data.user.profile && typeof data.user.profile.name === 'string' && data.user.profile.name) ||

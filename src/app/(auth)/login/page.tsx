@@ -50,7 +50,7 @@ export default function LoginPage() {
         return;
       }
 
-      document.cookie = `${SESSION_COOKIE}=${data.accessToken}; path=/; max-age=3600; SameSite=Lax`;
+      document.cookie = `${SESSION_COOKIE}=${data.accessToken}; path=/; max-age=2592000; SameSite=Lax`;
       window.location.href = '/';
     } catch (e) {
       console.error('[login] unexpected error', e);
