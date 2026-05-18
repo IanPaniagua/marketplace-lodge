@@ -1,7 +1,7 @@
 import { getServerProfile } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { UsersIcon, ShoppingBagIcon, FlagIcon } from 'lucide-react';
+import { UsersIcon, ShoppingBagIcon, FlagIcon, BarChart3Icon } from 'lucide-react';
 
 export default async function AdminPage() {
   const profile = await getServerProfile();
@@ -11,6 +11,7 @@ export default async function AdminPage() {
     { href: '/admin/users', icon: UsersIcon, label: 'Pending users', description: 'Approve new registrations' },
     { href: '/admin/listings', icon: ShoppingBagIcon, label: 'Pending listings', description: 'Approve or reject listings' },
     { href: '/admin/reports', icon: FlagIcon, label: 'Reports', description: 'Review flagged content' },
+    { href: '/admin/analytics', icon: BarChart3Icon, label: 'Analytics', description: 'KPIs and engagement metrics' },
   ];
 
   return (

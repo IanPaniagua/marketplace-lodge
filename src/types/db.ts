@@ -14,6 +14,7 @@ export interface Profile {
   is_approved: boolean;
   deleted_at: string | null;
   created_at: string;
+  last_active_at: string | null;
 }
 
 export interface Listing {

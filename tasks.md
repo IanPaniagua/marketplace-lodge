@@ -217,6 +217,44 @@ Before starting Phase 1, ask the user to claim the Insforge project at the print
 
 ---
 
+## Phase 7 — Analytics dashboard
+
+**Goal:** An admin can open `/admin/analytics` and see the key KPIs that answer "is this app being used and is the marketplace healthy?" — without any external tracking tool (no GA, no PostHog).
+
+### Tasks
+1. Add `last_active_at timestamptz` + index to `profiles` via Insforge MCP. Update the `Profile` TS type.
+2. Update `src/middleware.ts` to PATCH `profiles.last_active_at` on every authenticated request, throttled to 1 write/hour per user.
+3. Build `src/lib/metrics.ts` with `getMetrics(window)` exposing the KPI payload (adoption, engagement, marketplace, conversation, health). All queries use the service-role admin client.
+4. Build `src/app/api/admin/metrics/route.ts` (GET, `?window=7d|30d|90d|all`) that verifies `is_admin` and returns the payload.
+5. Build `src/app/(app)/admin/analytics/page.tsx` (Server Component): grid of stat cards grouped into 5 sections, window selector via search params.
+6. Add an "Analytics" entry to `src/app/(app)/admin/page.tsx`.
+
+### KPIs surfaced
+- **Adoption**: lodge adoption % (approved / 40), new signups in window, pending approvals, approved users.
+- **Engagement**: WAU (7d), MAU (30d), stickiness (WAU/MAU).
+- **Marketplace**: live listings, new listings in window, sold in window, median time-to-sold, sell-through rate.
+- **Conversation**: conversations started in window, % of listings with ≥1 conversation, avg messages per conversation.
+- **Health**: open reports, median time-to-resolve.
+
+### Acceptance Criteria
+- [ ] `profiles.last_active_at` exists with an index; the column is in the `Profile` TS type.
+- [ ] Browsing any authenticated page updates `last_active_at` (verify in DB after first hit; verify a second hit within 1h does **not** rewrite it).
+- [ ] `/admin/analytics` is blocked for non-admin users (middleware redirect to `/`).
+- [ ] `/admin/analytics?window=7d` and `?window=30d` produce different numbers when there is data in only one window (seed if needed).
+- [ ] All 5 sections render with at least one populated stat card for a freshly seeded DB.
+- [ ] At 360px viewport, the page does not horizontally scroll; cards are at least 2 per row.
+- [ ] `GET /api/admin/metrics?window=30d` returns the same payload the page renders (single source of truth via `getMetrics`).
+- [ ] No external analytics SDK is added to `package.json`.
+- [ ] No write to `last_active_at` happens for unapproved users on the `/pending` route loop.
+
+### Out of scope (do not build in this phase)
+- Charts or time-series visualisations (numbers only in V1).
+- Per-page or per-funnel tracking, session replay, error monitoring.
+- Delta-vs-previous-period indicators.
+- Caching layer for the metrics endpoint (40-user volume is trivial).
+
+---
+
 ## Final hand-off
 
 When all phases pass, deliver:

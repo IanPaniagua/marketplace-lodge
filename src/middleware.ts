@@ -15,7 +15,7 @@ async function getUser(token: string) {
 }
 
 async function getProfile(token: string, userId: string) {
-  const url = `${INSFORGE_URL}/api/database/records/profiles?select=is_approved,is_admin,deleted_at&id=eq.${userId}&limit=1`;
+  const url = `${INSFORGE_URL}/api/database/records/profiles?select=is_approved,is_admin,deleted_at,last_active_at&id=eq.${userId}&limit=1`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
     cache: 'no-store',
@@ -25,8 +25,29 @@ async function getProfile(token: string, userId: string) {
     is_approved: boolean;
     is_admin: boolean;
     deleted_at: string | null;
+    last_active_at: string | null;
   }>;
   return rows[0] ?? null;
+}
+
+const LAST_ACTIVE_THROTTLE_MS = 60 * 60 * 1000;
+
+async function touchLastActive(token: string, userId: string): Promise<void> {
+  const url = `${INSFORGE_URL}/api/database/records/profiles?id=eq.${userId}`;
+  try {
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({ last_active_at: new Date().toISOString() }),
+      cache: 'no-store',
+    });
+  } catch {
+    // Best-effort — never block navigation if the write fails.
+  }
 }
 
 function redirectToRefresh(request: NextRequest) {
@@ -76,6 +97,11 @@ export async function middleware(request: NextRequest) {
   // Admin gate for /admin routes
   if (pathname.startsWith('/admin') && !profile.is_admin) {
     return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  const lastActiveMs = profile.last_active_at ? new Date(profile.last_active_at).getTime() : 0;
+  if (Date.now() - lastActiveMs > LAST_ACTIVE_THROTTLE_MS) {
+    await touchLastActive(token, user.id);
   }
 
   return NextResponse.next();
