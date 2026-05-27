@@ -20,21 +20,20 @@ export async function POST(
   const { id } = await params;
   const admin = createAdminClient();
 
-  const { data, error } = await admin.database
-    .from('listings')
-    .update({ status: 'rejected', rejection_reason: reason })
-    .eq('id', id)
-    .select('id,status,rejection_reason')
-    .single();
+  const { data, error } = await admin.database.rpc('reject_listing', {
+    p_id: id,
+    p_reason: reason,
+  });
 
   if (error) {
-    console.error('[reject] update failed', { id, error });
+    console.error('[reject] rpc failed', { id, error });
     return NextResponse.json({ error: 'Failed to reject listing', detail: error }, { status: 500 });
   }
 
-  const row = data as { id: string; status: string; rejection_reason: string | null } | null;
+  const rows = data as Array<{ id: string; status: string; rejection_reason: string | null }> | null;
+  const row = rows?.[0] ?? null;
   if (!row || row.status !== 'rejected') {
-    console.error('[reject] update did not persist rejected status', { id, row });
+    console.error('[reject] rpc did not persist rejected status', { id, row });
     return NextResponse.json(
       { error: 'Reject did not persist', persisted: row },
       { status: 500 },
