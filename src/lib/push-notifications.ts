@@ -94,3 +94,41 @@ export async function hasActivePushSubscription(): Promise<boolean> {
   const sub = await reg.pushManager.getSubscription().catch(() => undefined);
   return !!sub;
 }
+
+/**
+ * Silently ensures the browser subscription exists AND is persisted on the server.
+ * Assumes permission is already `granted`. Idempotent: safe to call on every app load.
+ * Returns true if a valid subscription is now registered on the server.
+ */
+export async function ensurePushSubscription(): Promise<boolean> {
+  if (getPushPermissionStatus() !== 'granted') return false;
+
+  const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  if (!vapidPublicKey) return false;
+
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let subscription = await reg.pushManager.getSubscription();
+    if (!subscription) {
+      subscription = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: base64urlToUint8Array(vapidPublicKey).buffer as ArrayBuffer,
+      });
+    }
+
+    const json = subscription.toJSON();
+    const endpoint = json.endpoint;
+    const p256dh_key = json.keys?.p256dh;
+    const auth_key = json.keys?.auth;
+    if (!endpoint || !p256dh_key || !auth_key) return false;
+
+    const res = await fetch('/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint, p256dh_key, auth_key, user_agent: navigator.userAgent }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}

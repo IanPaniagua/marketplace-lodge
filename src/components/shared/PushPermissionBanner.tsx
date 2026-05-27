@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import { Bell } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { getPushPermissionStatus, requestPermissionAndSubscribe } from '@/lib/push-notifications';
-
-const DISMISSED_KEY = 'push-banner-dismissed';
+import {
+  getPushPermissionStatus,
+  ensurePushSubscription,
+  requestPermissionAndSubscribe,
+} from '@/lib/push-notifications';
 
 function isIos(): boolean {
   return /iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -22,18 +24,18 @@ export default function PushPermissionBanner() {
 
   useEffect(() => {
     const status = getPushPermissionStatus();
-    if (status !== 'default') return;
-    if (sessionStorage.getItem(DISMISSED_KEY) === '1') return;
+    if (status === 'unsupported' || status === 'denied') return;
+
+    if (status === 'granted') {
+      void ensurePushSubscription();
+      return;
+    }
+
     if (isIos() && !isStandalone()) return;
     setVisible(true);
   }, []);
 
   if (!visible) return null;
-
-  function dismiss() {
-    sessionStorage.setItem(DISMISSED_KEY, '1');
-    setVisible(false);
-  }
 
   async function handleEnable() {
     setSubscribing(true);
@@ -43,7 +45,7 @@ export default function PushPermissionBanner() {
       setVisible(false);
     } else {
       toast.error('Could not enable notifications. Check your browser settings.');
-      dismiss();
+      setVisible(false);
     }
   }
 
@@ -59,7 +61,7 @@ export default function PushPermissionBanner() {
             variant="ghost"
             size="sm"
             className="h-8 text-muted-foreground"
-            onClick={dismiss}
+            onClick={() => setVisible(false)}
             disabled={subscribing}
           >
             Not now
