@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lodge-v1';
+const CACHE_NAME = 'lodge-v2';
 
 const STATIC_ASSETS = [
   '/',

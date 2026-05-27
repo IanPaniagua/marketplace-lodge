@@ -12,7 +12,7 @@ import {
 } from '@/lib/push-notifications';
 
 export default function NotificationsToggle() {
-  const [status, setStatus] = useState<'loading' | 'unsupported' | 'denied' | 'subscribed' | 'unsubscribed'>('loading');
+  const [status, setStatus] = useState<'loading' | 'unsupported' | 'denied' | 'subscribed' | 'unsubscribed'>('unsubscribed');
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -20,9 +20,9 @@ export default function NotificationsToggle() {
     if (permission === 'unsupported') { setStatus('unsupported'); return; }
     if (permission === 'denied') { setStatus('denied'); return; }
 
-    hasActivePushSubscription().then((active) => {
-      setStatus(active ? 'subscribed' : 'unsubscribed');
-    });
+    hasActivePushSubscription()
+      .then((active) => setStatus(active ? 'subscribed' : 'unsubscribed'))
+      .catch(() => setStatus('unsubscribed'));
   }, []);
 
   if (status === 'loading') return null;
