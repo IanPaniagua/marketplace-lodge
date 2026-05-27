@@ -22,7 +22,7 @@ export async function POST(
 
   const { error } = await admin.database
     .from('listings')
-    .update({ status: 'pending', rejection_reason: reason })
+    .update({ status: 'rejected', rejection_reason: reason })
     .eq('id', id);
 
   if (error) {

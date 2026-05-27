@@ -85,6 +85,13 @@ export default function SignupPage() {
       return;
     }
 
+    // Best-effort admin push — don't block navigation on failure
+    fetch('/api/notify/new-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId }),
+    }).catch(() => {});
+
     window.location.href = '/pending';
   }
 

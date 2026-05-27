@@ -186,6 +186,32 @@ Requires `INSFORGE_SERVICE_KEY` and `NEXT_PUBLIC_INSFORGE_URL` in `.env.local`.
 
 ---
 
+## Push notifications setup
+
+Push notifications require three additional environment variables. Generate VAPID keys once, then paste them into Vercel and `.env.local`.
+
+```bash
+npx web-push generate-vapid-keys
+```
+
+| Variable | Value | Where |
+|---|---|---|
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Public key output above | Vercel + `.env.local` |
+| `VAPID_PRIVATE_KEY` | Private key output above | Vercel only (mark Sensitive) |
+| `VAPID_SUBJECT` | `mailto:your@email.com` | Vercel + `.env.local` |
+
+> **Security:** `VAPID_PRIVATE_KEY` must never be added as a `NEXT_PUBLIC_*` variable. Keep it server-side only.
+
+### iOS limitation
+
+Web Push on iOS requires the PWA to be **installed** (Add to Home Screen) and iOS 16.4+. The permission banner automatically detects this and shows instructions instead when running in Safari without install.
+
+### Testing
+
+Because the service worker only registers in production (`NODE_ENV === 'production'`), test push on a Vercel preview deployment, not on `pnpm dev`.
+
+---
+
 ## Troubleshooting
 
 | Problem | Fix |

@@ -22,6 +22,7 @@ const STATUS_LABELS: Record<ListingStatus, string> = {
   live: 'Live',
   sold: 'Sold',
   archived: 'Archived',
+  rejected: 'Rejected',
 };
 
 const STATUS_CLASSES: Record<ListingStatus, string> = {
@@ -30,6 +31,7 @@ const STATUS_CLASSES: Record<ListingStatus, string> = {
   live: 'bg-green-50 text-green-900 border border-green-200',
   sold: 'bg-muted text-muted-foreground',
   archived: 'bg-muted text-muted-foreground',
+  rejected: 'bg-red-50 text-red-900 border border-red-200',
 };
 
 export default async function ListingDetailPage({ params }: Props) {

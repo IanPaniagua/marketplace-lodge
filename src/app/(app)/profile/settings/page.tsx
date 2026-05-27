@@ -4,6 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SettingsForm from '@/components/profile/SettingsForm';
 import BlockedUsersList from '@/components/profile/BlockedUsersList';
+import NotificationsToggle from '@/components/profile/NotificationsToggle';
 import { getCurrentUserEmail } from '@/app/(app)/profile/actions';
 
 export const metadata = { title: 'Settings — Lodge Market' };
@@ -27,6 +28,13 @@ export default async function ProfileSettingsPage() {
       </div>
 
       <SettingsForm email={email} />
+
+      <section className="space-y-4 border-t pt-6">
+        <div className="space-y-1">
+          <h2 className="text-xl font-semibold tracking-tight">Notifications</h2>
+        </div>
+        <NotificationsToggle />
+      </section>
 
       <section className="space-y-4 border-t pt-6">
         <div className="space-y-1">

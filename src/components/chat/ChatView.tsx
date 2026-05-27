@@ -18,6 +18,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { sendMessage, markMessagesRead, blockUser, reportConversation, getMessagesSince } from '@/app/(app)/chats/actions';
+import { syncAppBadge } from '@/lib/badge';
 import RatingDialog from '@/components/rating/RatingDialog';
 import type { Message, Rating } from '@/types/db';
 
@@ -111,6 +112,24 @@ export default function ChatView({
     return () => clearInterval(interval);
   }, [conversationId]);
 
+  // Sync the OS app badge on mount and whenever the tab becomes visible
+  useEffect(() => {
+    async function syncBadge() {
+      const res = await fetch('/api/unread-count').catch(() => null);
+      if (!res?.ok) return;
+      const { count } = await res.json() as { count: number };
+      await syncAppBadge(count);
+    }
+
+    syncBadge();
+
+    function onVisibilityChange() {
+      if (document.visibilityState === 'visible') syncBadge();
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, []);
+
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -148,6 +167,13 @@ export default function ChatView({
       prev.map((m) => (m.id === optimisticMsg.id ? data.message : m)),
     );
     latestTimestampRef.current = data.message.created_at;
+
+    // Best-effort push notification to the recipient
+    fetch('/api/notify/new-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message_id: data.message.id }),
+    }).catch(() => {});
 
     // Publish to both channels
     const payload: Record<string, unknown> = {

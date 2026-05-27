@@ -1,4 +1,4 @@
-export type ListingStatus = 'draft' | 'pending' | 'live' | 'sold' | 'archived';
+export type ListingStatus = 'draft' | 'pending' | 'live' | 'sold' | 'archived' | 'rejected';
 export type ListingCategory = 'furniture' | 'kitchen' | 'electronics' | 'books' | 'clothes' | 'other';
 export type ListingCondition = 'new' | 'like_new' | 'used' | 'worn';
 export type ReportTargetType = 'user' | 'listing' | 'conversation';
@@ -28,6 +28,18 @@ export interface Listing {
   condition: ListingCondition;
   status: ListingStatus;
   rejection_reason: string | null;
+  first_approved_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PushSubscriptionRow {
+  id: string;
+  user_id: string;
+  endpoint: string;
+  p256dh_key: string;
+  auth_key: string;
+  user_agent: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -67,6 +79,17 @@ export interface Rating {
   comment: string | null;
   created_at: string;
   edit_locked_at: string;
+}
+
+export type NotificationType = 'message' | 'listing' | 'admin_user' | 'admin_listing';
+
+export interface Notification {
+  id: string;
+  recipient_id: string;
+  type: NotificationType;
+  ref_id: string | null;
+  read_at: string | null;
+  created_at: string;
 }
 
 export interface Block {

@@ -71,3 +71,58 @@ function fetchAndCache(request) {
     return response;
   });
 }
+
+// ── Push notifications ────────────────────────────────────────────────────────
+
+self.addEventListener('push', (event) => {
+  const data = event.data?.json() ?? {};
+  const { title, body, url, type, badgeCount } = data;
+
+  event.waitUntil((async () => {
+    // Suppress the system notification banner when the user already has the
+    // target URL open and focused — avoids double-notification while in-app.
+    const clientList = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const alreadyFocused = clientList.some(
+      (c) => c.focused && url && new URL(c.url).pathname === new URL(url, self.location.origin).pathname,
+    );
+
+    const tasks = [];
+
+    if (!alreadyFocused && title) {
+      tasks.push(
+        self.registration.showNotification(title, {
+          body: body ?? '',
+          icon: '/icons/icon-192.png',
+          badge: '/icons/badge-72.png',
+          data: { url: url ?? '/' },
+          // Collapse multiple message pushes for the same chat into one notification
+          tag: type === 'message' && url ? `msg-${url}` : undefined,
+        }),
+      );
+    }
+
+    // Only message pushes set the app icon badge.
+    // self.navigator (ServiceWorkerGlobalScope#navigator) — NOT self.registration.navigator
+    if (type === 'message' && typeof badgeCount === 'number' && self.navigator?.setAppBadge) {
+      tasks.push(self.navigator.setAppBadge(badgeCount));
+    }
+
+    await Promise.all(tasks);
+  })());
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = event.notification.data?.url ?? '/';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
+      const existing = wins.find((w) => {
+        try { return new URL(w.url).pathname === new URL(targetUrl, self.location.origin).pathname; }
+        catch { return false; }
+      });
+      if (existing) return existing.focus();
+      return self.clients.openWindow(targetUrl);
+    }),
+  );
+});

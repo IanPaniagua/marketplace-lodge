@@ -36,6 +36,7 @@ export interface MetricsPayload {
   health: {
     openReports: number;
     medianTimeToResolveHours: number | null;
+    medianListingProcessingHours: number | null;
   };
 }
 
@@ -155,6 +156,11 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     .select('created_at,resolved_at')
     .eq('status', 'resolved');
 
+  const listingProcessingQ = admin.database
+    .from('listings')
+    .select('created_at,first_approved_at')
+    .not('first_approved_at', 'is', null);
+
   const [
     approvedRes,
     pendingRes,
@@ -172,6 +178,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     totalConversationsRes,
     openReportsRes,
     resolvedReportsRes,
+    listingProcessingRes,
   ] = await Promise.all([
     approvedQ,
     pendingQ,
@@ -189,6 +196,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     totalConversationsQ,
     openReportsQ,
     resolvedReportsQ,
+    listingProcessingQ,
   ]);
 
   const approvedUsers = (approvedRes.data ?? []).length;
@@ -231,6 +239,15 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     .map((r) => (new Date(r.resolved_at).getTime() - new Date(r.created_at).getTime()) / (60 * 60 * 1000));
   const medianTimeToResolveHours = median(ttrHours);
 
+  const processingRows = (listingProcessingRes.data ?? []) as Array<{
+    created_at: string;
+    first_approved_at: string;
+  }>;
+  const processingHours = processingRows.map(
+    (r) => (new Date(r.first_approved_at).getTime() - new Date(r.created_at).getTime()) / (60 * 60 * 1000),
+  );
+  const medianListingProcessingHours = median(processingHours);
+
   return {
     generatedAt: new Date().toISOString(),
     window,
@@ -262,6 +279,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     health: {
       openReports,
       medianTimeToResolveHours,
+      medianListingProcessingHours,
     },
   };
 }

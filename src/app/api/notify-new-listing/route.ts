@@ -28,15 +28,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Listing not found' }, { status: 404 });
   }
 
-  // Call the edge function with the admin client
+  // Call the edge functions with the admin client — both are best-effort
   const admin = createAdminClient();
-  const { error } = await admin.functions.invoke('notify-admin-new-listing', {
-    body: { listing_id },
-  });
+  const [emailResult] = await Promise.allSettled([
+    admin.functions.invoke('notify-admin-new-listing', { body: { listing_id } }),
+    admin.functions.invoke('push-admin-new-listing', { body: { listing_id } }),
+  ]);
 
-  if (error) {
-    // Non-fatal — listing was created, notification is best-effort
-    console.error('notify-admin-new-listing error:', error);
+  if (emailResult.status === 'rejected' || (emailResult.status === 'fulfilled' && emailResult.value.error)) {
+    console.error('notify-admin-new-listing error:', emailResult.status === 'rejected' ? emailResult.reason : emailResult.value.error);
   }
 
   return NextResponse.json({ ok: true });

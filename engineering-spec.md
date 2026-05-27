@@ -142,6 +142,7 @@ create table listings (
   condition listing_condition not null,
   status listing_status not null default 'pending',
   rejection_reason text,
+  first_approved_at timestamptz,     -- set once on first approval; never overwritten (re-approval guard)
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint price_or_gift check (
@@ -239,6 +240,28 @@ $$ language plpgsql;
 create trigger messages_bump_conv
 after insert on messages
 for each row execute function bump_conversation_last_message();
+
+-- 3.10 push_subscriptions --------------------------------------------------
+create table push_subscriptions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id) on delete cascade,
+  endpoint text not null,
+  p256dh_key text not null,
+  auth_key text not null,
+  user_agent text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, endpoint)
+);
+create index push_subscriptions_user_idx on push_subscriptions(user_id);
+
+alter table push_subscriptions enable row level security;
+create policy push_subscriptions_select_own on push_subscriptions
+  for select using (user_id = auth.uid() or is_admin());
+create policy push_subscriptions_insert_own on push_subscriptions
+  for insert with check (user_id = auth.uid() and is_approved());
+create policy push_subscriptions_delete_own on push_subscriptions
+  for delete using (user_id = auth.uid() or is_admin());
 ```
 
 ---
@@ -496,9 +519,11 @@ For the unread badge in `BottomNav`, subscribe to all `messages` where `conversa
 
 ---
 
-## 10. Edge function: `notify-admin-new-listing`
+## 10. Edge functions
 
-Triggered by the app after a successful insert into `listings` (call from server-side route handler post-insert, **not** from a DB trigger — keeps the function code small and avoids replication issues).
+### `notify-admin-new-listing`
+
+Triggered by the app after a successful insert into `listings` (call from server-side route handler post-insert, **not** from a DB trigger).
 
 ```
 input:  { listing_id: string }
@@ -508,6 +533,58 @@ work:   - fetch listing + owner profile
         - send via Insforge SMTP: subject "New listing pending review: <title>"
                                   link to /admin/listings?id=<id>
 ```
+
+### `push-new-listing`
+
+Fan-out Web Push to all approved users (except the listing owner) when a listing is approved for the **first** time.
+
+```
+input:  { listing_id: string }
+output: { sent: number, expired: number }
+work:   - fetch listing; if first_approved_at was already set, no-op
+        - fan-out to all push_subscriptions where user_id != owner_id and user is approved
+        - delete expired subscriptions (404/410 responses)
+```
+
+### `push-new-message`
+
+Push notification to the conversation recipient when a message is inserted.
+
+```
+input:  { message_id: string }
+output: { sent: number, badgeCount: number, expired: number }
+work:   - fetch message; skip if already read
+        - determine recipient (the other party in the conversation)
+        - compute recipient's unread message count (for badge)
+        - send push with badgeCount in payload
+        - delete expired subscriptions
+```
+
+### `push-admin-new-user`
+
+Push notification to all admins when a new user signs up (pending approval).
+
+```
+input:  { user_id: string }
+output: { sent: number, expired: number }
+work:   - fetch new user's display_name
+        - fan-out to all admin push_subscriptions
+        - delete expired subscriptions
+```
+
+### `push-admin-new-listing`
+
+Push notification to all admins when a listing is submitted for review (in addition to the existing email via `notify-admin-new-listing`).
+
+```
+input:  { listing_id: string }
+output: { sent: number, expired: number }
+work:   - fetch listing title
+        - fan-out to all admin push_subscriptions
+        - delete expired subscriptions
+```
+
+All push functions implement RFC 8030 + RFC 8291 Web Push with VAPID using `crypto.subtle` (no external npm packages). Each function is a self-contained single TypeScript file using `npm:@insforge/sdk` (Deno runtime).
 
 ---
 
@@ -566,6 +643,7 @@ If the lodge grows past 200 users, swap for Insforge edge function + DB-backed c
 - **Errors:** all server actions return `{ data, error }` tuples; client toasts on error.
 - **Loading:** every async UI uses skeletons from `components/ui/skeleton`.
 - **Env vars:** `NEXT_PUBLIC_INSFORGE_URL`, `NEXT_PUBLIC_INSFORGE_ANON_KEY`. Service-role key is server-only as `INSFORGE_SERVICE_KEY`.
+- **VAPID env vars (Phase 8):** `NEXT_PUBLIC_VAPID_PUBLIC_KEY` (client + server), `VAPID_PRIVATE_KEY` (server + edge functions only — never `NEXT_PUBLIC_*`), `VAPID_SUBJECT` (a `mailto:` string). Generate keys with `npx web-push generate-vapid-keys`.
 
 ---
 

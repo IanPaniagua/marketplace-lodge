@@ -187,12 +187,17 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
       <section className="space-y-3">
         <SectionHeader title="Operational health" />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Stat label="Open reports" value={formatInt(m.health.openReports)} sub="needs review" />
           <Stat
             label="Time to resolve"
             value={formatHours(m.health.medianTimeToResolveHours)}
             sub="median, resolved reports"
+          />
+          <Stat
+            label="Listing processing"
+            value={formatHours(m.health.medianListingProcessingHours)}
+            sub="median, submission → approval"
           />
         </div>
       </section>
