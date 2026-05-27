@@ -64,12 +64,15 @@ export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps
     const onVisibility = () => {
       if (document.visibilityState === 'visible') fetchCount();
     };
+    const onPendingChanged = () => fetchCount();
     document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('admin:pending-changed', onPendingChanged);
 
     return () => {
       cancelled = true;
       clearInterval(id);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('admin:pending-changed', onPendingChanged);
     };
   }, [profile.is_admin, pathname]);
 

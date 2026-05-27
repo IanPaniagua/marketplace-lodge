@@ -34,6 +34,7 @@ export default function AdminListingActions({ listingId }: Props) {
       if (!res.ok) { toast.error('Failed to approve.'); return; }
       toast.success('Listing approved.');
       router.refresh();
+      handleApproveSuccess();
     });
   }
 
@@ -45,12 +46,22 @@ export default function AdminListingActions({ listingId }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason }),
       });
-      if (!res.ok) { toast.error('Failed to reject.'); return; }
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        console.error('[reject] api error', body);
+        toast.error('Failed to reject.');
+        return;
+      }
       toast.success('Listing rejected.');
       setRejectOpen(false);
       setReason('');
       router.refresh();
+      window.dispatchEvent(new CustomEvent('admin:pending-changed'));
     });
+  }
+
+  function handleApproveSuccess() {
+    window.dispatchEvent(new CustomEvent('admin:pending-changed'));
   }
 
   return (

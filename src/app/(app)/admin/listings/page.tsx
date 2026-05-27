@@ -9,6 +9,7 @@ import AdminListingActions from '@/components/listing/AdminListingActions';
 import type { Listing, Profile } from '@/types/db';
 
 export const metadata = { title: 'Pending listings — Admin' };
+export const dynamic = 'force-dynamic';
 
 export default async function AdminListingsPage() {
   const profile = await getServerProfile();
