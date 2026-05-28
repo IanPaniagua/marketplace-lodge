@@ -39,12 +39,12 @@ export default function PushPermissionBanner() {
 
   async function handleEnable() {
     setSubscribing(true);
-    const ok = await requestPermissionAndSubscribe();
+    const result = await requestPermissionAndSubscribe();
     setSubscribing(false);
-    if (ok) {
+    if (result.ok) {
       setVisible(false);
     } else {
-      toast.error('Could not enable notifications. Check your browser settings.');
+      toast.error(`Could not enable: ${result.reason}`);
       setVisible(false);
     }
   }

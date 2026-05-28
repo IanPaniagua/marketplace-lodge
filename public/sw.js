@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lodge-v2';
+const CACHE_NAME = 'lodge-v3';
 
 const STATIC_ASSETS = [
   '/',
@@ -93,7 +93,7 @@ self.addEventListener('push', (event) => {
         self.registration.showNotification(title, {
           body: body ?? '',
           icon: '/icons/icon-192.png',
-          badge: '/icons/badge-72.png',
+          badge: '/icons/icon-192.png',
           data: { url: url ?? '/' },
           // Collapse multiple message pushes for the same chat into one notification
           tag: type === 'message' && url ? `msg-${url}` : undefined,

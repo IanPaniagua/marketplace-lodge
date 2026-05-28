@@ -63,20 +63,29 @@ async function sendWebPush(sub: PushSub, payload: unknown, v: VapidConfig): Prom
 
 // ── Handler ───────────────────────────────────────────────────────────────────
 
-const BASE_URL = Deno.env.get('INSFORGE_URL') ?? Deno.env.get('NEXT_PUBLIC_INSFORGE_URL') ?? '';
-const SERVICE_KEY = Deno.env.get('INSFORGE_SERVICE_KEY') ?? '';
-const VAPID: VapidConfig = {
-  subject: Deno.env.get('VAPID_SUBJECT') ?? '',
-  publicKey: Deno.env.get('NEXT_PUBLIC_VAPID_PUBLIC_KEY') ?? '',
-  privateKey: Deno.env.get('VAPID_PRIVATE_KEY') ?? '',
-};
+const BASE_URL = Deno.env.get('INSFORGE_BASE_URL') ?? Deno.env.get('INSFORGE_URL') ?? '';
+const SERVICE_KEY = Deno.env.get('API_KEY') ?? Deno.env.get('INSFORGE_SERVICE_KEY') ?? '';
+
+// deno-lint-ignore no-explicit-any
+async function loadVapid(client: any): Promise<VapidConfig> {
+  const { data } = await client.database
+    .from('app_config').select('key,value')
+    .in('key', ['vapid_subject', 'vapid_public_key', 'vapid_private_key']);
+  const map = new Map(((data ?? []) as Array<{ key: string; value: string }>).map((r) => [r.key, r.value]));
+  return {
+    subject: map.get('vapid_subject') ?? '',
+    publicKey: map.get('vapid_public_key') ?? '',
+    privateKey: map.get('vapid_private_key') ?? '',
+  };
+}
 
 export default async function handler(req: Request): Promise<Response> {
   const body = await req.json() as { user_id?: string };
   if (!body.user_id) return new Response(JSON.stringify({ error: 'Missing user_id' }), { status: 400 });
-  if (!VAPID.publicKey || !VAPID.privateKey) return new Response(JSON.stringify({ sent: false, reason: 'VAPID not configured' }), { status: 200 });
 
   const client = createClient({ baseUrl: BASE_URL, edgeFunctionToken: SERVICE_KEY });
+  const VAPID = await loadVapid(client);
+  if (!VAPID.publicKey || !VAPID.privateKey) return new Response(JSON.stringify({ sent: false, reason: 'VAPID not configured' }), { status: 200 });
 
   const { data: userRaw } = await client.database
     .from('profiles').select('display_name').eq('id', body.user_id).single();

@@ -20,47 +20,68 @@ export function getPushPermissionStatus(): PermissionStatus {
   return Notification.permission as PermissionStatus;
 }
 
+export type SubscribeResult = { ok: true } | { ok: false; reason: string };
+
 /**
  * Request notification permission, subscribe to push, and save the subscription
- * to the server. Returns true on success.
+ * to the server. Returns { ok: true } on success, or { ok: false, reason } with a
+ * human-readable reason so failures are diagnosable on devices without devtools.
  */
-export async function requestPermissionAndSubscribe(): Promise<boolean> {
-  if (getPushPermissionStatus() === 'unsupported') return false;
+export async function requestPermissionAndSubscribe(): Promise<SubscribeResult> {
+  if (getPushPermissionStatus() === 'unsupported') {
+    return { ok: false, reason: 'Push is not supported on this browser/device' };
+  }
 
-  const permission = await Notification.requestPermission();
-  if (permission !== 'granted') return false;
+  let permission: NotificationPermission;
+  try {
+    permission = await Notification.requestPermission();
+  } catch (e) {
+    return { ok: false, reason: `Permission request failed: ${e instanceof Error ? e.message : String(e)}` };
+  }
+  if (permission !== 'granted') {
+    return { ok: false, reason: `Permission was "${permission}" — allow notifications in settings` };
+  }
 
   const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
   if (!vapidPublicKey) {
-    console.error('NEXT_PUBLIC_VAPID_PUBLIC_KEY is not set');
-    return false;
+    return { ok: false, reason: 'VAPID public key missing — not set in the Vercel build' };
   }
 
-  const reg = await navigator.serviceWorker.ready;
-  const subscription = await reg.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: base64urlToUint8Array(vapidPublicKey).buffer as ArrayBuffer,
-  });
+  let subscription: PushSubscription;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const existing = await reg.pushManager.getSubscription();
+    subscription = existing ?? await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: base64urlToUint8Array(vapidPublicKey).buffer as ArrayBuffer,
+    });
+  } catch (e) {
+    return { ok: false, reason: `subscribe() failed: ${e instanceof Error ? e.message : String(e)}` };
+  }
 
   const json = subscription.toJSON();
   const endpoint = json.endpoint;
   const p256dh_key = json.keys?.p256dh;
   const auth_key = json.keys?.auth;
+  if (!endpoint || !p256dh_key || !auth_key) {
+    return { ok: false, reason: 'Subscription returned without keys' };
+  }
 
-  if (!endpoint || !p256dh_key || !auth_key) return false;
+  let res: Response;
+  try {
+    res = await fetch('/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint, p256dh_key, auth_key, user_agent: navigator.userAgent }),
+    });
+  } catch (e) {
+    return { ok: false, reason: `Network error saving subscription: ${e instanceof Error ? e.message : String(e)}` };
+  }
+  if (!res.ok) {
+    return { ok: false, reason: `Server rejected subscription (HTTP ${res.status})` };
+  }
 
-  const res = await fetch('/api/push/subscribe', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      endpoint,
-      p256dh_key,
-      auth_key,
-      user_agent: navigator.userAgent,
-    }),
-  });
-
-  return res.ok;
+  return { ok: true };
 }
 
 /** Remove the push subscription from the server and unsubscribe locally. */

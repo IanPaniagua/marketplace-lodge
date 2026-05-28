@@ -46,10 +46,10 @@ export default function NotificationsToggle() {
       if (ok) { setStatus('unsubscribed'); toast.success('Notifications disabled.'); }
       else toast.error('Could not disable notifications.');
     } else {
-      const ok = await requestPermissionAndSubscribe();
+      const result = await requestPermissionAndSubscribe();
       setBusy(false);
-      if (ok) { setStatus('subscribed'); toast.success('Notifications enabled.'); }
-      else toast.error('Could not enable notifications. Check your browser settings.');
+      if (result.ok) { setStatus('subscribed'); toast.success('Notifications enabled.'); }
+      else toast.error(`Could not enable: ${result.reason}`);
     }
   }
 
