@@ -46,7 +46,7 @@ async function encrypt(plain: Uint8Array, sub: PushSub): Promise<Uint8Array> {
   const cek = await hkdf(prk, salt, new TextEncoder().encode('Content-Encoding: aes128gcm\x00'), 16);
   const nonce = await hkdf(prk, salt, new TextEncoder().encode('Content-Encoding: nonce\x00'), 12);
   const aes = await crypto.subtle.importKey('raw', cek, 'AES-GCM', false, ['encrypt']);
-  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: nonce, tagLength: 128 }, aes, concat(new Uint8Array(2), plain, new Uint8Array([2]))));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: nonce, tagLength: 128 }, aes, concat(plain, new Uint8Array([2]))));
   const rs = new Uint8Array(4); new DataView(rs.buffer).setUint32(0, 4096, false);
   return concat(salt, rs, new Uint8Array([spub.length]), spub, ct);
 }
