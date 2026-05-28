@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lodge-v3';
+const CACHE_NAME = 'lodge-v4';
 
 const STATIC_ASSETS = [
   '/',
@@ -95,8 +95,10 @@ self.addEventListener('push', (event) => {
           icon: '/icons/icon-192.png',
           badge: '/icons/icon-192.png',
           data: { url: url ?? '/' },
-          // Collapse multiple message pushes for the same chat into one notification
+          // Group messages from the same chat under one tag, but re-alert on each
+          // new message so consecutive messages still notify.
           tag: type === 'message' && url ? `msg-${url}` : undefined,
+          renotify: type === 'message' && url ? true : undefined,
         }),
       );
     }
