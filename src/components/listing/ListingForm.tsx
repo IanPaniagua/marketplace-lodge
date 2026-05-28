@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 
 import { ListingFieldsSchema, type ListingFieldsInput } from '@/lib/schemas';
 import { compressToWebp } from '@/lib/image';
-import { insforge } from '@/lib/insforge';
 import {
   createListingRecord,
   saveListingPhotos,
@@ -89,10 +88,15 @@ export default function ListingForm({
     for (const photo of newPhotos) {
       const compressed = await compressToWebp(photo.file);
       const path = `listings/${listingIdToUse}/${crypto.randomUUID()}.webp`;
-      const { error } = await insforge.storage
-        .from('listing-photos')
-        .upload(path, compressed);
-      if (error) throw new Error('Photo upload failed');
+      const fd = new FormData();
+      fd.append('file', compressed, 'photo.webp');
+      fd.append('path', path);
+      const res = await fetch('/api/storage/upload', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin',
+      });
+      if (!res.ok) throw new Error('Photo upload failed');
       paths.push(path);
     }
     return paths;

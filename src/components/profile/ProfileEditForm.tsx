@@ -64,11 +64,16 @@ export default function ProfileEditForm({ profile }: Props) {
       // both "file already exists" errors and CDN cache serving old content.
       const path = `avatars/${profile.id}-${Date.now()}.webp`;
 
-      const { error: uploadError } = await insforge.storage
-        .from('listing-photos')
-        .upload(path, croppedFile);
+      const fd = new FormData();
+      fd.append('file', croppedFile, 'avatar.webp');
+      fd.append('path', path);
+      const uploadRes = await fetch('/api/storage/upload', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin',
+      });
 
-      if (uploadError) {
+      if (!uploadRes.ok) {
         toast.error('Failed to upload avatar. Try again.');
         return;
       }
