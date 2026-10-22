@@ -44,7 +44,7 @@ export default function PushPermissionBanner() {
     if (result.ok) {
       setVisible(false);
     } else {
-      toast.error(`Could not enable: ${result.reason}`);
+      toast.error(`No se pudieron activar: ${result.reason}`);
       setVisible(false);
     }
   }
@@ -54,7 +54,7 @@ export default function PushPermissionBanner() {
       <div className="mx-auto flex max-w-2xl items-center gap-3 md:max-w-4xl">
         <Bell className="h-4 w-4 shrink-0 text-muted-foreground" />
         <p className="flex-1 text-sm text-foreground">
-          Get notified about new items and messages.
+          Recibe avisos sobre nuevos artículos y mensajes.
         </p>
         <div className="flex shrink-0 items-center gap-2">
           <Button
@@ -64,7 +64,7 @@ export default function PushPermissionBanner() {
             onClick={() => setVisible(false)}
             disabled={subscribing}
           >
-            Not now
+            Ahora no
           </Button>
           <Button
             size="sm"
@@ -72,7 +72,7 @@ export default function PushPermissionBanner() {
             onClick={handleEnable}
             disabled={subscribing}
           >
-            {subscribing ? 'Enabling…' : 'Enable'}
+            {subscribing ? 'Activando…' : 'Activar'}
           </Button>
         </div>
       </div>

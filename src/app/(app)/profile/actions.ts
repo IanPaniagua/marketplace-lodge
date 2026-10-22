@@ -41,7 +41,7 @@ export async function updateProfile(
       })
       .eq('id', user.id);
 
-    if (error) return { data: null, error: 'Failed to save profile.' };
+    if (error) return { data: null, error: 'No se pudo guardar el perfil.' };
     return { data: null, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };
@@ -60,7 +60,7 @@ export async function updateAvatarUrl(
       .update({ avatar_url: avatarUrl })
       .eq('id', user.id);
 
-    if (error) return { data: null, error: 'Failed to update avatar.' };
+    if (error) return { data: null, error: 'No se pudo actualizar la foto de perfil.' };
     return { data: null, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };

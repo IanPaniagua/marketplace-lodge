@@ -31,15 +31,15 @@ export default function AdminListingActions({ listingId }: Props) {
       const res = await fetch(`/api/admin/listings/${listingId}/approve`, {
         method: 'POST',
       });
-      if (!res.ok) { toast.error('Failed to approve.'); return; }
-      toast.success('Listing approved.');
+      if (!res.ok) { toast.error('No se pudo aprobar.'); return; }
+      toast.success('Anuncio aprobado.');
       router.refresh();
       handleApproveSuccess();
     });
   }
 
   function handleReject() {
-    if (!reason.trim()) { toast.error('Enter a rejection reason.'); return; }
+    if (!reason.trim()) { toast.error('Indica el motivo del rechazo.'); return; }
     startTransition(async () => {
       const res = await fetch(`/api/admin/listings/${listingId}/reject`, {
         method: 'POST',
@@ -49,10 +49,10 @@ export default function AdminListingActions({ listingId }: Props) {
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         console.error('[reject] api error', body);
-        toast.error('Failed to reject.');
+        toast.error('No se pudo rechazar.');
         return;
       }
-      toast.success('Listing rejected.');
+      toast.success('Anuncio rechazado.');
       setRejectOpen(false);
       setReason('');
       router.refresh();
@@ -67,42 +67,42 @@ export default function AdminListingActions({ listingId }: Props) {
   return (
     <div className="flex gap-2">
       <Button size="sm" onClick={handleApprove} disabled={isPending}>
-        Approve
+        Aprobar
       </Button>
 
       <Dialog open={rejectOpen} onOpenChange={setRejectOpen}>
         <DialogTrigger asChild>
           <Button variant="destructive" size="sm" disabled={isPending}>
-            Reject
+            Rechazar
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject this listing?</DialogTitle>
+            <DialogTitle>¿Rechazar este anuncio?</DialogTitle>
             <DialogDescription>
-              The seller will see your reason. Be clear and constructive.
+              La persona que vende verá el motivo. Sé claro y constructivo.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="reason">Reason</Label>
+            <Label htmlFor="reason">Motivo</Label>
             <Input
               id="reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="e.g. Photo is too dark, please re-upload"
+              placeholder="p. ej., la foto está demasiado oscura"
               className="h-11 md:h-10"
             />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setRejectOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button
               variant="destructive"
               onClick={handleReject}
               disabled={isPending || !reason.trim()}
             >
-              {isPending ? 'Rejecting…' : 'Reject'}
+              {isPending ? 'Rechazando…' : 'Rechazar'}
             </Button>
           </DialogFooter>
         </DialogContent>

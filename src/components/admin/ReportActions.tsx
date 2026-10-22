@@ -26,11 +26,11 @@ export default function ReportActions({ reportId }: Props) {
 
     if (!res.ok) {
       const json = await res.json().catch(() => ({})) as Record<string, unknown>;
-      toast.error(typeof json.error === 'string' ? json.error : `Failed to ${action} report`);
+      toast.error(typeof json.error === 'string' ? json.error : 'No se pudo actualizar el reporte');
       return;
     }
 
-    toast.success(action === 'resolve' ? 'Report resolved.' : 'Report dismissed.');
+    toast.success(action === 'resolve' ? 'Reporte resuelto.' : 'Reporte descartado.');
     router.refresh();
   }
 
@@ -41,7 +41,7 @@ export default function ReportActions({ reportId }: Props) {
         onClick={() => handleAction('resolve')}
         disabled={resolving || dismissing}
       >
-        {resolving ? 'Resolving…' : 'Resolve'}
+        {resolving ? 'Resolviendo…' : 'Resolver'}
       </Button>
       <Button
         size="sm"
@@ -49,7 +49,7 @@ export default function ReportActions({ reportId }: Props) {
         onClick={() => handleAction('dismiss')}
         disabled={resolving || dismissing}
       >
-        {dismissing ? 'Dismissing…' : 'Dismiss'}
+        {dismissing ? 'Descartando…' : 'Descartar'}
       </Button>
     </div>
   );

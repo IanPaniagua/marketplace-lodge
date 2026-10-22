@@ -1,11 +1,11 @@
 {
   "name": "Lodge Market",
   "short_name": "Lodge Market",
-  "description": "Private marketplace for lodge residents.",
+  "description": "El mercado privado de los residentes de Lodge.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#8B1A1A",
+  "theme_color": "#2563EB",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -52,7 +52,7 @@ export default function RatingDialog({
 
   function handleSubmit() {
     if (stars === 0) {
-      toast.error('Pick a star rating before submitting.');
+      toast.error('Selecciona una puntuación antes de continuar.');
       return;
     }
     startTransition(async () => {
@@ -66,7 +66,7 @@ export default function RatingDialog({
         toast.error(error);
         return;
       }
-      toast.success(isEdit ? 'Rating updated.' : 'Rating submitted.');
+      toast.success(isEdit ? 'Valoración actualizada.' : 'Valoración enviada.');
       onOpenChange(false);
       router.refresh();
     });
@@ -77,32 +77,32 @@ export default function RatingDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {isEdit ? 'Edit rating' : `Rate ${rateeName}`}
+            {isEdit ? 'Editar valoración' : `Valorar a ${rateeName}`}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-5">
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Stars</Label>
+            <Label className="text-sm font-medium">Puntuación</Label>
             <StarPicker value={stars} onChange={setStars} disabled={pending} />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="rating-comment" className="text-sm font-medium">
-              Comment{' '}
-              <span className="font-normal text-muted-foreground">(optional)</span>
+              Comentario{' '}
+              <span className="font-normal text-muted-foreground">(opcional)</span>
             </Label>
             <Textarea
               id="rating-comment"
               value={comment}
               onChange={(e) => setComment(e.target.value.slice(0, 280))}
-              placeholder="Share your experience…"
+              placeholder="Comparte tu experiencia…"
               rows={3}
               disabled={pending}
               className="resize-none"
             />
             <p className="text-right text-xs text-muted-foreground">
-              {280 - comment.length} remaining
+              Quedan {280 - comment.length}
             </p>
           </div>
         </div>
@@ -113,10 +113,10 @@ export default function RatingDialog({
             onClick={() => handleOpenChange(false)}
             disabled={pending}
           >
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={handleSubmit} disabled={pending || stars === 0}>
-            {pending ? 'Saving…' : isEdit ? 'Update' : 'Submit'}
+            {pending ? 'Guardando…' : isEdit ? 'Actualizar' : 'Enviar'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -87,7 +87,7 @@ export default async function ChatPage({ params }: Props) {
         display_name: otherUser.display_name,
         avatar_url: otherUser.avatar_url,
       }}
-      listingTitle={listing?.title ?? 'Listing'}
+      listingTitle={listing?.title ?? 'Anuncio'}
       initialMessages={initialMessages}
       listingId={conv.listing_id}
       existingRating={existingRating}

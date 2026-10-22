@@ -24,7 +24,7 @@ interface Props {
 
 type PasswordStep = 'idle' | 'code-sent' | 'set-password';
 
-const newPasswordSchema = z.string().min(8, 'At least 8 characters');
+const newPasswordSchema = z.string().min(8, 'La contraseña debe tener al menos 8 caracteres');
 
 export default function SettingsForm({ email }: Props) {
   const [pwStep, setPwStep] = useState<PasswordStep>('idle');
@@ -43,11 +43,11 @@ export default function SettingsForm({ email }: Props) {
     try {
       const { error } = await insforge.auth.sendResetPasswordEmail({ email });
       if (error) {
-        toast.error('Failed to send code. Try again.');
+        toast.error('No se pudo enviar el código. Inténtalo de nuevo.');
         return;
       }
       setPwStep('code-sent');
-      toast.success('Check your email for a 6-digit code.');
+      toast.success('Revisa tu correo: te hemos enviado un código de 6 dígitos.');
     } finally {
       setBusy(false);
     }
@@ -55,7 +55,7 @@ export default function SettingsForm({ email }: Props) {
 
   async function verifyCode() {
     if (code.length !== 6) {
-      toast.error('Enter the 6-digit code from your email.');
+      toast.error('Introduce el código de 6 dígitos que recibiste por correo.');
       return;
     }
     setBusy(true);
@@ -65,7 +65,7 @@ export default function SettingsForm({ email }: Props) {
         code,
       });
       if (error || !data?.token) {
-        toast.error('Invalid or expired code.');
+        toast.error('El código no es válido o ha caducado.');
         return;
       }
       setResetToken(data.token);
@@ -78,11 +78,11 @@ export default function SettingsForm({ email }: Props) {
   async function setNewPw() {
     const result = newPasswordSchema.safeParse(newPassword);
     if (!result.success) {
-      toast.error(result.error.issues[0]?.message ?? 'Invalid password');
+      toast.error(result.error.issues[0]?.message ?? 'Contraseña no válida');
       return;
     }
     if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match.');
+      toast.error('Las contraseñas no coinciden.');
       return;
     }
     setBusy(true);
@@ -92,10 +92,10 @@ export default function SettingsForm({ email }: Props) {
         otp: resetToken,
       });
       if (error) {
-        toast.error('Failed to update password.');
+        toast.error('No se pudo actualizar la contraseña.');
         return;
       }
-      toast.success('Password updated.');
+      toast.success('Contraseña actualizada.');
       setPwStep('idle');
       setCode('');
       setResetToken('');
@@ -107,7 +107,7 @@ export default function SettingsForm({ email }: Props) {
   }
 
   async function handleDelete() {
-    if (confirmText !== 'delete') return;
+    if (confirmText !== 'eliminar') return;
     setIsDeleting(true);
     await deleteMyAccount();
   }
@@ -116,12 +116,12 @@ export default function SettingsForm({ email }: Props) {
     <div className="space-y-10">
       {/* Change password */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">Change password</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Cambiar contraseña</h2>
 
         {pwStep === 'idle' && (
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              We will send a one-time code to{' '}
+              Enviaremos un código de un solo uso a{' '}
               <span className="font-medium text-foreground">{email}</span>.
             </p>
             <Button
@@ -129,7 +129,7 @@ export default function SettingsForm({ email }: Props) {
               disabled={busy}
               className="w-full md:w-auto"
             >
-              {busy ? 'Sending…' : 'Send code'}
+              {busy ? 'Enviando…' : 'Enviar código'}
             </Button>
           </div>
         )}
@@ -137,7 +137,7 @@ export default function SettingsForm({ email }: Props) {
         {pwStep === 'code-sent' && (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="code">Code from email</Label>
+              <Label htmlFor="code">Código del correo</Label>
               <Input
                 id="code"
                 value={code}
@@ -156,14 +156,14 @@ export default function SettingsForm({ email }: Props) {
             </div>
             <div className="flex gap-2">
               <Button onClick={verifyCode} disabled={busy} className="w-full md:w-auto">
-                {busy ? 'Verifying…' : 'Verify code'}
+                {busy ? 'Verificando…' : 'Verificar código'}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setPwStep('idle')}
                 disabled={busy}
               >
-                Cancel
+                Cancelar
               </Button>
             </div>
           </div>
@@ -172,7 +172,7 @@ export default function SettingsForm({ email }: Props) {
         {pwStep === 'set-password' && (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="newpw">New password</Label>
+              <Label htmlFor="newpw">Nueva contraseña</Label>
               <Input
                 id="newpw"
                 type="password"
@@ -183,7 +183,7 @@ export default function SettingsForm({ email }: Props) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmpw">Confirm password</Label>
+              <Label htmlFor="confirmpw">Confirmar contraseña</Label>
               <Input
                 id="confirmpw"
                 type="password"
@@ -200,14 +200,14 @@ export default function SettingsForm({ email }: Props) {
                 disabled={busy}
                 className="w-full md:w-auto"
               >
-                {busy ? 'Saving…' : 'Update password'}
+                {busy ? 'Guardando…' : 'Actualizar contraseña'}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setPwStep('idle')}
                 disabled={busy}
               >
-                Cancel
+                Cancelar
               </Button>
             </div>
           </div>
@@ -216,31 +216,31 @@ export default function SettingsForm({ email }: Props) {
 
       {/* Danger zone */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">Danger zone</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Zona de riesgo</h2>
         <p className="text-sm text-muted-foreground">
-          Deleting your account hides your profile and listings permanently. This
-          cannot be undone.
+          Eliminar tu cuenta ocultará de forma permanente tu perfil y tus anuncios.
+          Esta acción no se puede deshacer.
         </p>
 
         <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
           <DialogTrigger asChild>
             <Button variant="destructive" className="w-full md:w-auto">
-              Delete my account
+              Eliminar mi cuenta
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Delete your account?</DialogTitle>
+              <DialogTitle>¿Eliminar tu cuenta?</DialogTitle>
               <DialogDescription>
-                Your profile, listings, and chats will be hidden. Type{' '}
-                <strong>delete</strong> to confirm.
+                Tu perfil, tus anuncios y tus conversaciones se ocultarán. Escribe{' '}
+                <strong>eliminar</strong> para confirmar.
               </DialogDescription>
             </DialogHeader>
 
             <Input
               value={confirmText}
               onChange={(e) => setConfirmText(e.target.value)}
-              placeholder='Type "delete" to confirm'
+              placeholder='Escribe "eliminar" para confirmar'
               className="h-11 md:h-10"
             />
 
@@ -252,14 +252,14 @@ export default function SettingsForm({ email }: Props) {
                   setConfirmText('');
                 }}
               >
-                Cancel
+                Cancelar
               </Button>
               <Button
                 variant="destructive"
-                disabled={confirmText !== 'delete' || isDeleting}
+                disabled={confirmText !== 'eliminar' || isDeleting}
                 onClick={handleDelete}
               >
-                {isDeleting ? 'Deleting…' : 'Delete account'}
+                {isDeleting ? 'Eliminando…' : 'Eliminar cuenta'}
               </Button>
             </DialogFooter>
           </DialogContent>

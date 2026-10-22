@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { Star } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import RatingEditTrigger from './RatingEditTrigger';
@@ -34,7 +35,7 @@ export default async function RatingsList({ rateeId, rateeName, currentUserId }:
 
   if (ratings.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">No ratings yet.</p>
+      <p className="text-sm text-muted-foreground">Aún no hay valoraciones.</p>
     );
   }
 
@@ -75,10 +76,10 @@ export default async function RatingsList({ rateeId, rateeName, currentUserId }:
                 </Avatar>
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">
-                    {rater?.display_name ?? 'User'}
+                    {rater?.display_name ?? 'Usuario'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
+                    {formatDistanceToNow(new Date(r.created_at), { addSuffix: true, locale: es })}
                   </p>
                 </div>
               </div>

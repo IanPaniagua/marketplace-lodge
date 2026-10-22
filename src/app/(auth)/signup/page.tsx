@@ -32,18 +32,18 @@ export default function SignupPage() {
       // Existing unverified account — send a new code and route to /verify-email.
       if (error.error === 'ALREADY_EXISTS' || error.statusCode === 409) {
         await insforge.auth.resendVerificationEmail({ email: values.email });
-        toast.success('You already started signing up. We sent you a new code.');
+        toast.success('Ya habías iniciado el registro. Te hemos enviado un nuevo código.');
         router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
         return;
       }
-      toast.error(error.message ?? 'Sign up failed. Please try again.');
+      toast.error(error.message ?? 'No se pudo completar el registro. Inténtalo de nuevo.');
       return;
     }
 
     if (data?.requireEmailVerification) {
       setPendingEmail(values.email);
       setStep('verify');
-      toast.success('Check your email for a 6-digit verification code.');
+      toast.success('Revisa tu correo: te hemos enviado un código de 6 dígitos.');
       return;
     }
 
@@ -60,7 +60,7 @@ export default function SignupPage() {
     });
 
     if (error || !data?.accessToken || !data.user) {
-      toast.error(error?.message ?? 'Invalid code. Please try again.');
+      toast.error(error?.message ?? 'El código no es válido. Inténtalo de nuevo.');
       return;
     }
 
@@ -72,7 +72,7 @@ export default function SignupPage() {
     // Persist session via same-origin HttpOnly cookies (set by Route Handler).
     const ok = await setSessionCookies({ accessToken, refreshToken });
     if (!ok) {
-      toast.error('Could not persist your session. Please try again.');
+      toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
       return;
     }
 
@@ -81,7 +81,7 @@ export default function SignupPage() {
       .insert({ id: userId, display_name: displayName });
 
     if (profileError) {
-      toast.error('Account created but profile setup failed. Please contact support.');
+      toast.error('La cuenta se ha creado, pero no se pudo configurar el perfil. Contacta con soporte.');
       return;
     }
 
@@ -99,15 +99,15 @@ export default function SignupPage() {
     return (
       <div className="space-y-6">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Check your email</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Revisa tu correo</h1>
           <p className="text-sm text-muted-foreground">
-            We sent a 6-digit verification code to your email address.
+            Te hemos enviado un código de verificación de 6 dígitos.
           </p>
         </div>
 
         <form onSubmit={verifyForm.handleSubmit(onVerify)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="otp">Verification code</Label>
+            <Label htmlFor="otp">Código de verificación</Label>
             <Controller
               control={verifyForm.control}
               name="otp"
@@ -141,7 +141,7 @@ export default function SignupPage() {
             className="w-full md:w-auto"
             disabled={verifyForm.formState.isSubmitting}
           >
-            {verifyForm.formState.isSubmitting ? 'Verifying…' : 'Verify email'}
+            {verifyForm.formState.isSubmitting ? 'Verificando…' : 'Verificar correo'}
           </Button>
         </form>
 
@@ -150,10 +150,10 @@ export default function SignupPage() {
           className="text-sm text-muted-foreground underline-offset-4 hover:underline"
           onClick={async () => {
             await insforge.auth.resendVerificationEmail({ email: pendingEmail });
-            toast.success('Code resent.');
+            toast.success('Código reenviado.');
           }}
         >
-          Resend code
+          Reenviar código
         </button>
       </div>
     );
@@ -162,16 +162,16 @@ export default function SignupPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Create account</h1>
-        <p className="text-sm text-muted-foreground">Lodge residents only.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">Crear una cuenta</h1>
+        <p className="text-sm text-muted-foreground">Solo para residentes de Lodge.</p>
       </div>
 
       <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="display_name">Display name</Label>
+          <Label htmlFor="display_name">Nombre visible</Label>
           <Input
             id="display_name"
-            placeholder="Your name"
+            placeholder="Tu nombre"
             className="h-11 md:h-10"
             {...signupForm.register('display_name')}
           />
@@ -183,7 +183,7 @@ export default function SignupPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Correo electrónico</Label>
           <Input
             id="email"
             type="email"
@@ -197,11 +197,11 @@ export default function SignupPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">Contraseña</Label>
           <Input
             id="password"
             type="password"
-            placeholder="At least 8 characters"
+            placeholder="Al menos 8 caracteres"
             className="h-11 md:h-10"
             {...signupForm.register('password')}
           />
@@ -220,14 +220,14 @@ export default function SignupPage() {
               {...signupForm.register('accept_privacy')}
             />
             <span className="text-muted-foreground">
-              I have read and accept the{' '}
+              He leído y acepto la{' '}
               <Link
                 href="/privacy"
                 target="_blank"
                 rel="noopener"
                 className="text-foreground underline underline-offset-4"
               >
-                Privacy Policy
+                Política de privacidad
               </Link>
               .
             </span>
@@ -245,14 +245,14 @@ export default function SignupPage() {
           className="w-full md:w-auto"
           disabled={signupForm.formState.isSubmitting}
         >
-          {signupForm.formState.isSubmitting ? 'Creating account…' : 'Create account'}
+          {signupForm.formState.isSubmitting ? 'Creando cuenta…' : 'Crear cuenta'}
         </Button>
       </form>
 
       <p className="text-sm text-muted-foreground">
-        Already have an account?{' '}
+        ¿Ya tienes una cuenta?{' '}
         <Link href="/login" className="text-foreground underline-offset-4 hover:underline">
-          Sign in
+          Iniciar sesión
         </Link>
       </p>
     </div>

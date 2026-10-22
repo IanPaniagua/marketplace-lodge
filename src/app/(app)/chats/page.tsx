@@ -44,9 +44,9 @@ export default async function ChatsPage() {
   if (convs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <p className="text-lg font-semibold">No conversations yet</p>
+        <p className="text-lg font-semibold">Aún no hay conversaciones</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Find something you like and message the seller.
+          Encuentra algo que te guste y escribe a la persona que lo vende.
         </p>
       </div>
     );
@@ -92,7 +92,7 @@ export default async function ChatsPage() {
 
   return (
     <div className="space-y-2 pb-4">
-      <h1 className="text-xl font-semibold tracking-tight">Messages</h1>
+      <h1 className="text-xl font-semibold tracking-tight">Mensajes</h1>
       <div className="space-y-2">
         {convs.map((conv) => {
           const otherId = conv.buyer_id === me ? conv.seller_id : conv.buyer_id;
@@ -109,9 +109,9 @@ export default async function ChatsPage() {
             <ConversationRow
               key={conv.id}
               conversationId={conv.id}
-              otherUserName={otherProfile?.display_name ?? 'Unknown'}
+              otherUserName={otherProfile?.display_name ?? 'Desconocido'}
               otherUserAvatar={otherProfile?.avatar_url ?? null}
-              listingTitle={listing?.title ?? 'Unknown listing'}
+              listingTitle={listing?.title ?? 'Anuncio desconocido'}
               lastMessageBody={latest.body}
               lastMessageAt={latest.created_at}
               unreadCount={unread}

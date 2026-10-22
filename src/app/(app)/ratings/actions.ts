@@ -58,7 +58,7 @@ export async function submitRating(
       if (msg.toLowerCase().includes('policy') || msg.toLowerCase().includes('rls')) {
         return { data: null, error: 'Ratings are locked after 7 days.' };
       }
-      return { data: null, error: 'Failed to update rating.' };
+      return { data: null, error: 'No se pudo actualizar la valoración.' };
     }
 
     return { data: updated as unknown as Rating, error: null };
@@ -78,7 +78,7 @@ export async function submitRating(
     .single();
 
   if (error) {
-    return { data: null, error: 'Could not submit rating. Make sure you have chatted with this user about this listing.' };
+    return { data: null, error: 'No se pudo enviar la valoración. Asegúrate de haber hablado con esta persona sobre el anuncio.' };
   }
 
   return { data: inserted as unknown as Rating, error: null };
@@ -99,6 +99,6 @@ export async function getMyRatingForListing(
     .eq('listing_id', listingId)
     .maybeSingle();
 
-  if (error) return { data: null, error: 'Failed to fetch rating.' };
+  if (error) return { data: null, error: 'No se pudo cargar la valoración.' };
   return { data: data as unknown as Rating | null, error: null };
 }

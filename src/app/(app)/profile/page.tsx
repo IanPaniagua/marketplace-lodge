@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import RatingsList from '@/components/rating/RatingsList';
 
-export const metadata = { title: 'My Profile — Lodge Market' };
+export const metadata = { title: 'Mi perfil — Lodge Market' };
 
 export default async function ProfilePage() {
   const profile = await getServerProfile();
@@ -16,12 +16,12 @@ export default async function ProfilePage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-          My profile
+          Mi perfil
         </h1>
         <Button variant="ghost" size="sm" asChild>
           <Link href="/profile/settings" className="flex items-center gap-1.5">
             <Settings className="h-4 w-4" />
-            Settings
+            Ajustes
           </Link>
         </Button>
       </div>
@@ -29,7 +29,7 @@ export default async function ProfilePage() {
       <ProfileEditForm profile={profile} />
 
       <section className="space-y-3 border-t pt-6">
-        <h2 className="text-xl font-semibold tracking-tight">My ratings</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Mis valoraciones</h2>
         <RatingsList
           rateeId={profile.id}
           rateeName={profile.display_name}

@@ -74,7 +74,7 @@ export default function ProfileEditForm({ profile }: Props) {
       });
 
       if (!uploadRes.ok) {
-        toast.error('Failed to upload avatar. Try again.');
+        toast.error('No se pudo subir la foto. Inténtalo de nuevo.');
         return;
       }
 
@@ -89,10 +89,10 @@ export default function ProfileEditForm({ profile }: Props) {
       }
 
       setAvatarUrl(publicUrl);
-      toast.success('Avatar updated.');
+      toast.success('Foto de perfil actualizada.');
     } catch (err) {
       console.error('[avatar upload]', err);
-      toast.error('Something went wrong uploading the avatar.');
+      toast.error('Ha ocurrido un error al subir la foto.');
     } finally {
       setUploadingAvatar(false);
     }
@@ -104,7 +104,7 @@ export default function ProfileEditForm({ profile }: Props) {
       if (error) {
         toast.error(error);
       } else {
-        toast.success('Profile saved.');
+        toast.success('Perfil guardado.');
       }
     });
   }
@@ -134,13 +134,13 @@ export default function ProfileEditForm({ profile }: Props) {
             onClick={() => fileInputRef.current?.click()}
             disabled={uploadingAvatar}
             className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border bg-background shadow-sm transition-colors hover:bg-muted disabled:opacity-50"
-            aria-label="Change avatar"
+            aria-label="Cambiar foto de perfil"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
         </div>
         {uploadingAvatar && (
-          <p className="text-xs text-muted-foreground">Uploading…</p>
+          <p className="text-xs text-muted-foreground">Subiendo…</p>
         )}
         <input
           ref={fileInputRef}
@@ -159,11 +159,11 @@ export default function ProfileEditForm({ profile }: Props) {
             name="display_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Display name</FormLabel>
+                <FormLabel>Nombre visible</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="Your name"
+                    placeholder="Tu nombre"
                     className="h-11 md:h-10"
                   />
                 </FormControl>
@@ -177,11 +177,11 @@ export default function ProfileEditForm({ profile }: Props) {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bio</FormLabel>
+                <FormLabel>Presentación</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
-                    placeholder="A short introduction (max 200 characters)"
+                    placeholder="Una breve presentación (máximo 200 caracteres)"
                     maxLength={200}
                     rows={3}
                     className="resize-none"
@@ -200,11 +200,11 @@ export default function ProfileEditForm({ profile }: Props) {
             name="room_number"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Room number</FormLabel>
+                <FormLabel>Número de habitación</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="e.g. 14"
+                    placeholder="p. ej., 14"
                     className="h-11 md:h-10"
                   />
                 </FormControl>
@@ -219,7 +219,7 @@ export default function ProfileEditForm({ profile }: Props) {
             className="w-full md:w-auto"
             disabled={isPending}
           >
-            {isPending ? 'Saving…' : 'Save changes'}
+            {isPending ? 'Guardando…' : 'Guardar cambios'}
           </Button>
         </form>
       </Form>

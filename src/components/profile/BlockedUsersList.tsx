@@ -41,14 +41,14 @@ export default function BlockedUsersList() {
         return;
       }
       setUsers((prev) => prev?.filter((u) => u.id !== user.id) ?? null);
-      toast.success(`${user.display_name} unblocked.`);
+      toast.success(`${user.display_name} ha sido desbloqueado.`);
     });
   }
 
   if (error) {
     return (
       <p className="text-sm text-muted-foreground">
-        Could not load blocked users. Refresh to try again.
+        No se pudieron cargar los usuarios bloqueados. Actualiza la página para intentarlo de nuevo.
       </p>
     );
   }
@@ -73,9 +73,9 @@ export default function BlockedUsersList() {
     return (
       <div className="flex flex-col items-center gap-2 rounded-md border bg-card py-8">
         <UserX className="h-8 w-8 text-muted-foreground" />
-        <p className="text-base font-medium">No blocked users</p>
+        <p className="text-base font-medium">No hay usuarios bloqueados</p>
         <p className="text-sm text-muted-foreground">
-          Users you block from a chat will appear here.
+          Las personas que bloquees desde una conversación aparecerán aquí.
         </p>
       </div>
     );
@@ -109,7 +109,7 @@ export default function BlockedUsersList() {
               onClick={() => handleUnblock(u)}
               disabled={isThisOne}
             >
-              {isThisOne ? 'Unblocking…' : 'Unblock'}
+              {isThisOne ? 'Desbloqueando…' : 'Desbloquear'}
             </Button>
           </li>
         );

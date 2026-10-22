@@ -10,7 +10,7 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-export const metadata = { title: 'Edit listing — Lodge Market' };
+export const metadata = { title: 'Editar anuncio — Lodge Market' };
 
 export default async function EditListingPage({ params }: Props) {
   const { id } = await params;
@@ -57,7 +57,7 @@ export default async function EditListingPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-        Edit listing
+        Editar anuncio
       </h1>
       <ListingForm
         mode="edit"

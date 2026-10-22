@@ -23,7 +23,7 @@ function VerifyEmailInner() {
     try {
       const { data, error } = await insforge.auth.verifyEmail({ email, otp });
       if (error || !data?.accessToken || !data.user) {
-        toast.error(error?.message ?? 'Invalid or expired code.');
+        toast.error(error?.message ?? 'El código no es válido o ha caducado.');
         return;
       }
 
@@ -32,7 +32,7 @@ function VerifyEmailInner() {
         refreshToken: data.refreshToken,
       });
       if (!sessionOk) {
-        toast.error('Could not persist your session. Please try again.');
+        toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
         return;
       }
 
@@ -46,7 +46,7 @@ function VerifyEmailInner() {
 
       // Ignore duplicate-key — a profile may already exist from an earlier attempt.
       if (insertError && !/duplicate|already exists|conflict/i.test(insertError.message ?? '')) {
-        toast.error('Verified, but profile setup failed. Contact support.');
+        toast.error('Correo verificado, pero no se pudo configurar el perfil. Contacta con soporte.');
         return;
       }
 
@@ -58,31 +58,31 @@ function VerifyEmailInner() {
 
   async function onResend() {
     if (!email) {
-      toast.error('Enter your email first.');
+      toast.error('Introduce primero tu correo.');
       return;
     }
     setBusy(true);
     const { error } = await insforge.auth.resendVerificationEmail({ email });
     setBusy(false);
     if (error) {
-      toast.error(error.message ?? 'Could not resend code.');
+      toast.error(error.message ?? 'No se pudo reenviar el código.');
       return;
     }
-    toast.success('Code sent — check your email.');
+    toast.success('Código enviado. Revisa tu correo.');
   }
 
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Verify your email</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Verifica tu correo</h1>
         <p className="text-sm text-muted-foreground">
-          Enter the 6-digit code we sent you.
+          Introduce el código de 6 dígitos que te hemos enviado.
         </p>
       </div>
 
       <form onSubmit={onVerify} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Correo electrónico</Label>
           <Input
             id="email"
             type="email"
@@ -95,7 +95,7 @@ function VerifyEmailInner() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="otp">Verification code</Label>
+          <Label htmlFor="otp">Código de verificación</Label>
           <Input
             id="otp"
             type="text"
@@ -119,7 +119,7 @@ function VerifyEmailInner() {
           className="w-full md:w-auto"
           disabled={busy || otp.length < 6 || !email}
         >
-          {busy ? 'Verifying…' : 'Verify email'}
+          {busy ? 'Verificando…' : 'Verificar correo'}
         </Button>
       </form>
 
@@ -130,13 +130,13 @@ function VerifyEmailInner() {
           onClick={onResend}
           disabled={busy}
         >
-          Resend code
+          Reenviar código
         </button>
         <Link
           href="/login"
           className="self-start text-muted-foreground underline-offset-4 hover:underline"
         >
-          Back to sign in
+          Volver a iniciar sesión
         </Link>
       </div>
     </div>

@@ -31,7 +31,7 @@ export default function OwnerActions({ listingId, status }: Props) {
     startTransition(async () => {
       const { error } = await markAsSold(listingId);
       if (error) { toast.error(error); return; }
-      toast.success('Marked as sold.');
+      toast.success('Marcado como vendido.');
       router.refresh();
     });
   }
@@ -40,7 +40,7 @@ export default function OwnerActions({ listingId, status }: Props) {
     startTransition(async () => {
       const { error } = await deleteListing(listingId);
       if (error) { toast.error(error); return; }
-      toast.success('Listing deleted.');
+      toast.success('Anuncio eliminado.');
       router.push('/');
     });
   }
@@ -48,7 +48,7 @@ export default function OwnerActions({ listingId, status }: Props) {
   return (
     <div className="flex flex-wrap gap-2">
       <Button variant="secondary" size="sm" asChild>
-        <Link href={`/listings/${listingId}/edit`}>Edit</Link>
+        <Link href={`/listings/${listingId}/edit`}>Editar</Link>
       </Button>
 
       {status === 'live' && (
@@ -58,31 +58,31 @@ export default function OwnerActions({ listingId, status }: Props) {
           onClick={handleMarkSold}
           disabled={isPending}
         >
-          Mark as sold
+          Marcar como vendido
         </Button>
       )}
 
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogTrigger asChild>
-          <Button variant="destructive" size="sm">Delete</Button>
+          <Button variant="destructive" size="sm">Eliminar</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete this listing?</DialogTitle>
+            <DialogTitle>¿Eliminar este anuncio?</DialogTitle>
             <DialogDescription>
-              This will permanently remove the listing and all its photos.
+              Se eliminarán permanentemente el anuncio y todas sus fotos.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button
               variant="destructive"
               disabled={isPending}
               onClick={handleDelete}
             >
-              {isPending ? 'Deleting…' : 'Delete'}
+              {isPending ? 'Eliminando…' : 'Eliminar'}
             </Button>
           </DialogFooter>
         </DialogContent>

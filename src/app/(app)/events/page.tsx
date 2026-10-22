@@ -1,6 +1,6 @@
 import { CalendarDays } from 'lucide-react';
 
-export const metadata = { title: 'Events — Lodge Market' };
+export const metadata = { title: 'Eventos — Lodge Market' };
 
 export default function EventsPage() {
   return (
@@ -8,9 +8,9 @@ export default function EventsPage() {
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
         <CalendarDays className="h-8 w-8 text-muted-foreground" />
       </div>
-      <h1 className="text-xl font-semibold">Events — Coming Soon</h1>
+      <h1 className="text-xl font-semibold">Eventos · Próximamente</h1>
       <p className="max-w-xs text-sm text-muted-foreground">
-        Lodge Market events will be available in a future update. Stay tuned.
+        Los eventos de Lodge Market estarán disponibles en una próxima actualización.
       </p>
     </main>
   );

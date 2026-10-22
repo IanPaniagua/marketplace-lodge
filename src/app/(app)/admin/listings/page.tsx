@@ -5,10 +5,11 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import AdminListingActions from '@/components/listing/AdminListingActions';
 import type { Listing, Profile } from '@/types/db';
 
-export const metadata = { title: 'Pending listings — Admin' };
+export const metadata = { title: 'Anuncios pendientes — Admin' };
 export const dynamic = 'force-dynamic';
 
 export default async function AdminListingsPage() {
@@ -46,16 +47,16 @@ export default async function AdminListingsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Pending listings</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Anuncios pendientes</h1>
         <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-          ← Admin
+          ← Administración
         </Link>
       </div>
 
       {listings.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-16">
-          <p className="text-base font-medium">All clear</p>
-          <p className="text-sm text-muted-foreground">No listings awaiting review.</p>
+          <p className="text-base font-medium">Todo al día</p>
+          <p className="text-sm text-muted-foreground">No hay anuncios esperando revisión.</p>
         </div>
       ) : (
         <ul className="divide-y rounded-lg border">
@@ -72,8 +73,8 @@ export default async function AdminListingsPage() {
                       {listing.title}
                     </Link>
                     <p className="text-xs text-muted-foreground">
-                      by {seller?.display_name ?? 'Unknown'} ·{' '}
-                      {formatDistanceToNow(new Date(listing.created_at), { addSuffix: true })}
+                      por {seller?.display_name ?? 'Desconocido'} ·{' '}
+                      {formatDistanceToNow(new Date(listing.created_at), { addSuffix: true, locale: es })}
                     </p>
                     <div className="flex items-center gap-2 pt-0.5">
                       <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
@@ -85,7 +86,7 @@ export default async function AdminListingsPage() {
                       </span>
                       <span className="text-muted-foreground text-xs">·</span>
                       <span className="text-xs font-semibold tabular-nums text-primary">
-                        {listing.is_gift ? 'Free' : `€${listing.price_eur}`}
+                        {listing.is_gift ? 'Gratis' : `${listing.price_eur} €`}
                       </span>
                     </div>
                   </div>

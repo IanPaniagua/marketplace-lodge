@@ -13,7 +13,7 @@ export default function PendingPage() {
   async function handleSignOut() {
     await insforge.auth.signOut();
     await clearSessionCookies();
-    toast.success('Signed out.');
+    toast.success('Sesión cerrada.');
     router.replace('/login');
   }
 
@@ -23,14 +23,14 @@ export default function PendingPage() {
         <ClockIcon className="h-8 w-8 text-muted-foreground" />
       </div>
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Waiting for approval</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Esperando aprobación</h1>
         <p className="text-sm text-muted-foreground">
-          Your account is pending review. You will be able to browse and post listings once an admin
-          approves you.
+          Tu cuenta está pendiente de revisión. Podrás explorar y publicar anuncios cuando el equipo
+          de administración la apruebe.
         </p>
       </div>
       <Button variant="outline" size="sm" onClick={handleSignOut}>
-        Sign out
+        Cerrar sesión
       </Button>
     </div>
   );

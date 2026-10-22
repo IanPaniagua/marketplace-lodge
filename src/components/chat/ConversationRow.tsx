@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface Props {
@@ -23,7 +24,7 @@ export default function ConversationRow({
   lastMessageAt,
   unreadCount,
 }: Props) {
-  const timeAgo = formatDistanceToNow(new Date(lastMessageAt), { addSuffix: true });
+  const timeAgo = formatDistanceToNow(new Date(lastMessageAt), { addSuffix: true, locale: es });
   const preview =
     lastMessageBody.length > 60
       ? lastMessageBody.slice(0, 60) + '…'
@@ -32,7 +33,7 @@ export default function ConversationRow({
   return (
     <Link
       href={`/chats/${conversationId}`}
-      className="flex items-center gap-3 rounded-lg border bg-card p-4 transition-colors hover:bg-accent/40 active:bg-accent/60"
+      className="surface-card flex items-center gap-3 rounded-xl p-4 transition-all hover:-translate-y-0.5 hover:border-primary/20 active:bg-accent/60"
     >
       <Avatar className="h-11 w-11 shrink-0">
         {otherUserAvatar && (

@@ -30,7 +30,7 @@ export default function RateSellerButton({
         className="flex items-center gap-1.5"
       >
         <Star className="h-4 w-4" />
-        {existingRating ? 'Edit rating' : 'Rate seller'}
+        {existingRating ? 'Editar valoración' : 'Valorar vendedor'}
       </Button>
       <RatingDialog
         open={open}

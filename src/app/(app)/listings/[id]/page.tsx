@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { AlertCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ListingGallery from '@/components/listing/ListingGallery';
@@ -17,12 +18,12 @@ interface Props {
 }
 
 const STATUS_LABELS: Record<ListingStatus, string> = {
-  draft: 'Draft',
-  pending: 'Pending review',
-  live: 'Live',
-  sold: 'Sold',
-  archived: 'Archived',
-  rejected: 'Rejected',
+  draft: 'Borrador',
+  pending: 'Pendiente de revisión',
+  live: 'Publicado',
+  sold: 'Vendido',
+  archived: 'Archivado',
+  rejected: 'Rechazado',
 };
 
 const STATUS_CLASSES: Record<ListingStatus, string> = {
@@ -82,7 +83,14 @@ export default async function ListingDetailPage({ params }: Props) {
 
   const isOwner = currentUserId === listing.owner_id;
   const status = listing.status as ListingStatus;
-  const timeAgo = formatDistanceToNow(new Date(listing.created_at), { addSuffix: true });
+  const timeAgo = formatDistanceToNow(new Date(listing.created_at), { addSuffix: true, locale: es });
+  const categoryLabels: Record<string, string> = {
+    furniture: 'Muebles', kitchen: 'Cocina', electronics: 'Electrónica',
+    books: 'Libros', clothes: 'Ropa', other: 'Otros',
+  };
+  const conditionLabels: Record<string, string> = {
+    new: 'Nuevo', like_new: 'Como nuevo', used: 'Usado', worn: 'Desgastado',
+  };
 
   // Check if the current user (buyer) has a conversation with messages → show rate CTA
   let canRateSeller = false;
@@ -138,7 +146,7 @@ export default async function ListingDetailPage({ params }: Props) {
         <div className="flex gap-2 rounded-lg border border-destructive/30 bg-red-50 p-3">
           <AlertCircle className="h-4 w-4 shrink-0 text-destructive mt-0.5" />
           <div>
-            <p className="text-xs font-medium text-destructive">Rejection reason</p>
+            <p className="text-xs font-medium text-destructive">Motivo del rechazo</p>
             <p className="text-sm">{listing.rejection_reason}</p>
           </div>
         </div>
@@ -148,15 +156,15 @@ export default async function ListingDetailPage({ params }: Props) {
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">{listing.title}</h1>
         <p className="text-2xl font-bold tabular-nums text-primary">
-          {listing.is_gift ? 'Free' : `€${listing.price_eur}`}
+          {listing.is_gift ? 'Gratis' : `${listing.price_eur} €`}
         </p>
         <div className="flex items-center gap-2">
           <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-            {listing.category}
+            {categoryLabels[listing.category] ?? listing.category}
           </span>
           <span className="text-muted-foreground">·</span>
           <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-            {listing.condition.replace('_', ' ')}
+            {conditionLabels[listing.condition] ?? listing.condition}
           </span>
           <span className="text-muted-foreground">·</span>
           <span className="text-xs text-muted-foreground">{timeAgo}</span>
@@ -187,7 +195,7 @@ export default async function ListingDetailPage({ params }: Props) {
             <div>
               <p className="text-sm font-medium">{seller.display_name}</p>
               <p className="text-xs text-muted-foreground">
-                Member {formatDistanceToNow(new Date(seller.created_at), { addSuffix: true })}
+                Miembro desde {formatDistanceToNow(new Date(seller.created_at), { locale: es })}
               </p>
             </div>
           </Link>

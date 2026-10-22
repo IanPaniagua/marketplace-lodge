@@ -37,7 +37,7 @@ function SessionRefreshInner() {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-3">
       <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      <p className="text-sm text-muted-foreground">Refreshing your session…</p>
+      <p className="text-sm text-muted-foreground">Actualizando tu sesión…</p>
     </div>
   );
 }
@@ -47,7 +47,7 @@ export default function SessionRefreshPage() {
     <Suspense fallback={
       <div className="flex min-h-dvh flex-col items-center justify-center gap-3">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">Refreshing your session…</p>
+        <p className="text-sm text-muted-foreground">Actualizando tu sesión…</p>
       </div>
     }>
       <SessionRefreshInner />

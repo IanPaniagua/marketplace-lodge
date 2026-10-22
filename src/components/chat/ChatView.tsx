@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { ArrowLeft, Flag, ShieldX, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { insforge } from '@/lib/insforge';
@@ -155,7 +156,7 @@ export default function ChatView({
     setSending(false);
 
     if (error || !data) {
-      toast.error(error ?? 'Failed to send message');
+      toast.error(error ?? 'No se pudo enviar el mensaje');
       // Remove optimistic message
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMsg.id));
       setBody(trimmed);
@@ -196,7 +197,7 @@ export default function ChatView({
 
   async function handleReport() {
     if (reportReason.trim().length < 5) {
-      toast.error('Please provide a reason (at least 5 characters).');
+      toast.error('Indica un motivo de al menos 5 caracteres.');
       return;
     }
     setReportSending(true);
@@ -206,7 +207,7 @@ export default function ChatView({
       toast.error(error);
       return;
     }
-    toast.success('Report submitted. Our admin will review it.');
+    toast.success('Reporte enviado. El equipo de administración lo revisará.');
     setReportOpen(false);
     setReportReason('');
   }
@@ -219,7 +220,7 @@ export default function ChatView({
       toast.error(error);
       return;
     }
-    toast.success(`${otherUser.display_name} has been blocked.`);
+    toast.success(`${otherUser.display_name} ha sido bloqueado.`);
     router.push('/chats');
   }
 
@@ -232,7 +233,7 @@ export default function ChatView({
       <div className="flex items-center gap-3 border-b bg-background px-4 py-3">
         <Link href="/chats" className="rounded-md p-1 text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-5 w-5" />
-          <span className="sr-only">Back to chats</span>
+          <span className="sr-only">Volver a mensajes</span>
         </Link>
         <Avatar className="h-8 w-8 shrink-0">
           {otherUser.avatar_url && (
@@ -252,7 +253,7 @@ export default function ChatView({
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-primary"
             onClick={() => setRateOpen(true)}
-            title={existingRating ? 'Edit rating' : 'Rate user'}
+            title={existingRating ? 'Editar valoración' : 'Valorar usuario'}
           >
             <Star className={`h-4 w-4 ${existingRating ? 'fill-primary text-primary' : ''}`} />
           </Button>
@@ -261,7 +262,7 @@ export default function ChatView({
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
             onClick={() => setReportOpen(true)}
-            title="Report conversation"
+            title="Reportar conversación"
           >
             <Flag className="h-4 w-4" />
           </Button>
@@ -270,7 +271,7 @@ export default function ChatView({
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-destructive"
             onClick={() => setBlockOpen(true)}
-            title="Block user"
+            title="Bloquear usuario"
           >
             <ShieldX className="h-4 w-4" />
           </Button>
@@ -279,15 +280,15 @@ export default function ChatView({
 
       {/* Privacy notice */}
       <p className="border-b bg-muted/40 px-4 py-2 text-center text-[11px] leading-snug text-muted-foreground">
-        Messages are private between you and {otherUser.display_name}. Admins may read them only
-        when reviewing a report.
+        Los mensajes son privados entre tú y {otherUser.display_name}. El equipo de administración
+        solo podrá leerlos al revisar un reporte.
       </p>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {messages.length === 0 && (
           <p className="text-center text-sm text-muted-foreground pt-8">
-            No messages yet. Say hello!
+            Aún no hay mensajes. ¡Saluda!
           </p>
         )}
         {messages.map((msg) => {
@@ -300,14 +301,14 @@ export default function ChatView({
               <div
                 className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm leading-relaxed ${
                   isOwn
-                    ? 'bg-primary text-primary-foreground rounded-br-sm'
+                    ? 'brand-gradient text-primary-foreground rounded-br-sm shadow-sm'
                     : 'bg-muted text-foreground rounded-bl-sm'
                 }`}
               >
                 {msg.body}
               </div>
               <span className="mt-0.5 text-[10px] text-muted-foreground">
-                {formatDistanceToNow(new Date(msg.created_at), { addSuffix: true })}
+                {formatDistanceToNow(new Date(msg.created_at), { addSuffix: true, locale: es })}
               </span>
             </div>
           );
@@ -328,14 +329,14 @@ export default function ChatView({
                   handleSend();
                 }
               }}
-              placeholder="Type a message…"
+              placeholder="Escribe un mensaje…"
               className="min-h-[44px] max-h-[120px] resize-none text-sm"
               maxLength={2000}
               disabled={sending}
             />
             {nearLimit && (
               <p className={`mt-0.5 text-right text-[10px] ${remaining < 50 ? 'text-destructive' : 'text-muted-foreground'}`}>
-                {remaining} remaining
+                Quedan {remaining}
               </p>
             )}
           </div>
@@ -345,7 +346,7 @@ export default function ChatView({
             className="shrink-0"
             size="sm"
           >
-            Send
+            Enviar
           </Button>
         </div>
       </div>
@@ -364,27 +365,27 @@ export default function ChatView({
       <Dialog open={reportOpen} onOpenChange={setReportOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Report conversation</DialogTitle>
+            <DialogTitle>Reportar conversación</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            Describe the issue. Our admin team will review this conversation.
+            Describe el problema. El equipo de administración revisará esta conversación.
           </p>
           <Textarea
             value={reportReason}
             onChange={(e) => setReportReason(e.target.value)}
-            placeholder="Describe the problem (min 5 characters)…"
+            placeholder="Describe el problema (mínimo 5 caracteres)…"
             className="min-h-[100px] resize-none"
             maxLength={1000}
           />
           <p className="text-right text-[10px] text-muted-foreground">
-            {1000 - reportReason.length} remaining
+            Quedan {1000 - reportReason.length}
           </p>
           <DialogFooter className="gap-2">
             <Button variant="outline" onClick={() => setReportOpen(false)} disabled={reportSending}>
-              Cancel
+              Cancelar
             </Button>
             <Button onClick={handleReport} disabled={reportSending || reportReason.trim().length < 5}>
-              {reportSending ? 'Submitting…' : 'Submit report'}
+              {reportSending ? 'Enviando…' : 'Enviar reporte'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -394,18 +395,18 @@ export default function ChatView({
       <Dialog open={blockOpen} onOpenChange={setBlockOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Block {otherUser.display_name}?</DialogTitle>
+            <DialogTitle>¿Bloquear a {otherUser.display_name}?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            They will not be able to see your listings or message you. This action cannot be undone
-            without contacting an admin.
+            No podrá ver tus anuncios ni enviarte mensajes. Podrás gestionar el bloqueo más tarde
+            desde Ajustes.
           </p>
           <DialogFooter className="gap-2">
             <Button variant="outline" onClick={() => setBlockOpen(false)} disabled={blockSending}>
-              Cancel
+              Cancelar
             </Button>
             <Button variant="destructive" onClick={handleBlock} disabled={blockSending}>
-              {blockSending ? 'Blocking…' : `Block ${otherUser.display_name}`}
+              {blockSending ? 'Bloqueando…' : `Bloquear a ${otherUser.display_name}`}
             </Button>
           </DialogFooter>
         </DialogContent>

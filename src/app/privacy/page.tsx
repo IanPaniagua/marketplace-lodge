@@ -1,108 +1,108 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Privacy — Lodge Market' };
+export const metadata = { title: 'Privacidad — Lodge Market' };
 
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-8 px-4 py-10 md:py-16">
       <header className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Privacy Policy</h1>
-        <p className="text-sm text-muted-foreground">Last updated: 2026-05-06</p>
+        <h1 className="text-3xl font-semibold tracking-tight">Política de privacidad</h1>
+        <p className="text-sm text-muted-foreground">Última actualización: 06/05/2026</p>
       </header>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Who runs Lodge Market</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Quién gestiona Lodge Market</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Lodge Market is a private marketplace built for residents of a single student lodge. It is
-          operated by the lodge admin (Ian) for the residents&apos; benefit and is not a commercial
-          service. There are no payments processed on the platform.
+          Lodge Market es un mercado privado creado para los residentes de una residencia de estudiantes.
+          Lo gestiona el administrador de la residencia (Ian) en beneficio de sus residentes y no es un
+          servicio comercial. La plataforma no procesa pagos.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">What we collect</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Qué datos recopilamos</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
-          <li>Account: email address, password (hashed), display name.</li>
-          <li>Profile: avatar, short bio, room number (visible to other approved residents).</li>
-          <li>Listings: title, description, category, condition, price, photos.</li>
-          <li>Messages: the text of chats you send to other residents.</li>
+          <li>Cuenta: correo electrónico, contraseña cifrada y nombre visible.</li>
+          <li>Perfil: foto, presentación y número de habitación (visible para otros residentes aprobados).</li>
+          <li>Anuncios: título, descripción, categoría, estado, precio y fotos.</li>
+          <li>Mensajes: el texto de las conversaciones que mantienes con otros residentes.</li>
           <li>
-            Moderation data: reports you submit, blocks you set, ratings you give and receive.
+            Moderación: reportes enviados, bloqueos y valoraciones dadas y recibidas.
           </li>
           <li>
-            Technical: standard web request metadata (IP, user agent) handled by our hosting
-            provider for abuse prevention.
+            Datos técnicos: metadatos habituales de las peticiones web (IP y agente de usuario),
+            tratados por nuestro proveedor de alojamiento para prevenir abusos.
           </li>
         </ul>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Who can see your data</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Quién puede ver tus datos</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
           <li>
-            Other approved residents can see your public profile (display name, avatar, bio,
-            average rating) and your live listings.
+            Otros residentes aprobados pueden ver tu perfil público (nombre visible, foto,
+            presentación y valoración media) y tus anuncios publicados.
           </li>
           <li>
-            The other party in a chat can see the messages you sent in that chat. Messages are
-            never shown to other residents.
+            La otra persona de una conversación puede ver los mensajes enviados en ella. Estos
+            mensajes nunca se muestran al resto de residentes.
           </li>
           <li>
             <strong className="text-foreground">
-              Admins can read messages, listings, and reports to moderate the platform.
+              Los administradores pueden leer mensajes, anuncios y reportes para moderar la plataforma.
             </strong>{' '}
-            They will only do this when investigating a report or enforcing the rules.
+            Solo lo harán al investigar un reporte o aplicar las normas.
           </li>
-          <li>Your room number, email, and password are never shown on public profile views.</li>
+          <li>Tu número de habitación, correo y contraseña nunca aparecen en tu perfil público.</li>
         </ul>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Where your data is stored</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Dónde se almacenan tus datos</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Data is stored on Insforge, a managed Postgres backend hosted in the European Union
-          (eu-central). Connections are encrypted in transit (HTTPS/TLS) and at rest by the
-          underlying cloud provider&apos;s disk encryption. Photos are stored in the same provider
-          under access-controlled buckets.
+          Los datos se almacenan en InsForge, un backend Postgres gestionado y alojado en la Unión
+          Europea (eu-central). Las conexiones se cifran en tránsito (HTTPS/TLS) y los discos del
+          proveedor se cifran en reposo. Las fotos se guardan en el mismo proveedor, en espacios
+          con control de acceso.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">How long we keep it</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Durante cuánto tiempo los conservamos</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          We keep your data while your account is active. When you delete your account, we
-          soft-delete your profile: your display name is replaced with &ldquo;Deleted user&rdquo;,
-          your avatar, bio and room number are removed, and your listings are hidden. Past
-          messages remain visible to the other party but appear as sent by &ldquo;Deleted
-          user&rdquo;, since deleting messages would erase the other side of their conversation.
-          You can request full deletion of your past messages by contacting the admin.
+          Conservamos tus datos mientras tu cuenta esté activa. Al eliminarla, desactivamos tu perfil:
+          el nombre se sustituye por &ldquo;Usuario eliminado&rdquo;, se borran la foto, la presentación
+          y la habitación, y se ocultan tus anuncios. Los mensajes anteriores siguen visibles para la
+          otra persona, pero aparecen enviados por &ldquo;Usuario eliminado&rdquo;, ya que borrarlos
+          eliminaría también su copia de la conversación. Puedes solicitar la eliminación completa de
+          tus mensajes anteriores contactando con el administrador.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Your rights under GDPR</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Tus derechos según el RGPD</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          As a resident in the EU, you have the right to access, rectify, delete, restrict, and
-          port your data, and to object to its processing. To exercise any of these, use the
-          built-in editing tools in your profile, the &ldquo;Delete my account&rdquo; button in
-          settings, or contact the admin directly.
+          Como residente en la UE, tienes derecho a acceder, rectificar, eliminar, limitar y portar
+          tus datos, así como a oponerte a su tratamiento. Puedes ejercer estos derechos con las
+          herramientas de edición del perfil, el botón &ldquo;Eliminar mi cuenta&rdquo; de Ajustes o
+          contactando directamente con el administrador.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Legal basis</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Base jurídica</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          We process your data on the basis of your consent (Art. 6(1)(a) GDPR) when you sign up,
-          and on the basis of legitimate interest (Art. 6(1)(f) GDPR) for moderation, abuse
-          prevention, and keeping the lodge community safe.
+          Tratamos tus datos sobre la base de tu consentimiento (art. 6.1.a del RGPD) al registrarte
+          y del interés legítimo (art. 6.1.f del RGPD) para moderar, prevenir abusos y mantener segura
+          la comunidad de la residencia.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Contact</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Contacto</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          For any privacy question or to exercise your rights, contact the lodge admin in person
-          or by email.
+          Para cualquier consulta sobre privacidad o para ejercer tus derechos, contacta con el
+          administrador de la residencia en persona o por correo electrónico.
         </p>
       </section>
 
@@ -111,7 +111,7 @@ export default function PrivacyPage() {
           href="/login"
           className="text-sm text-foreground underline-offset-4 hover:underline"
         >
-          Back to sign in
+          Volver a iniciar sesión
         </Link>
       </div>
     </div>

@@ -21,9 +21,9 @@ export default async function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Pending approvals</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Aprobaciones pendientes</h1>
         <p className="text-sm text-muted-foreground">
-          {users.length === 0 ? 'No users waiting for approval.' : `${users.length} user${users.length === 1 ? '' : 's'} waiting.`}
+          {users.length === 0 ? 'No hay usuarios esperando aprobación.' : `${users.length} ${users.length === 1 ? 'usuario pendiente' : 'usuarios pendientes'}.`}
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export default async function AdminUsersPage() {
               <div className="space-y-0.5">
                 <p className="text-sm font-medium">{u.display_name}</p>
                 <p className="text-xs text-muted-foreground">
-                  Joined {new Date(u.created_at).toLocaleDateString()}
+                  Se registró el {new Date(u.created_at).toLocaleDateString('es-ES')}
                 </p>
               </div>
               <ApproveButton userId={u.id} />

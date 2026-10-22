@@ -107,7 +107,7 @@ export default function PhotoUpload({ photos, onChange, maxPhotos = 5 }: Props) 
                 dragOver === index && 'opacity-50',
               )}
             >
-              <Image src={src} alt={`Photo ${index + 1}`} fill className="object-cover" />
+              <Image src={src} alt={`Foto ${index + 1}`} fill className="object-cover" />
               {/* Sort handle */}
               <div className="absolute left-1 top-1 cursor-grab rounded bg-black/40 p-0.5 opacity-0 group-hover:opacity-100">
                 <GripVertical className="h-3 w-3 text-white" />
@@ -117,13 +117,13 @@ export default function PhotoUpload({ photos, onChange, maxPhotos = 5 }: Props) 
                 type="button"
                 onClick={() => remove(index)}
                 className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
-                aria-label="Remove photo"
+                aria-label="Eliminar foto"
               >
                 <X className="h-3 w-3" />
               </button>
               {index === 0 && (
                 <span className="absolute bottom-1 left-1 rounded bg-black/50 px-1.5 py-0.5 text-[10px] text-white">
-                  Main
+                  Portada
                 </span>
               )}
             </div>
@@ -137,13 +137,13 @@ export default function PhotoUpload({ photos, onChange, maxPhotos = 5 }: Props) 
             className="flex aspect-square flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-border bg-muted/50 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
           >
             <Plus className="h-5 w-5" />
-            <span className="text-[10px]">Add</span>
+            <span className="text-[10px]">Añadir</span>
           </button>
         )}
       </div>
 
       <p className="text-xs text-muted-foreground">
-        {photos.length}/{maxPhotos} photos · Drag to reorder · First photo is the cover
+        {photos.length}/{maxPhotos} fotos · Arrastra para ordenar · La primera será la portada
       </p>
 
       <input

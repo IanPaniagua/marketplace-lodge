@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import SettingsForm from '@/components/profile/SettingsForm';
 import BlockedUsersList from '@/components/profile/BlockedUsersList';
 import NotificationsToggle from '@/components/profile/NotificationsToggle';
+import LanguageSettings from '@/components/profile/LanguageSettings';
 import { getCurrentUserEmail } from '@/app/(app)/profile/actions';
 
-export const metadata = { title: 'Settings — Lodge Market' };
+export const metadata = { title: 'Ajustes — Lodge Market' };
 
 export default async function ProfileSettingsPage() {
   const email = await getCurrentUserEmail();
@@ -19,41 +20,46 @@ export default async function ProfileSettingsPage() {
         <Button variant="ghost" size="sm" asChild>
           <Link href="/profile" className="flex items-center gap-1">
             <ChevronLeft className="h-4 w-4" />
-            Back
+            Volver
           </Link>
         </Button>
         <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-          Settings
+          Ajustes
         </h1>
       </div>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold tracking-tight">Idioma</h2>
+        <LanguageSettings />
+      </section>
 
       <SettingsForm email={email} />
 
       <section className="space-y-4 border-t pt-6">
         <div className="space-y-1">
-          <h2 className="text-xl font-semibold tracking-tight">Notifications</h2>
+          <h2 className="text-xl font-semibold tracking-tight">Notificaciones</h2>
         </div>
         <NotificationsToggle />
       </section>
 
       <section className="space-y-4 border-t pt-6">
         <div className="space-y-1">
-          <h2 className="text-xl font-semibold tracking-tight">Blocked users</h2>
+          <h2 className="text-xl font-semibold tracking-tight">Usuarios bloqueados</h2>
           <p className="text-sm text-muted-foreground">
-            Unblocking restores their profile, listings, and any existing chat
-            between you.
+            Al desbloquear a una persona volverás a ver su perfil, sus anuncios y
+            las conversaciones que ya existieran.
           </p>
         </div>
         <BlockedUsersList />
       </section>
 
       <p className="border-t pt-4 text-xs text-muted-foreground">
-        See our{' '}
+        Consulta nuestra{' '}
         <Link
           href="/privacy"
           className="text-foreground underline-offset-4 hover:underline"
         >
-          Privacy Policy
+          Política de privacidad
         </Link>
         .
       </p>

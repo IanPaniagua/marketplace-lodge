@@ -11,11 +11,11 @@ const WINDOW_LABELS: Record<MetricsWindow, string> = {
   '7d': '7d',
   '30d': '30d',
   '90d': '90d',
-  all: 'All',
+  all: 'Todo',
 };
 
 function formatInt(n: number) {
-  return new Intl.NumberFormat('en-US').format(Math.round(n));
+  return new Intl.NumberFormat('es-ES').format(Math.round(n));
 }
 
 function formatPct(value: number) {
@@ -85,23 +85,23 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const window = parseWindow(params.window);
   const m = await getMetrics(window);
 
-  const windowSuffix = m.windowDays !== null ? `last ${m.windowDays}d` : 'all time';
+  const windowSuffix = m.windowDays !== null ? `últimos ${m.windowDays} días` : 'histórico';
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Analítica</h1>
           <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground">
-            Back to admin
+            Volver a administración
           </Link>
         </div>
         <p className="text-sm text-muted-foreground">
-          Internal dashboard. Numbers refresh on page load.
+          Panel interno. Los datos se actualizan al cargar la página.
         </p>
       </div>
 
-      <nav aria-label="Time window" className="inline-flex rounded-md bg-muted p-1">
+      <nav aria-label="Periodo" className="inline-flex rounded-md bg-muted p-1">
         {METRICS_WINDOWS.map((w) => {
           const isActive = w === window;
           return (
@@ -122,42 +122,42 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       </nav>
 
       <section className="space-y-3">
-        <SectionHeader title="Adoption" />
+        <SectionHeader title="Adopción" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Stat
-            label="Lodge adoption"
+            label="Adopción en Lodge"
             value={formatPct(m.adoption.adoptionRate)}
-            sub={`${m.adoption.approvedUsers} of ${m.adoption.lodgeSize}`}
+            sub={`${m.adoption.approvedUsers} de ${m.adoption.lodgeSize}`}
             accent
           />
-          <Stat label="New signups" value={formatInt(m.adoption.newSignupsInWindow)} sub={windowSuffix} />
-          <Stat label="Pending approvals" value={formatInt(m.adoption.pendingApprovals)} sub="awaiting review" />
-          <Stat label="Approved users" value={formatInt(m.adoption.approvedUsers)} sub="active accounts" />
+          <Stat label="Nuevos registros" value={formatInt(m.adoption.newSignupsInWindow)} sub={windowSuffix} />
+          <Stat label="Aprobaciones pendientes" value={formatInt(m.adoption.pendingApprovals)} sub="esperando revisión" />
+          <Stat label="Usuarios aprobados" value={formatInt(m.adoption.approvedUsers)} sub="cuentas activas" />
         </div>
       </section>
 
       <section className="space-y-3">
-        <SectionHeader title="Engagement" hint="based on last app open" />
+        <SectionHeader title="Participación" hint="según la última apertura" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <Stat label="Weekly active" value={formatInt(m.engagement.wau)} sub="last 7d" />
-          <Stat label="Monthly active" value={formatInt(m.engagement.mau)} sub="last 30d" />
-          <Stat label="Stickiness" value={formatPct(m.engagement.stickiness)} sub="WAU ÷ MAU" />
+          <Stat label="Activos semanales" value={formatInt(m.engagement.wau)} sub="últimos 7 días" />
+          <Stat label="Activos mensuales" value={formatInt(m.engagement.mau)} sub="últimos 30 días" />
+          <Stat label="Recurrencia" value={formatPct(m.engagement.stickiness)} sub="WAU ÷ MAU" />
         </div>
       </section>
 
       <section className="space-y-3">
-        <SectionHeader title="Marketplace" />
+        <SectionHeader title="Mercado" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          <Stat label="Live listings" value={formatInt(m.marketplace.liveListings)} sub="status = live" />
-          <Stat label="New listings" value={formatInt(m.marketplace.newListingsInWindow)} sub={windowSuffix} />
-          <Stat label="Sold" value={formatInt(m.marketplace.soldInWindow)} sub={windowSuffix} />
+          <Stat label="Anuncios activos" value={formatInt(m.marketplace.liveListings)} sub="publicados" />
+          <Stat label="Nuevos anuncios" value={formatInt(m.marketplace.newListingsInWindow)} sub={windowSuffix} />
+          <Stat label="Vendidos" value={formatInt(m.marketplace.soldInWindow)} sub={windowSuffix} />
           <Stat
-            label="Time to sold"
+            label="Tiempo hasta venta"
             value={formatDays(m.marketplace.medianTimeToSoldDays)}
-            sub="median, all time"
+            sub="mediana histórica"
           />
           <Stat
-            label="Sell-through"
+            label="Tasa de venta"
             value={m.marketplace.sellThroughRate === null ? '—' : formatPct(m.marketplace.sellThroughRate)}
             sub="sold ÷ (live + sold)"
           />
@@ -165,45 +165,45 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       </section>
 
       <section className="space-y-3">
-        <SectionHeader title="Conversation" />
+        <SectionHeader title="Conversaciones" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Stat
-            label="Conversations started"
+            label="Conversaciones iniciadas"
             value={formatInt(m.conversation.conversationsStartedInWindow)}
             sub={windowSuffix}
           />
           <Stat
-            label="Listings with chat"
+            label="Anuncios con chat"
             value={formatPct(m.conversation.pctListingsWithConversation)}
             sub="≥1 conversation"
           />
           <Stat
-            label="Avg messages / chat"
+            label="Media mensajes / chat"
             value={formatDecimal(m.conversation.avgMessagesPerConversation)}
-            sub="all time"
+            sub="histórico"
           />
         </div>
       </section>
 
       <section className="space-y-3">
-        <SectionHeader title="Operational health" />
+        <SectionHeader title="Salud operativa" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <Stat label="Open reports" value={formatInt(m.health.openReports)} sub="needs review" />
+          <Stat label="Reportes abiertos" value={formatInt(m.health.openReports)} sub="requieren revisión" />
           <Stat
-            label="Time to resolve"
+            label="Tiempo de resolución"
             value={formatHours(m.health.medianTimeToResolveHours)}
-            sub="median, resolved reports"
+            sub="mediana de reportes resueltos"
           />
           <Stat
-            label="Listing processing"
+            label="Revisión de anuncios"
             value={formatHours(m.health.medianListingProcessingHours)}
-            sub="median, submission → approval"
+            sub="mediana, envío → aprobación"
           />
         </div>
       </section>
 
       <p className="text-xs text-muted-foreground">
-        Generated {new Date(m.generatedAt).toLocaleString('en-GB')}
+        Generado el {new Date(m.generatedAt).toLocaleString('es-ES')}
       </p>
     </div>
   );

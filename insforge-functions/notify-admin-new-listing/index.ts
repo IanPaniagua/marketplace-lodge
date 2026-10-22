@@ -1,7 +1,7 @@
-import { createClient } from '@insforge/sdk';
+import { createClient } from 'npm:@insforge/sdk';
 
-const BASE_URL = process.env.INSFORGE_URL ?? process.env.NEXT_PUBLIC_INSFORGE_URL ?? '';
-const SERVICE_KEY = process.env.INSFORGE_SERVICE_KEY ?? '';
+const BASE_URL = Deno.env.get('INSFORGE_BASE_URL') ?? Deno.env.get('INSFORGE_URL') ?? '';
+const SERVICE_KEY = Deno.env.get('API_KEY') ?? Deno.env.get('INSFORGE_SERVICE_KEY') ?? '';
 
 export default async function handler(req: Request): Promise<Response> {
   const body = await req.json() as { listing_id?: string };
@@ -69,7 +69,7 @@ export default async function handler(req: Request): Promise<Response> {
   `;
 
   // Use the Insforge emails API
-  const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL;
+  const ADMIN_EMAIL = Deno.env.get('ADMIN_NOTIFICATION_EMAIL');
   if (!ADMIN_EMAIL) {
     return new Response(JSON.stringify({ sent: false, reason: 'No admin email configured' }), { status: 200 });
   }

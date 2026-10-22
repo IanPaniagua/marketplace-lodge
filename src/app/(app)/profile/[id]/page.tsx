@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { Star } from 'lucide-react';
 import RatingsList from '@/components/rating/RatingsList';
 import type { Profile } from '@/types/db';
@@ -14,7 +15,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
-  return { title: `Profile ${id} — Lodge Market` };
+  return { title: `Perfil ${id} — Lodge Market` };
 }
 
 export default async function PublicProfilePage({ params }: Props) {
@@ -66,6 +67,7 @@ export default async function PublicProfilePage({ params }: Props) {
 
   const memberSince = formatDistanceToNow(new Date(p.created_at), {
     addSuffix: true,
+    locale: es,
   });
 
   return (
@@ -92,12 +94,12 @@ export default async function PublicProfilePage({ params }: Props) {
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-3 divide-x rounded-lg border bg-card">
+      <div className="surface-card grid grid-cols-3 divide-x rounded-xl">
         <div className="flex flex-col items-center gap-0.5 py-4">
           <span className="text-lg font-semibold tabular-nums">
             {listingsCount ?? 0}
           </span>
-          <span className="text-xs text-muted-foreground">Listings</span>
+          <span className="text-xs text-muted-foreground">Anuncios</span>
         </div>
 
         <div className="flex flex-col items-center gap-0.5 py-4">
@@ -108,26 +110,26 @@ export default async function PublicProfilePage({ params }: Props) {
                 {avgRating.toFixed(1)}
               </span>
               <span className="text-xs text-muted-foreground">
-                {ratings.length} {ratings.length === 1 ? 'rating' : 'ratings'}
+                {ratings.length} {ratings.length === 1 ? 'valoración' : 'valoraciones'}
               </span>
             </>
           ) : (
             <>
               <span className="text-lg font-semibold text-muted-foreground">—</span>
-              <span className="text-xs text-muted-foreground">No ratings yet</span>
+              <span className="text-xs text-muted-foreground">Sin valoraciones</span>
             </>
           )}
         </div>
 
         <div className="flex flex-col items-center gap-0.5 py-4">
-          <span className="text-xs text-muted-foreground">Member</span>
+          <span className="text-xs text-muted-foreground">Miembro</span>
           <span className="text-center text-xs font-medium">{memberSince}</span>
         </div>
       </div>
       {/* Ratings list */}
       {ratings.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold tracking-tight">Ratings</h2>
+          <h2 className="text-lg font-semibold tracking-tight">Valoraciones</h2>
           <RatingsList rateeId={p.id} rateeName={p.display_name} />
         </section>
       )}

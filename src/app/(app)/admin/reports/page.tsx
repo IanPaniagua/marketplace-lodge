@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import ReportActions from '@/components/admin/ReportActions';
 import type { Profile } from '@/types/db';
 
@@ -70,14 +71,14 @@ export default async function AdminReportsPage({ searchParams }: Props) {
   }
 
   const tabs: { key: string; label: string }[] = [
-    { key: 'open', label: 'Open' },
-    { key: 'resolved', label: 'Resolved' },
-    { key: 'dismissed', label: 'Dismissed' },
+    { key: 'open', label: 'Abiertos' },
+    { key: 'resolved', label: 'Resueltos' },
+    { key: 'dismissed', label: 'Descartados' },
   ];
 
   return (
     <div className="space-y-6 pb-4">
-      <h1 className="text-xl font-semibold tracking-tight">Reports</h1>
+      <h1 className="text-xl font-semibold tracking-tight">Reportes</h1>
 
       {/* Tab bar */}
       <div className="flex gap-1 rounded-lg bg-muted p-1">
@@ -98,7 +99,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
 
       {reports.length === 0 && (
         <p className="text-center text-sm text-muted-foreground py-12">
-          No {tab} reports.
+          No hay reportes en esta sección.
         </p>
       )}
 
@@ -110,14 +111,14 @@ export default async function AdminReportsPage({ searchParams }: Props) {
               <div className="flex items-start justify-between gap-2">
                 <div className="space-y-0.5">
                   <p className="text-xs text-muted-foreground">
-                    Reported by{' '}
+                    Reportado por{' '}
                     <span className="font-medium text-foreground">
                       {reporter?.display_name ?? report.reporter_id}
                     </span>{' '}
-                    · {formatDistanceToNow(new Date(report.created_at), { addSuffix: true })}
+                    · {formatDistanceToNow(new Date(report.created_at), { addSuffix: true, locale: es })}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Target:{' '}
+                    Objetivo:{' '}
                     <span className="font-mono text-foreground text-[11px]">
                       {report.target_type}/{report.target_id}
                     </span>

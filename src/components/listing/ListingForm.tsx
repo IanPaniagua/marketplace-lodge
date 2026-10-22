@@ -31,19 +31,19 @@ import {
 } from '@/components/ui/form';
 
 const CATEGORIES = [
-  { value: 'furniture', label: 'Furniture' },
-  { value: 'kitchen', label: 'Kitchen' },
-  { value: 'electronics', label: 'Electronics' },
-  { value: 'books', label: 'Books' },
-  { value: 'clothes', label: 'Clothes' },
-  { value: 'other', label: 'Other' },
+  { value: 'furniture', label: 'Muebles' },
+  { value: 'kitchen', label: 'Cocina' },
+  { value: 'electronics', label: 'Electrónica' },
+  { value: 'books', label: 'Libros' },
+  { value: 'clothes', label: 'Ropa' },
+  { value: 'other', label: 'Otros' },
 ] as const;
 
 const CONDITIONS = [
-  { value: 'new', label: 'New' },
-  { value: 'like_new', label: 'Like new' },
-  { value: 'used', label: 'Used' },
-  { value: 'worn', label: 'Worn' },
+  { value: 'new', label: 'Nuevo' },
+  { value: 'like_new', label: 'Como nuevo' },
+  { value: 'used', label: 'Usado' },
+  { value: 'worn', label: 'Desgastado' },
 ] as const;
 
 interface Props {
@@ -96,7 +96,7 @@ export default function ListingForm({
         body: fd,
         credentials: 'same-origin',
       });
-      if (!res.ok) throw new Error('Photo upload failed');
+      if (!res.ok) throw new Error('No se pudo subir la foto');
       paths.push(path);
     }
     return paths;
@@ -112,7 +112,7 @@ export default function ListingForm({
 
   function onSubmit(values: ListingFieldsInput) {
     if (photos.length === 0) {
-      toast.error('Add at least one photo.');
+      toast.error('Añade al menos una foto.');
       return;
     }
 
@@ -120,7 +120,7 @@ export default function ListingForm({
       try {
         if (mode === 'create') {
           const { data, error } = await createListingRecord(values);
-          if (error || !data) { toast.error(error ?? 'Failed to create listing'); return; }
+          if (error || !data) { toast.error(error ?? 'No se pudo crear el anuncio'); return; }
 
           const newPhotos = photos.filter((p): p is NewPhoto => p.type === 'new');
           const paths = await uploadNewPhotos(newPhotos, data.listingId);
@@ -128,7 +128,7 @@ export default function ListingForm({
           if (photoErr) { toast.error(photoErr); return; }
 
           await notifyAdmin(data.listingId);
-          toast.success('Listing submitted for review.');
+          toast.success('Anuncio enviado para revisión.');
           router.push(`/listings/${data.listingId}`);
         } else {
           if (!listingId) return;
@@ -172,11 +172,11 @@ export default function ListingForm({
           }
 
           if (photosChanged) await notifyAdmin(listingId);
-          toast.success('Listing updated.');
+          toast.success('Anuncio actualizado.');
           router.push(`/listings/${listingId}`);
         }
       } catch (err) {
-        toast.error('Something went wrong. Try again.');
+        toast.error('Algo ha salido mal. Inténtalo de nuevo.');
         console.error(err);
       }
     });
@@ -187,7 +187,7 @@ export default function ListingForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Photos */}
         <div className="space-y-2">
-          <Label>Photos <span className="text-destructive">*</span></Label>
+          <Label>Fotos <span className="text-destructive">*</span></Label>
           <PhotoUpload
             photos={photos}
             onChange={setPhotos}
@@ -200,9 +200,9 @@ export default function ListingForm({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Título</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="What are you selling?" className="h-11 md:h-10" />
+                <Input {...field} placeholder="¿Qué quieres vender?" className="h-11 md:h-10" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -215,11 +215,11 @@ export default function ListingForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Descripción</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
-                  placeholder="Describe the item — condition, size, reason for selling…"
+                  placeholder="Describe el artículo: estado, tamaño y cualquier detalle útil…"
                   rows={4}
                   maxLength={2000}
                   className="resize-none"
@@ -239,7 +239,7 @@ export default function ListingForm({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>Categoría</FormLabel>
               <div className="flex flex-wrap gap-2">
                 {CATEGORIES.map(({ value, label }) => (
                   <button
@@ -248,7 +248,7 @@ export default function ListingForm({
                     onClick={() => field.onChange(value)}
                     className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors ${
                       field.value === value
-                        ? 'border-primary bg-primary text-primary-foreground'
+                        ? 'brand-gradient border-transparent text-primary-foreground shadow-sm'
                         : 'border-border bg-background text-foreground hover:bg-muted'
                     }`}
                   >
@@ -267,7 +267,7 @@ export default function ListingForm({
           name="condition"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Condition</FormLabel>
+              <FormLabel>Estado</FormLabel>
               <div className="flex flex-wrap gap-2">
                 {CONDITIONS.map(({ value, label }) => (
                   <button
@@ -276,7 +276,7 @@ export default function ListingForm({
                     onClick={() => field.onChange(value)}
                     className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors ${
                       field.value === value
-                        ? 'border-primary bg-primary text-primary-foreground'
+                        ? 'brand-gradient border-transparent text-primary-foreground shadow-sm'
                         : 'border-border bg-background text-foreground hover:bg-muted'
                     }`}
                   >
@@ -292,7 +292,7 @@ export default function ListingForm({
         {/* Price / Free toggle */}
         <div className="space-y-3">
           <div className="space-y-2">
-            <Label>Pricing</Label>
+            <Label>Precio</Label>
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -307,7 +307,7 @@ export default function ListingForm({
                   }
                 }}
                 className={`relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors ${
-                  isGift ? 'bg-primary' : 'bg-border'
+                  isGift ? 'brand-gradient' : 'bg-border'
                 }`}
               >
                 <span
@@ -316,7 +316,7 @@ export default function ListingForm({
                   }`}
                 />
               </button>
-              <span className="text-sm font-medium">Give away for free</span>
+              <span className="text-sm font-medium">Regalar gratis</span>
             </div>
           </div>
 
@@ -326,7 +326,7 @@ export default function ListingForm({
               name="price_eur"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price (€)</FormLabel>
+                  <FormLabel>Precio (€)</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
@@ -363,11 +363,11 @@ export default function ListingForm({
         >
           {isPending
             ? mode === 'create'
-              ? 'Submitting…'
-              : 'Saving…'
+              ? 'Enviando…'
+              : 'Guardando…'
             : mode === 'create'
-              ? 'Submit listing'
-              : 'Save changes'}
+              ? 'Publicar anuncio'
+              : 'Guardar cambios'}
         </Button>
       </form>
     </Form>

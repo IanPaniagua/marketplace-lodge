@@ -47,7 +47,7 @@ export default function AvatarCropModal({ imageSrc, open, onClose, onCropped }: 
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <DialogContent className="max-w-sm gap-0 p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4">
-          <DialogTitle>Crop photo</DialogTitle>
+          <DialogTitle>Recortar foto</DialogTitle>
         </DialogHeader>
 
         {/* Crop area */}
@@ -72,7 +72,7 @@ export default function AvatarCropModal({ imageSrc, open, onClose, onCropped }: 
         <div className="flex items-center gap-3 px-6 py-4">
           <button
             type="button"
-            aria-label="Zoom out"
+            aria-label="Alejar"
             onClick={() => setZoom((z) => Math.max(1, z - 0.1))}
             className="flex h-8 w-8 items-center justify-center rounded-full border transition-colors hover:bg-muted"
           >
@@ -90,7 +90,7 @@ export default function AvatarCropModal({ imageSrc, open, onClose, onCropped }: 
           />
           <button
             type="button"
-            aria-label="Zoom in"
+            aria-label="Acercar"
             onClick={() => setZoom((z) => Math.min(3, z + 0.1))}
             className="flex h-8 w-8 items-center justify-center rounded-full border transition-colors hover:bg-muted"
           >
@@ -100,10 +100,10 @@ export default function AvatarCropModal({ imageSrc, open, onClose, onCropped }: 
 
         <DialogFooter className="px-6 pb-6 gap-2">
           <Button variant="secondary" onClick={onClose} disabled={busy}>
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={handleApply} disabled={busy}>
-            {busy ? 'Applying…' : 'Apply'}
+            {busy ? 'Aplicando…' : 'Aplicar'}
           </Button>
         </DialogFooter>
       </DialogContent>

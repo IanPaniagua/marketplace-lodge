@@ -48,7 +48,7 @@ export async function createListingRecord(
 
     if (error || !data) {
       console.error('[createListing] DB error:', error);
-      return { data: null, error: 'Failed to create listing.' };
+      return { data: null, error: 'No se pudo crear el anuncio.' };
     }
     return { data: { listingId: (data as { id: string }).id }, error: null };
   } catch {
@@ -70,7 +70,7 @@ export async function saveListingPhotos(
     }));
 
     const { error } = await client.database.from('listing_photos').insert(rows);
-    if (error) return { data: null, error: 'Failed to save photos.' };
+    if (error) return { data: null, error: 'No se pudieron guardar las fotos.' };
     return { data: null, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };
@@ -127,7 +127,7 @@ export async function updateListingRecord(
       .eq('id', listingId)
       .eq('owner_id', user.id);
 
-    if (error) return { data: null, error: 'Failed to update listing.' };
+    if (error) return { data: null, error: 'No se pudo actualizar el anuncio.' };
     return { data: null, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };
@@ -144,7 +144,7 @@ export async function deleteListingPhotos(
       .from('listing_photos')
       .delete()
       .in('id', photoIds);
-    if (error) return { data: null, error: 'Failed to remove photos.' };
+    if (error) return { data: null, error: 'No se pudieron eliminar las fotos.' };
     return { data: null, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };
@@ -166,7 +166,7 @@ export async function reorderListingPhotos(
     );
     return { data: null, error: null };
   } catch {
-    return { data: null, error: 'Failed to reorder photos.' };
+    return { data: null, error: 'No se pudieron ordenar las fotos.' };
   }
 }
 
@@ -183,7 +183,7 @@ export async function markAsSold(
       .eq('id', listingId)
       .eq('owner_id', user.id);
 
-    if (error) return { data: null, error: 'Failed to mark as sold.' };
+    if (error) return { data: null, error: 'No se pudo marcar como vendido.' };
     return { data: null, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };
@@ -203,7 +203,7 @@ export async function deleteListing(
       .eq('id', listingId)
       .eq('owner_id', user.id);
 
-    if (error) return { data: null, error: 'Failed to delete listing.' };
+    if (error) return { data: null, error: 'No se pudo eliminar el anuncio.' };
     return { data: null, error: null };
   } catch {
     return { data: null, error: 'Not authenticated.' };

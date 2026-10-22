@@ -14,10 +14,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: '/', label: 'Search', Icon: ShoppingBag },
-  { href: '/listings/new', label: 'Post item', Icon: PlusSquare },
-  { href: '/chats', label: 'Chats', Icon: MessageCircle },
-  { href: '/profile', label: 'Profile', Icon: User },
+  { href: '/', label: 'Explorar', Icon: ShoppingBag },
+  { href: '/listings/new', label: 'Publicar', Icon: PlusSquare },
+  { href: '/chats', label: 'Mensajes', Icon: MessageCircle },
+  { href: '/profile', label: 'Perfil', Icon: User },
 ];
 
 interface Props {
@@ -77,7 +77,7 @@ export default function BottomNav({ userId }: Props) {
   }, [userId, pathname, handleNewMessage]);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t bg-background md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/70 bg-background/90 shadow-[0_-10px_30px_-22px_hsl(var(--foreground)/0.35)] backdrop-blur-xl md:hidden">
       <ul className="mx-auto flex h-16 max-w-2xl items-center justify-around px-2">
         {navItems.map(({ href, label, Icon }) => {
           const active =
@@ -91,7 +91,7 @@ export default function BottomNav({ userId }: Props) {
                 className={cn(
                   'relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-md transition-colors',
                   active
-                    ? 'text-primary'
+                    ? 'text-primary after:absolute after:bottom-0 after:h-0.5 after:w-5 after:rounded-full after:bg-primary'
                     : 'text-muted-foreground hover:text-foreground',
                 )}
               >

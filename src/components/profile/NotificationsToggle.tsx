@@ -28,13 +28,13 @@ export default function NotificationsToggle() {
   if (status === 'loading') return null;
   if (status === 'unsupported') return (
     <p className="text-sm text-muted-foreground">
-      Push notifications are not supported in this browser.
+      Este navegador no admite notificaciones push.
     </p>
   );
 
   if (status === 'denied') return (
     <p className="text-sm text-muted-foreground">
-      Notifications are blocked. Enable them in your browser or device settings to receive alerts.
+      Las notificaciones están bloqueadas. Actívalas en los ajustes del navegador o del dispositivo.
     </p>
   );
 
@@ -43,13 +43,13 @@ export default function NotificationsToggle() {
     if (status === 'subscribed') {
       const ok = await unsubscribeFromPush();
       setBusy(false);
-      if (ok) { setStatus('unsubscribed'); toast.success('Notifications disabled.'); }
-      else toast.error('Could not disable notifications.');
+      if (ok) { setStatus('unsubscribed'); toast.success('Notificaciones desactivadas.'); }
+      else toast.error('No se pudieron desactivar las notificaciones.');
     } else {
       const result = await requestPermissionAndSubscribe();
       setBusy(false);
-      if (result.ok) { setStatus('subscribed'); toast.success('Notifications enabled.'); }
-      else toast.error(`Could not enable: ${result.reason}`);
+      if (result.ok) { setStatus('subscribed'); toast.success('Notificaciones activadas.'); }
+      else toast.error(`No se pudieron activar: ${result.reason}`);
     }
   }
 
@@ -61,9 +61,9 @@ export default function NotificationsToggle() {
           : <BellOff className="h-4 w-4 text-muted-foreground" />
         }
         <div>
-          <p className="text-sm font-medium">Notifications</p>
+          <p className="text-sm font-medium">Notificaciones</p>
           <p className="text-xs text-muted-foreground">
-            {status === 'subscribed' ? 'You will receive push notifications on this device.' : 'You will not receive push notifications on this device.'}
+            {status === 'subscribed' ? 'Recibirás notificaciones en este dispositivo.' : 'No recibirás notificaciones en este dispositivo.'}
           </p>
         </div>
       </div>
@@ -74,7 +74,7 @@ export default function NotificationsToggle() {
         disabled={busy}
         className="shrink-0"
       >
-        {busy ? '…' : status === 'subscribed' ? 'Disable' : 'Enable'}
+        {busy ? '…' : status === 'subscribed' ? 'Desactivar' : 'Activar'}
       </Button>
     </div>
   );

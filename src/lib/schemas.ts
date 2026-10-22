@@ -5,7 +5,7 @@ export const SignupSchema = z.object({
   password: z.string().min(8).max(72),
   display_name: z.string().min(2).max(40),
   accept_privacy: z.literal(true, {
-    message: 'You must accept the Privacy Policy.',
+    message: 'Debes aceptar la Política de privacidad.',
   }),
 });
 
@@ -15,16 +15,16 @@ export const LoginSchema = z.object({
 });
 
 export const VerifyEmailSchema = z.object({
-  otp: z.string().length(6, 'Code must be 6 digits'),
+  otp: z.string().length(6, 'El código debe tener 6 dígitos'),
 });
 
 // Fields-only schema (photos handled separately in the component)
 export const ListingFieldsSchema = z
   .object({
-    title: z.string().min(3, 'At least 3 characters').max(80, 'Max 80 characters'),
+    title: z.string().min(3, 'Mínimo 3 caracteres').max(80, 'Máximo 80 caracteres'),
     description: z
       .string()
-      .max(2000, 'Max 2000 characters'),
+      .max(2000, 'Máximo 2000 caracteres'),
     category: z.enum([
       'furniture',
       'kitchen',
@@ -35,10 +35,10 @@ export const ListingFieldsSchema = z
     ]),
     condition: z.enum(['new', 'like_new', 'used', 'worn']),
     is_gift: z.boolean(),
-    price_eur: z.number().nonnegative('Price must be 0 or more').nullable(),
+    price_eur: z.number().nonnegative('El precio debe ser 0 o superior').nullable(),
   })
   .refine((d) => (d.is_gift ? d.price_eur === null : d.price_eur !== null), {
-    message: 'Set a price or mark as free',
+    message: 'Indica un precio o marca el artículo como gratis',
     path: ['price_eur'],
   });
 
@@ -53,7 +53,7 @@ export const ListingSchema = z
     photos: z.array(z.instanceof(File)).min(1).max(5),
   })
   .refine((d) => (d.is_gift ? d.price_eur === null : d.price_eur !== null), {
-    message: 'Set a price or mark as gift',
+    message: 'Indica un precio o marca el artículo como regalo',
   });
 
 export const MessageSchema = z.object({

@@ -1,0 +1,10 @@
+[mcp_servers.insforge]
+command = "npx"
+args = [
+    "-y",
+    "@insforge/mcp@latest",
+]
+
+[mcp_servers.insforge.env]
+API_KEY = "ik_c0490ff0442c7cfee8bdc426cd87cda5"
+API_BASE_URL = "https://ueaj3g8y.eu-central.insforge.app"

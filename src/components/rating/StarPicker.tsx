@@ -26,7 +26,7 @@ export default function StarPicker({ value, onChange, disabled = false }: Props)
   return (
     <div
       role="group"
-      aria-label="Star rating"
+      aria-label="Puntuación con estrellas"
       className="flex gap-1"
       onMouseLeave={() => setHovered(0)}
     >
@@ -38,7 +38,7 @@ export default function StarPicker({ value, onChange, disabled = false }: Props)
             type="button"
             role="radio"
             aria-checked={value === star}
-            aria-label={`${star} star${star === 1 ? '' : 's'}`}
+            aria-label={`${star} ${star === 1 ? 'estrella' : 'estrellas'}`}
             disabled={disabled}
             className={cn(
               'h-11 w-11 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:h-9 md:w-9',

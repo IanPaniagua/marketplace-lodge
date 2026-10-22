@@ -52,7 +52,7 @@ export async function getOrCreateConversation(
     .single();
 
   if (error || !created) {
-    return { data: null, error: 'Failed to create conversation' };
+    return { data: null, error: 'No se pudo crear la conversación' };
   }
 
   const conv = created as unknown as Pick<Conversation, 'id'>;
@@ -83,7 +83,7 @@ export async function sendMessage(
     .eq('id', conversationId)
     .single();
 
-  if (!convRaw) return { data: null, error: 'Conversation not found' };
+  if (!convRaw) return { data: null, error: 'No se encontró la conversación' };
   const conv = convRaw as unknown as Pick<Conversation, 'id' | 'buyer_id' | 'seller_id'>;
   if (conv.buyer_id !== userId && conv.seller_id !== userId) {
     return { data: null, error: 'Not a participant' };
@@ -96,7 +96,7 @@ export async function sendMessage(
     .single();
 
   if (error || !msgRaw) {
-    return { data: null, error: 'Failed to send message' };
+    return { data: null, error: 'No se pudo enviar el mensaje' };
   }
 
   // Update last_message_at on the conversation
@@ -123,7 +123,7 @@ export async function getMessagesSince(
     .gt('created_at', since)
     .order('created_at', { ascending: true });
 
-  if (error) return { data: null, error: 'Failed to fetch messages' };
+  if (error) return { data: null, error: 'No se pudieron cargar los mensajes' };
   return { data: (msgsRaw ?? []) as unknown as Message[], error: null };
 }
 
@@ -149,7 +149,7 @@ export async function blockUser(
     .from('blocks')
     .insert({ blocker_id: userId, blocked_id: targetUserId });
 
-  if (error) return { error: 'Failed to block user' };
+  if (error) return { error: 'No se pudo bloquear al usuario' };
   return { error: null };
 }
 
@@ -173,7 +173,7 @@ export async function getBlockedUsers(): Promise<{
     .eq('blocker_id', userId)
     .order('created_at', { ascending: false });
 
-  if (blocksError) return { data: null, error: 'Failed to load blocks' };
+  if (blocksError) return { data: null, error: 'No se pudieron cargar los bloqueos' };
 
   const blocks = (blocksRaw ?? []) as Array<{
     blocked_id: string;
@@ -189,7 +189,7 @@ export async function getBlockedUsers(): Promise<{
     .select('id,display_name,avatar_url')
     .in('id', blockedIds);
 
-  if (profilesError) return { data: null, error: 'Failed to load profiles' };
+  if (profilesError) return { data: null, error: 'No se pudieron cargar los perfiles' };
 
   const profiles = (profilesRaw ?? []) as Array<{
     id: string;
@@ -202,7 +202,7 @@ export async function getBlockedUsers(): Promise<{
     const p = profileMap.get(b.blocked_id);
     return {
       id: b.blocked_id,
-      display_name: p?.display_name ?? 'Unknown user',
+      display_name: p?.display_name ?? 'Usuario desconocido',
       avatar_url: p?.avatar_url ?? null,
       blocked_at: b.created_at,
     };
@@ -223,7 +223,7 @@ export async function unblockUser(
     .eq('blocker_id', userId)
     .eq('blocked_id', targetUserId);
 
-  if (error) return { error: 'Failed to unblock user' };
+  if (error) return { error: 'No se pudo desbloquear al usuario' };
   return { error: null };
 }
 
@@ -236,7 +236,7 @@ export async function reportConversation(
 
   const allowed = checkRateLimit(userId, 'report');
   if (!allowed) {
-    return { error: 'Report limit reached. Try again tomorrow.' };
+    return { error: 'Has alcanzado el límite de reportes. Inténtalo de nuevo mañana.' };
   }
 
   const trimmed = reason.trim();
@@ -254,6 +254,6 @@ export async function reportConversation(
       status: 'open',
     });
 
-  if (error) return { error: 'Failed to submit report' };
+  if (error) return { error: 'No se pudo enviar el reporte' };
   return { error: null };
 }

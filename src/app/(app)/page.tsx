@@ -52,11 +52,11 @@ async function FeedGrid({ searchParams }: { searchParams: SearchParams }) {
     return (
       <div className="flex flex-col items-center gap-2 py-20">
         <ShoppingBag className="h-8 w-8 text-muted-foreground" />
-        <p className="text-base font-medium">Nothing here yet</p>
+        <p className="text-base font-medium">Aún no hay nada por aquí</p>
         <p className="text-sm text-muted-foreground">
           {freeOnly || (category && category !== 'all')
-            ? 'Try removing filters.'
-            : 'Be the first to post a listing.'}
+            ? 'Prueba a quitar algún filtro.'
+            : 'Sé la primera persona en publicar un anuncio.'}
         </p>
       </div>
     );
@@ -100,7 +100,7 @@ function FeedSkeleton() {
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="overflow-hidden rounded-lg border bg-card">
+        <div key={i} className="overflow-hidden rounded-xl border border-white/80 bg-card shadow-sm">
           <Skeleton className="aspect-square w-full" />
           <div className="space-y-2 p-3">
             <Skeleton className="h-4 w-3/4" />

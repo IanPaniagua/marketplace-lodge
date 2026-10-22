@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button';
 import type { ListingCategory } from '@/types/db';
 
 const CATEGORIES: { value: ListingCategory | 'all'; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'furniture', label: 'Furniture' },
-  { value: 'kitchen', label: 'Kitchen' },
-  { value: 'electronics', label: 'Electronics' },
-  { value: 'books', label: 'Books' },
-  { value: 'clothes', label: 'Clothes' },
-  { value: 'other', label: 'Other' },
+  { value: 'all', label: 'Todo' },
+  { value: 'furniture', label: 'Muebles' },
+  { value: 'kitchen', label: 'Cocina' },
+  { value: 'electronics', label: 'Electrónica' },
+  { value: 'books', label: 'Libros' },
+  { value: 'clothes', label: 'Ropa' },
+  { value: 'other', label: 'Otros' },
 ];
 
 export default function FeedFilters() {
@@ -49,8 +49,8 @@ export default function FeedFilters() {
             className={cn(
               'shrink-0 rounded-full border px-3 py-1 text-sm font-medium transition-colors',
               activeCategory === value
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'border-border bg-background text-foreground hover:bg-muted',
+                ? 'brand-gradient border-transparent text-primary-foreground shadow-sm shadow-primary/20'
+                : 'border-border bg-background/80 text-foreground hover:border-primary/20 hover:bg-accent',
             )}
           >
             {label}
@@ -65,7 +65,7 @@ export default function FeedFilters() {
         onClick={() => updateParam('free', freeOnly ? null : '1')}
         className="h-8 rounded-full text-sm"
       >
-        Free only
+        Solo gratis
       </Button>
     </div>
   );

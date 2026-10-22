@@ -20,7 +20,7 @@ export default function MessageSellerButton({ listingId, sellerId }: Props) {
     setLoading(true);
     const { data, error } = await getOrCreateConversation(listingId, sellerId);
     if (error || !data) {
-      toast.error(error ?? 'Something went wrong');
+      toast.error(error ?? 'Algo ha salido mal');
       setLoading(false);
       return;
     }
@@ -35,7 +35,7 @@ export default function MessageSellerButton({ listingId, sellerId }: Props) {
       disabled={loading}
     >
       <MessageCircle className="h-4 w-4" />
-      {loading ? 'Opening…' : 'Message'}
+      {loading ? 'Abriendo…' : 'Mensaje'}
     </Button>
   );
 }

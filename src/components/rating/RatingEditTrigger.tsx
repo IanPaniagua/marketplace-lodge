@@ -20,7 +20,7 @@ export default function RatingEditTrigger({ existingRating, rateeName }: Props) 
         variant="ghost"
         size="sm"
         onClick={() => setOpen(true)}
-        aria-label="Edit rating"
+        aria-label="Editar valoración"
         className="h-8 w-8 p-0"
       >
         <Pencil className="h-4 w-4" />

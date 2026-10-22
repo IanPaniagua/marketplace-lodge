@@ -67,20 +67,20 @@ export default function ServiceWorkerRegistration() {
         <button
           onClick={dismissAndroid}
           className="absolute right-3 top-3 text-muted-foreground"
-          aria-label="Dismiss"
+          aria-label="Cerrar"
         >
           <X className="h-4 w-4" />
         </button>
-        <p className="mb-3 text-sm font-medium">Install Lodge Market on your device</p>
+        <p className="mb-3 text-sm font-medium">Instala Lodge Market en tu dispositivo</p>
         <p className="mb-3 text-xs text-muted-foreground">
-          Add to your home screen for the best experience.
+          Añádela a tu pantalla de inicio para disfrutar de la mejor experiencia.
         </p>
         <div className="flex gap-2">
           <Button size="sm" onClick={handleInstall} className="flex-1">
-            Install
+            Instalar
           </Button>
           <Button size="sm" variant="outline" onClick={dismissAndroid}>
-            Not now
+            Ahora no
           </Button>
         </div>
       </div>
@@ -93,14 +93,14 @@ export default function ServiceWorkerRegistration() {
         <button
           onClick={dismissIos}
           className="absolute right-3 top-3 text-muted-foreground"
-          aria-label="Dismiss"
+          aria-label="Cerrar"
         >
           <X className="h-4 w-4" />
         </button>
-        <p className="mb-2 text-sm font-medium">Install Lodge Market on iOS</p>
+        <p className="mb-2 text-sm font-medium">Instala Lodge Market en iOS</p>
         <p className="text-xs text-muted-foreground">
-          Tap the <strong>Share</strong> button in Safari, then choose{' '}
-          <strong>Add to Home Screen</strong>.
+          Pulsa <strong>Compartir</strong> en Safari y elige{' '}
+          <strong>Añadir a pantalla de inicio</strong>.
         </p>
       </div>
     );

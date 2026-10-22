@@ -24,9 +24,9 @@ interface TopBarProps {
 }
 
 const desktopNav = [
-  { href: '/', label: 'Search', Icon: ShoppingBag },
-  { href: '/listings/new', label: 'Post item', Icon: PlusSquare },
-  { href: '/chats', label: 'Chats', Icon: MessageCircle },
+  { href: '/', label: 'Explorar', Icon: ShoppingBag },
+  { href: '/listings/new', label: 'Publicar', Icon: PlusSquare },
+  { href: '/chats', label: 'Mensajes', Icon: MessageCircle },
 ];
 
 const PENDING_REFRESH_MS = 60 * 1000;
@@ -79,17 +79,17 @@ export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps
   async function handleSignOut() {
     await insforge.auth.signOut();
     await clearSessionCookies();
-    toast.success('Signed out.');
+    toast.success('Sesión cerrada.');
     router.replace('/login');
   }
 
   const showBadge = profile.is_admin && pendingCount > 0;
 
   return (
-    <header className="sticky top-0 z-40 h-14 border-b bg-background">
+    <header className="sticky top-0 z-40 h-14 border-b border-white/70 bg-background/80 shadow-sm shadow-slate-950/[0.03] backdrop-blur-xl">
       <div className="mx-auto flex h-full max-w-4xl items-center justify-between px-4">
         <Link href="/" className="text-lg font-semibold tracking-tight">
-          Lodge<span className="text-primary"> Market</span>
+          Lodge<span className="brand-gradient-text"> Market</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -118,7 +118,7 @@ export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps
             <button
               type="button"
               className="relative rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label={showBadge ? `Admin: ${pendingCount} pending` : 'Account menu'}
+              aria-label={showBadge ? `Administración: ${pendingCount} pendientes` : 'Menú de cuenta'}
             >
               <Avatar className="h-9 w-9">
                 {profile.avatar_url && <AvatarImage src={profile.avatar_url} alt={profile.display_name} />}
@@ -137,7 +137,7 @@ export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps
             <DropdownMenuItem asChild>
               <Link href="/profile" className="flex items-center gap-2">
                 <UserIcon className="h-4 w-4" />
-                My profile
+                Mi perfil
               </Link>
             </DropdownMenuItem>
             {profile.is_admin && (
@@ -146,7 +146,7 @@ export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps
                 <DropdownMenuItem asChild>
                   <Link href="/admin" className="flex items-center gap-2">
                     <ShieldIcon className="h-4 w-4" />
-                    Admin
+                    Administración
                   </Link>
                 </DropdownMenuItem>
               </>
@@ -157,7 +157,7 @@ export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps
               onClick={handleSignOut}
             >
               <LogOutIcon className="h-4 w-4" />
-              Sign out
+              Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

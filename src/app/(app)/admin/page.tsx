@@ -8,16 +8,16 @@ export default async function AdminPage() {
   if (!profile?.is_admin) redirect('/');
 
   const links = [
-    { href: '/admin/users', icon: UsersIcon, label: 'Pending users', description: 'Approve new registrations' },
-    { href: '/admin/listings', icon: ShoppingBagIcon, label: 'Pending listings', description: 'Approve or reject listings' },
-    { href: '/admin/reports', icon: FlagIcon, label: 'Reports', description: 'Review flagged content' },
-    { href: '/admin/analytics', icon: BarChart3Icon, label: 'Analytics', description: 'KPIs and engagement metrics' },
+    { href: '/admin/users', icon: UsersIcon, label: 'Usuarios pendientes', description: 'Aprobar nuevos registros' },
+    { href: '/admin/listings', icon: ShoppingBagIcon, label: 'Anuncios pendientes', description: 'Aprobar o rechazar anuncios' },
+    { href: '/admin/reports', icon: FlagIcon, label: 'Reportes', description: 'Revisar contenido reportado' },
+    { href: '/admin/analytics', icon: BarChart3Icon, label: 'Analítica', description: 'KPIs y métricas de uso' },
   ];
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Admin</h1>
-      <ul className="divide-y rounded-lg border">
+      <h1 className="text-2xl font-semibold tracking-tight">Administración</h1>
+      <ul className="surface-card divide-y rounded-xl">
         {links.map(({ href, icon: Icon, label, description }) => (
           <li key={href}>
             <Link href={href} className="flex items-center gap-4 px-4 py-4 transition-colors hover:bg-muted">

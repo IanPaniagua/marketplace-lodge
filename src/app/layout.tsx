@@ -5,7 +5,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Lodge Market',
-  description: 'Private marketplace for lodge residents.',
+  description: 'El mercado privado de los residentes de Lodge.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#8B1A1A',
+  themeColor: '#2563EB',
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className="antialiased">
         {children}
         <Toaster />

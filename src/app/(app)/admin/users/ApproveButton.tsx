@@ -15,17 +15,17 @@ export default function ApproveButton({ userId }: { userId: string }) {
     setLoading(false);
 
     if (!res.ok) {
-      toast.error('Failed to approve user.');
+      toast.error('No se pudo aprobar al usuario.');
       return;
     }
 
-    toast.success('User approved.');
+    toast.success('Usuario aprobado.');
     router.refresh();
   }
 
   return (
     <Button size="sm" onClick={approve} disabled={loading}>
-      {loading ? 'Approving…' : 'Approve'}
+      {loading ? 'Aprobando…' : 'Aprobar'}
     </Button>
   );
 }
