@@ -34,6 +34,7 @@ export const ListingFieldsSchema = z
       'other',
     ]),
     condition: z.enum(['new', 'like_new', 'used', 'worn']),
+    visibility: z.enum(['everyone', 'friends']),
     is_gift: z.boolean(),
     price_eur: z.number().nonnegative('El precio debe ser 0 o superior').nullable(),
   })
@@ -48,6 +49,7 @@ export const ListingSchema = z
     description: z.string().max(2000),
     category: z.enum(['furniture', 'kitchen', 'electronics', 'books', 'clothes', 'other']),
     condition: z.enum(['new', 'like_new', 'used', 'worn']),
+    visibility: z.enum(['everyone', 'friends']),
     is_gift: z.boolean(),
     price_eur: z.number().nonnegative().nullable(),
     photos: z.array(z.instanceof(File)).min(1).max(5),

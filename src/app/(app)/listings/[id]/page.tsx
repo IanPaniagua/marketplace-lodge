@@ -5,7 +5,7 @@ import { createServerClient } from '@/lib/insforge-server';
 import { SESSION_COOKIE } from '@/lib/insforge';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Globe2, Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ListingGallery from '@/components/listing/ListingGallery';
 import OwnerActions from '@/components/listing/OwnerActions';
@@ -47,7 +47,7 @@ export default async function ListingDetailPage({ params }: Props) {
 
   const { data: listingRaw } = await client.database
     .from('listings')
-    .select('id,owner_id,title,description,category,condition,is_gift,price_eur,status,rejection_reason,created_at')
+    .select('id,owner_id,title,description,category,condition,visibility,is_gift,price_eur,status,rejection_reason,created_at')
     .eq('id', id)
     .single();
 
@@ -55,7 +55,7 @@ export default async function ListingDetailPage({ params }: Props) {
   const listing = listingRaw as Pick<
     Listing,
     | 'id' | 'owner_id' | 'title' | 'description' | 'category'
-    | 'condition' | 'is_gift' | 'price_eur' | 'status'
+    | 'condition' | 'visibility' | 'is_gift' | 'price_eur' | 'status'
     | 'rejection_reason' | 'created_at'
   >;
 
@@ -138,6 +138,13 @@ export default async function ListingDetailPage({ params }: Props) {
       {(isOwner || status !== 'live') && (
         <span className={`inline-block rounded-md px-2 py-0.5 text-xs font-medium ${STATUS_CLASSES[status]}`}>
           {STATUS_LABELS[status]}
+        </span>
+      )}
+
+      {isOwner && (
+        <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+          {listing.visibility === 'friends' ? <Users className="h-3 w-3" /> : <Globe2 className="h-3 w-3" />}
+          {listing.visibility === 'friends' ? 'Solo amigos' : 'Visible para todos'}
         </span>
       )}
 

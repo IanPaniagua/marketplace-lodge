@@ -33,16 +33,17 @@ export async function createListingRecord(
 
     const { data, error } = await client.database
       .from('listings')
-      .insert({
+      .insert([{
         owner_id: user.id,
         title: fields.title,
         description: fields.description?.trim() || null,
         category: fields.category,
         condition: fields.condition,
+        visibility: fields.visibility,
         is_gift: fields.is_gift,
         price_eur: fields.price_eur,
         status: 'pending',
-      })
+      }])
       .select('id')
       .single();
 
@@ -119,6 +120,7 @@ export async function updateListingRecord(
         description: fields.description?.trim() || null,
         category: fields.category,
         condition: fields.condition,
+        visibility: fields.visibility,
         is_gift: fields.is_gift,
         price_eur: fields.price_eur,
         status: newStatus,

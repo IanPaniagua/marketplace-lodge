@@ -1,6 +1,8 @@
 export type ListingStatus = 'draft' | 'pending' | 'live' | 'sold' | 'archived' | 'rejected';
 export type ListingCategory = 'furniture' | 'kitchen' | 'electronics' | 'books' | 'clothes' | 'other';
 export type ListingCondition = 'new' | 'like_new' | 'used' | 'worn';
+export type ListingVisibility = 'everyone' | 'friends';
+export type FriendshipStatus = 'pending' | 'accepted';
 export type ReportTargetType = 'user' | 'listing' | 'conversation';
 export type ReportStatus = 'open' | 'resolved' | 'dismissed';
 
@@ -26,11 +28,21 @@ export interface Listing {
   is_gift: boolean;
   category: ListingCategory;
   condition: ListingCondition;
+  visibility: ListingVisibility;
   status: ListingStatus;
   rejection_reason: string | null;
   first_approved_at: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface Friendship {
+  id: string;
+  requester_id: string;
+  addressee_id: string;
+  status: FriendshipStatus;
+  created_at: string;
+  responded_at: string | null;
 }
 
 export interface PushSubscriptionRow {

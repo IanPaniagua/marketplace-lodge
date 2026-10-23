@@ -3,11 +3,14 @@ import Image from 'next/image';
 import type { Listing } from '@/types/db';
 
 interface Props {
-  listing: Pick<Listing, 'id' | 'title' | 'price_eur' | 'is_gift' | 'category' | 'condition'>;
+  listing: Pick<Listing, 'id' | 'title' | 'price_eur' | 'is_gift' | 'category' | 'condition'>
+    & Partial<Pick<Listing, 'visibility'>>;
   photoUrl: string | null;
+  showVisibility?: boolean;
+  href?: string;
 }
 
-export default function ListingCard({ listing, photoUrl }: Props) {
+export default function ListingCard({ listing, photoUrl, showVisibility = false, href }: Props) {
   const categoryLabels: Record<string, string> = {
     furniture: 'Muebles', kitchen: 'Cocina', electronics: 'Electrónica',
     books: 'Libros', clothes: 'Ropa', other: 'Otros',
@@ -17,8 +20,8 @@ export default function ListingCard({ listing, photoUrl }: Props) {
   };
 
   return (
-    <Link href={`/listings/${listing.id}`} className="group block">
-      <article className="overflow-hidden rounded-xl border border-white/80 bg-card shadow-[0_10px_30px_-22px_hsl(var(--foreground)/0.4)] transition-all duration-200 group-hover:-translate-y-1 group-hover:border-primary/20 group-hover:shadow-lg">
+    <Link href={href ?? `/listings/${listing.id}`} className="group block">
+      <article className="overflow-hidden rounded-lg border bg-card transition-shadow duration-150 group-hover:shadow-md">
         <div className="relative aspect-square w-full bg-muted">
           {photoUrl ? (
             <Image
@@ -34,8 +37,13 @@ export default function ListingCard({ listing, photoUrl }: Props) {
             </div>
           )}
           {listing.is_gift && (
-            <span className="brand-gradient absolute left-2 top-2 rounded-md px-2 py-0.5 text-xs font-semibold text-primary-foreground shadow-sm">
+            <span className="absolute left-2 top-2 rounded-md bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
               GRATIS
+            </span>
+          )}
+          {showVisibility && listing.visibility && (
+            <span className="absolute bottom-2 left-2 rounded-md bg-background/90 px-2 py-0.5 text-[10px] font-medium text-foreground backdrop-blur">
+              {listing.visibility === 'friends' ? 'Solo amigos' : 'Todos'}
             </span>
           )}
         </div>

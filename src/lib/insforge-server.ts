@@ -11,6 +11,11 @@ export function createServerClient(accessToken: string) {
   return createClient({ baseUrl: url, anonKey, edgeFunctionToken: accessToken });
 }
 
+/** Public server client for link-only catalog pages. RLS limits it to public rows. */
+export function createPublicClient() {
+  return createClient({ baseUrl: url, anonKey, isServerMode: true });
+}
+
 /**
  * Admin client using the service key.
  * Only for Route Handlers under /api/admin/* that verify is_admin themselves.

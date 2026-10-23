@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { Globe2, Users } from 'lucide-react';
 
 import { ListingFieldsSchema, type ListingFieldsInput } from '@/lib/schemas';
 import { compressToWebp } from '@/lib/image';
@@ -73,6 +74,7 @@ export default function ListingForm({
       description: defaultValues?.description ?? '',
       category: defaultValues?.category ?? 'other',
       condition: defaultValues?.condition ?? 'used',
+      visibility: defaultValues?.visibility ?? 'everyone',
       is_gift: defaultValues?.is_gift ?? false,
       price_eur: defaultValues?.price_eur ?? null,
     },
@@ -354,6 +356,56 @@ export default function ListingForm({
             />
           )}
         </div>
+
+        <FormField
+          control={form.control}
+          name="visibility"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>¿Quién puede verlo?</FormLabel>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  {
+                    value: 'everyone' as const,
+                    label: 'Todos',
+                    description: 'Aparece en Explorar y cualquiera con el enlace puede verlo.',
+                    Icon: Globe2,
+                  },
+                  {
+                    value: 'friends' as const,
+                    label: 'Solo amigos',
+                    description: 'Solo tus amigos aceptados podrán abrir este anuncio.',
+                    Icon: Users,
+                  },
+                ].map(({ value, label, description, Icon }) => {
+                  const selected = field.value === value;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => field.onChange(value)}
+                      className={`flex items-start gap-3 rounded-lg border p-4 text-left transition-colors ${
+                        selected
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border bg-card hover:bg-muted'
+                      }`}
+                      aria-pressed={selected}
+                    >
+                      <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${selected ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <span className="space-y-1">
+                        <span className="block text-sm font-medium">{label}</span>
+                        <span className="block text-xs leading-relaxed text-muted-foreground">
+                          {description}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button
           type="submit"

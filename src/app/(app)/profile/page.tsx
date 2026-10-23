@@ -5,6 +5,7 @@ import { Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import RatingsList from '@/components/rating/RatingsList';
+import ShareCatalogButton from '@/components/profile/ShareCatalogButton';
 
 export const metadata = { title: 'Mi perfil — Lodge Market' };
 
@@ -18,12 +19,15 @@ export default async function ProfilePage() {
         <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
           Mi perfil
         </h1>
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/profile/settings" className="flex items-center gap-1.5">
-            <Settings className="h-4 w-4" />
-            Ajustes
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <ShareCatalogButton userId={profile.id} />
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/profile/settings" className="flex items-center gap-1.5">
+              <Settings className="h-4 w-4" />
+              Ajustes
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <ProfileEditForm profile={profile} />

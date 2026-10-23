@@ -47,7 +47,11 @@ next-env.d.ts
 # InsForge & AI agent skills
 .insforge
 .agent
-.agents
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/lodge-marketplace-ui/
+!.agents/skills/lodge-marketplace-ui/SKILL.md
 .augment
 .claude
 .cline

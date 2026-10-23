@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { LogOutIcon, UserIcon, ShieldIcon, ShoppingBag, PlusSquare, MessageCircle } from 'lucide-react';
+import { LogOutIcon, UserIcon, ShieldIcon, Compass, PlusSquare, MessageCircle, Users } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -24,7 +24,8 @@ interface TopBarProps {
 }
 
 const desktopNav = [
-  { href: '/', label: 'Explorar', Icon: ShoppingBag },
+  { href: '/', label: 'Amigos', Icon: Users },
+  { href: '/explore', label: 'Explorar', Icon: Compass },
   { href: '/listings/new', label: 'Publicar', Icon: PlusSquare },
   { href: '/chats', label: 'Mensajes', Icon: MessageCircle },
 ];

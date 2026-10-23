@@ -24,14 +24,14 @@ export default async function EditListingPage({ params }: Props) {
 
   const { data: listingRaw } = await client.database
     .from('listings')
-    .select('id,owner_id,title,description,category,condition,is_gift,price_eur,status')
+    .select('id,owner_id,title,description,category,condition,visibility,is_gift,price_eur,status')
     .eq('id', id)
     .single();
 
   if (!listingRaw) notFound();
   const listing = listingRaw as Pick<
     Listing,
-    'id' | 'owner_id' | 'title' | 'description' | 'category' | 'condition' | 'is_gift' | 'price_eur' | 'status'
+    'id' | 'owner_id' | 'title' | 'description' | 'category' | 'condition' | 'visibility' | 'is_gift' | 'price_eur' | 'status'
   >;
 
   if (listing.owner_id !== userData.user.id) redirect(`/listings/${id}`);
@@ -67,6 +67,7 @@ export default async function EditListingPage({ params }: Props) {
           description: listing.description,
           category: listing.category as ListingCategory,
           condition: listing.condition as ListingCondition,
+          visibility: listing.visibility,
           is_gift: listing.is_gift,
           price_eur: listing.price_eur,
         }}
