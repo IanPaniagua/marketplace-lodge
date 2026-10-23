@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import FriendshipActions, { type FriendshipViewState } from '@/components/friends/FriendshipActions';
+import InviteFriendsButton from '@/components/friends/InviteFriendsButton';
 import type { Friendship, Listing, ListingPhoto, Profile } from '@/types/db';
 
 interface Props {
@@ -124,12 +125,15 @@ export default async function FriendsHomePage({ searchParams }: Props) {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-1">
-        <p className="text-sm text-muted-foreground">Hola, {profile.display_name}</p>
-        <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Tus amigos</h1>
-        <p className="max-w-xl text-sm text-muted-foreground">
-          Entra en el perfil de una persona para ver únicamente su catálogo.
-        </p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1">
+          <p className="text-sm text-muted-foreground">Hola, {profile.display_name}</p>
+          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Tus amigos</h1>
+          <p className="max-w-xl text-sm text-muted-foreground">
+            Entra en el perfil de una persona para ver únicamente su catálogo.
+          </p>
+        </div>
+        <InviteFriendsButton displayName={profile.display_name} className="w-full sm:w-auto" />
       </header>
 
       {received.length > 0 && (
@@ -181,7 +185,7 @@ export default async function FriendsHomePage({ searchParams }: Props) {
             <Users className="h-8 w-8 text-muted-foreground" />
             <p className="text-base font-medium">Aún no tienes amigos</p>
             <p className="max-w-sm text-sm text-muted-foreground">
-              Busca a alguien por su nombre y envíale una solicitud.
+              Busca a alguien por su nombre o envíale tu invitación por WhatsApp.
             </p>
           </div>
         ) : (

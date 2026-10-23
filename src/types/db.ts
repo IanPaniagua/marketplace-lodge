@@ -45,6 +45,22 @@ export interface Friendship {
   responded_at: string | null;
 }
 
+export interface FriendInvite {
+  id: string;
+  token: string;
+  inviter_id: string;
+  created_at: string;
+  expires_at: string;
+  revoked_at: string | null;
+}
+
+export interface FriendInviteClaim {
+  invite_id: string;
+  inviter_id: string;
+  invitee_id: string;
+  claimed_at: string;
+}
+
 export interface PushSubscriptionRow {
   id: string;
   user_id: string;

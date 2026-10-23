@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import RatingsList from '@/components/rating/RatingsList';
 import ShareCatalogButton from '@/components/profile/ShareCatalogButton';
+import InviteFriendsButton from '@/components/friends/InviteFriendsButton';
 
 export const metadata = { title: 'Mi perfil — Lodge Market' };
 
@@ -20,6 +21,11 @@ export default async function ProfilePage() {
           Mi perfil
         </h1>
         <div className="flex flex-wrap items-center gap-2">
+          <InviteFriendsButton
+            displayName={profile.display_name}
+            variant="outline"
+            size="sm"
+          />
           <ShareCatalogButton userId={profile.id} />
           <Button variant="ghost" size="sm" asChild>
             <Link href="/profile/settings" className="flex items-center gap-1.5">

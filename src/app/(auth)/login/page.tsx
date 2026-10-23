@@ -43,7 +43,11 @@ export default function LoginPage() {
         toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
         return;
       }
-      window.location.href = '/';
+      const requestedPath = new URLSearchParams(window.location.search).get('next');
+      const nextPath = requestedPath?.startsWith('/') && !requestedPath.startsWith('//')
+        ? requestedPath
+        : '/';
+      window.location.href = nextPath;
     } catch (e) {
       console.error('[login] unexpected error', e);
       toast.error('Algo ha salido mal. Inténtalo de nuevo.');
