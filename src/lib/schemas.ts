@@ -14,10 +14,6 @@ export const LoginSchema = z.object({
   password: z.string().min(1),
 });
 
-export const VerifyEmailSchema = z.object({
-  otp: z.string().length(6, 'El código debe tener 6 dígitos'),
-});
-
 // Fields-only schema (photos handled separately in the component)
 export const ListingFieldsSchema = z
   .object({
@@ -76,6 +72,5 @@ export const ProfileEditSchema = z.object({
 
 export type SignupInput = z.infer<typeof SignupSchema>;
 export type LoginInput = z.infer<typeof LoginSchema>;
-export type VerifyEmailInput = z.infer<typeof VerifyEmailSchema>;
 export type ProfileEditInput = z.infer<typeof ProfileEditSchema>;
 export type ListingFieldsInput = z.infer<typeof ListingFieldsSchema>;

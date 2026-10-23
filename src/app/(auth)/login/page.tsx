@@ -32,19 +32,6 @@ export default function LoginPage() {
         password: values.password,
       });
 
-      // Stranded unverified accounts: route to /verify-email so they can recover.
-      const unverifiedFromError =
-        error?.error === 'EMAIL_NOT_VERIFIED' ||
-        /not verified|verify.*email/i.test(error?.message ?? '');
-      const unverifiedFromData = data?.user && data.user.emailVerified === false;
-
-      if (unverifiedFromError || unverifiedFromData) {
-        await insforge.auth.resendVerificationEmail({ email: values.email });
-        toast.success('Verifica tu correo para continuar. Te hemos enviado un nuevo código.');
-        router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
-        return;
-      }
-
       if (error || !data?.accessToken) {
         toast.error(error?.message ?? 'Correo o contraseña incorrectos.');
         return;

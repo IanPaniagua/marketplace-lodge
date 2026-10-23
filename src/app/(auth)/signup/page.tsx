@@ -1,25 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { insforge } from '@/lib/insforge';
 import { setSessionCookies } from '@/lib/session-client';
-import { SignupSchema, VerifyEmailSchema, type SignupInput, type VerifyEmailInput } from '@/lib/schemas';
+import { SignupSchema, type SignupInput } from '@/lib/schemas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export default function SignupPage() {
   const router = useRouter();
-  const [step, setStep] = useState<'signup' | 'verify'>('signup');
-  const [pendingEmail, setPendingEmail] = useState('');
 
   const signupForm = useForm<SignupInput>({ resolver: zodResolver(SignupSchema) });
-  const verifyForm = useForm<VerifyEmailInput>({ resolver: zodResolver(VerifyEmailSchema) });
 
   async function onSignup(values: SignupInput) {
     const { data, error } = await insforge.auth.signUp({
@@ -29,43 +25,22 @@ export default function SignupPage() {
     });
 
     if (error) {
-      // Existing unverified account — send a new code and route to /verify-email.
       if (error.error === 'ALREADY_EXISTS' || error.statusCode === 409) {
-        await insforge.auth.resendVerificationEmail({ email: values.email });
-        toast.success('Ya habías iniciado el registro. Te hemos enviado un nuevo código.');
-        router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
+        toast.error('Ya existe una cuenta con este correo. Inicia sesión.');
+        router.push('/login');
         return;
       }
       toast.error(error.message ?? 'No se pudo completar el registro. Inténtalo de nuevo.');
       return;
     }
 
-    if (data?.requireEmailVerification) {
-      setPendingEmail(values.email);
-      setStep('verify');
-      toast.success('Revisa tu correo: te hemos enviado un código de 6 dígitos.');
-      return;
-    }
-
-    // Email verification not required — insert profile and continue
     if (data?.accessToken && data.user) {
       await insertProfileAndRedirect(data.user.id, data.accessToken, data.refreshToken, values.display_name);
-    }
-  }
-
-  async function onVerify(values: VerifyEmailInput) {
-    const { data, error } = await insforge.auth.verifyEmail({
-      email: pendingEmail,
-      otp: values.otp,
-    });
-
-    if (error || !data?.accessToken || !data.user) {
-      toast.error(error?.message ?? 'El código no es válido. Inténtalo de nuevo.');
       return;
     }
 
-    const signupValues = signupForm.getValues();
-    await insertProfileAndRedirect(data.user.id, data.accessToken, data.refreshToken, signupValues.display_name);
+    toast.error('La cuenta se creó sin una sesión válida. Inicia sesión para continuar.');
+    router.push('/login');
   }
 
   async function insertProfileAndRedirect(userId: string, accessToken: string, refreshToken: string | undefined, displayName: string) {
@@ -78,7 +53,7 @@ export default function SignupPage() {
 
     const { error: profileError } = await insforge.database
       .from('profiles')
-      .insert({ id: userId, display_name: displayName });
+      .insert([{ id: userId, display_name: displayName }]);
 
     if (profileError) {
       toast.error('La cuenta se ha creado, pero no se pudo configurar el perfil. Contacta con soporte.');
@@ -93,70 +68,6 @@ export default function SignupPage() {
     }).catch(() => {});
 
     window.location.href = '/pending';
-  }
-
-  if (step === 'verify') {
-    return (
-      <div className="space-y-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Revisa tu correo</h1>
-          <p className="text-sm text-muted-foreground">
-            Te hemos enviado un código de verificación de 6 dígitos.
-          </p>
-        </div>
-
-        <form onSubmit={verifyForm.handleSubmit(onVerify)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="otp">Código de verificación</Label>
-            <Controller
-              control={verifyForm.control}
-              name="otp"
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  id="otp"
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={6}
-                  placeholder="123456"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  autoCapitalize="none"
-                  spellCheck={false}
-                  onChange={(e) => field.onChange(e.target.value.replace(/\D/g, ''))}
-                  className="h-11 text-center text-lg tracking-widest md:h-10"
-                />
-              )}
-            />
-            {verifyForm.formState.errors.otp && (
-              <p className="text-xs text-destructive">{verifyForm.formState.errors.otp.message}</p>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full md:w-auto"
-            disabled={verifyForm.formState.isSubmitting}
-          >
-            {verifyForm.formState.isSubmitting ? 'Verificando…' : 'Verificar correo'}
-          </Button>
-        </form>
-
-        <button
-          type="button"
-          className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-          onClick={async () => {
-            await insforge.auth.resendVerificationEmail({ email: pendingEmail });
-            toast.success('Código reenviado.');
-          }}
-        >
-          Reenviar código
-        </button>
-      </div>
-    );
   }
 
   return (
