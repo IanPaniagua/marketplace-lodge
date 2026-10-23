@@ -15,14 +15,13 @@ async function getUser(token: string) {
 }
 
 async function getProfile(token: string, userId: string) {
-  const url = `${INSFORGE_URL}/api/database/records/profiles?select=is_approved,is_admin,deleted_at,last_active_at&id=eq.${userId}&limit=1`;
+  const url = `${INSFORGE_URL}/api/database/records/profiles?select=is_admin,deleted_at,last_active_at&id=eq.${userId}&limit=1`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
     cache: 'no-store',
   });
   if (!res.ok) return null;
   const rows = await res.json() as Array<{
-    is_approved: boolean;
     is_admin: boolean;
     deleted_at: string | null;
     last_active_at: string | null;
@@ -86,14 +85,6 @@ export async function middleware(request: NextRequest) {
     return redirectToLogin(request);
   }
 
-  // Not approved → pending
-  if (!profile.is_approved) {
-    if (!pathname.startsWith('/pending')) {
-      return NextResponse.redirect(new URL('/pending', request.url));
-    }
-    return NextResponse.next();
-  }
-
   // Admin gate for /admin routes
   if (pathname.startsWith('/admin') && !profile.is_admin) {
     return NextResponse.redirect(new URL('/', request.url));
@@ -109,6 +100,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!login|signup|pending|privacy|catalog|invite|session-refresh|api/auth|_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js).*)',
+    '/((?!login|signup|privacy|catalog|invite|session-refresh|api/auth|_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js).*)',
   ],
 };

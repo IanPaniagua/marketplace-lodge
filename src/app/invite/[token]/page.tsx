@@ -142,8 +142,7 @@ export default async function FriendInvitePage({ params }: Props) {
             </div>
 
             <p className="rounded-lg bg-muted px-4 py-3 text-center text-xs text-muted-foreground">
-              Las cuentas nuevas se revisan antes de acceder al mercado. La amistad quedará preparada
-              durante ese proceso.
+              Al crear tu perfil entrarás directamente en Lodge Market y la amistad quedará activada.
             </p>
           </div>
         </section>

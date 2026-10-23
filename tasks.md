@@ -62,7 +62,7 @@ Before starting Phase 1, ask the user to claim the Insforge project at the print
 
 ---
 
-## Phase 1 — Schema + RLS + Auth + Approval gate
+## Phase 1 — Schema + RLS + Auth
 
 **Goal:** A user can sign up, see "waiting for approval", an admin can approve them via DB (we'll build the admin UI in Phase 4), and an approved user can log in to a placeholder feed.
 
@@ -71,18 +71,18 @@ Before starting Phase 1, ask the user to claim the Insforge project at the print
 2. Apply RLS policies from §4. Verify each table has RLS enabled.
 3. Create the `listing-photos` storage bucket per §6.
 4. Build `src/lib/insforge.ts` (browser client) and `src/lib/insforge-server.ts` (server admin client using service key).
-5. Build pages: `/(auth)/signup`, `/(auth)/login`, `/(auth)/pending`.
+5. Build pages: `/(auth)/signup` and `/(auth)/login`.
 6. Signup form: email + password + display name. On submit, create auth user, then insert profile row.
 7. Login form: email + password.
-8. Implement `src/middleware.ts` per §9: protects `/(app)` routes, redirects unapproved users to `/pending`.
+8. Implement `src/middleware.ts` per §9: protects `/(app)` routes and requires a valid, non-deleted profile.
 9. Build the `(app)/layout.tsx` shell with TopBar + (placeholder) BottomNav and a stub `page.tsx` saying "Feed coming soon".
 10. Add a temporary admin helper: a SQL snippet in the README explaining how to manually flip `is_admin` and `is_approved` via Insforge dashboard for the first user.
 
 ### Acceptance Criteria
 - [ ] All 8 tables exist with correct columns, constraints, and indexes (verify via MCP `list-tables`).
 - [ ] RLS is **enabled** on every table.
-- [ ] A new user can register at `/signup` and ends up at `/pending`.
-- [ ] An unapproved user trying to visit `/` is redirected to `/pending`.
+- [ ] A new user can register at `/signup` and enter the app directly.
+- [ ] A user without a valid profile cannot access `/`.
 - [ ] Manually flipping `is_approved = true` in DB allows that user to access `/`.
 - [ ] Trying to insert a `listings` row as an unapproved user is blocked by RLS.
 - [ ] No service-role key is exposed in any `NEXT_PUBLIC_*` var.
@@ -245,7 +245,7 @@ Before starting Phase 1, ask the user to claim the Insforge project at the print
 - [ ] At 360px viewport, the page does not horizontally scroll; cards are at least 2 per row.
 - [ ] `GET /api/admin/metrics?window=30d` returns the same payload the page renders (single source of truth via `getMetrics`).
 - [ ] No external analytics SDK is added to `package.json`.
-- [ ] No write to `last_active_at` happens for unapproved users on the `/pending` route loop.
+- [ ] `last_active_at` writes remain throttled to at most once per hour per active user.
 
 ### Out of scope (do not build in this phase)
 - Charts or time-series visualisations (numbers only in V1).

@@ -23,7 +23,7 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold tracking-tight">Qué datos recopilamos</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
           <li>Cuenta: correo electrónico, contraseña cifrada y nombre visible.</li>
-          <li>Perfil: foto, presentación y número de habitación (visible para otros residentes aprobados).</li>
+          <li>Perfil: foto, presentación y número de habitación (visible para otros residentes registrados).</li>
           <li>Anuncios: título, descripción, categoría, estado, precio y fotos.</li>
           <li>Mensajes: el texto de las conversaciones que mantienes con otros residentes.</li>
           <li>
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold tracking-tight">Quién puede ver tus datos</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
           <li>
-            Otros residentes aprobados pueden ver tu perfil público (nombre visible, foto,
+            Otros residentes registrados pueden ver tu perfil público (nombre visible, foto,
             presentación y valoración media) y tus anuncios publicados.
           </li>
           <li>

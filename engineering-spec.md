@@ -310,9 +310,9 @@ create policy profiles_select on profiles for select using (
   )
 );
 
--- Insert: a new auth user inserts their own profile row, default not approved.
+-- Insert: a new auth user inserts their own profile row, active by default.
 create policy profiles_insert on profiles for insert with check (
-  id = auth.uid() and is_admin = false and is_approved = false
+  id = auth.uid() and is_admin = false and is_approved = true and deleted_at is null
 );
 
 -- Update: own profile only. is_admin & is_approved are not user-writable
@@ -470,9 +470,8 @@ These need the **service-role key** (admin) and live in Next.js Route Handlers (
 
 | Action | Where | Why server-only |
 |---|---|---|
-| Approve user (`is_approved = true`) | `POST /api/admin/users/[id]/approve` | RLS forbids users updating their own `is_approved` |
-| Set/unset admin | `POST /api/admin/users/[id]/admin` | Same |
-| Soft-delete user | `POST /api/admin/users/[id]/delete` | Anonymizes profile, cascades |
+| Set/unset admin | `POST /api/admin/users/[id]/admin` | The `is_admin` field is not client-writable |
+| Soft-delete user | `POST /api/admin/users/[id]/delete` | Anonymizes profile and applies the account lifecycle rules |
 | Approve listing (`status = 'live'`) | `POST /api/admin/listings/[id]/approve` | Status transitions need validation |
 | Reject listing | `POST /api/admin/listings/[id]/reject` | Stores `rejection_reason` |
 | Resolve report | `POST /api/admin/reports/[id]/resolve` | |
@@ -512,9 +511,9 @@ For the unread badge in `BottomNav`, subscribe to all `messages` where `conversa
 
 ## 9. Auth flow details
 
-1. **Signup** (`POST` via Insforge SDK): create auth user → in same flow, create `profiles` row with `is_approved = false`. Both client-side, in sequence; rollback profile insert error to user with retry.
-2. **Login**: standard Insforge email/password. Middleware checks `is_approved` and redirects to `/pending` if false.
-3. **Middleware** (`src/middleware.ts`): runs on every `(app)` route, validates session via Insforge SDK, fetches `profiles` row, gates by `is_approved` and `deleted_at is null`.
+1. **Signup** (`POST` via Insforge SDK): create auth user → create the `profiles` row, which is active immediately through the database default. Both happen client-side in sequence; a profile insert error is shown to the user for recovery.
+2. **Login**: standard Insforge email/password with direct access after authentication.
+3. **Middleware** (`src/middleware.ts`): runs on every `(app)` route, validates the session and requires an existing profile with `deleted_at is null`.
 4. **Admin gate**: separate middleware check on `/admin/*` for `is_admin = true`.
 
 ---
@@ -557,18 +556,6 @@ work:   - fetch message; skip if already read
         - determine recipient (the other party in the conversation)
         - compute recipient's unread message count (for badge)
         - send push with badgeCount in payload
-        - delete expired subscriptions
-```
-
-### `push-admin-new-user`
-
-Push notification to all admins when a new user signs up (pending approval).
-
-```
-input:  { user_id: string }
-output: { sent: number, expired: number }
-work:   - fetch new user's display_name
-        - fan-out to all admin push_subscriptions
         - delete expired subscriptions
 ```
 

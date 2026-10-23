@@ -1,47 +1,5 @@
-import { getServerProfile } from '@/lib/auth';
-import { createAdminClient } from '@/lib/insforge-server';
 import { redirect } from 'next/navigation';
-import type { Profile } from '@/types/db';
-import ApproveButton from './ApproveButton';
 
-export default async function AdminUsersPage() {
-  const profile = await getServerProfile();
-  if (!profile?.is_admin) redirect('/');
-
-  const admin = createAdminClient();
-  const { data: pending } = await admin.database
-    .from('profiles')
-    .select('id, display_name, created_at')
-    .eq('is_approved', false)
-    .is('deleted_at', null)
-    .order('created_at', { ascending: true });
-
-  const users = (pending ?? []) as Pick<Profile, 'id' | 'display_name' | 'created_at'>[];
-
-  return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Aprobaciones pendientes</h1>
-        <p className="text-sm text-muted-foreground">
-          {users.length === 0 ? 'No hay usuarios esperando aprobación.' : `${users.length} ${users.length === 1 ? 'usuario pendiente' : 'usuarios pendientes'}.`}
-        </p>
-      </div>
-
-      {users.length > 0 && (
-        <ul className="divide-y rounded-lg border">
-          {users.map((u) => (
-            <li key={u.id} className="flex items-center justify-between px-4 py-3">
-              <div className="space-y-0.5">
-                <p className="text-sm font-medium">{u.display_name}</p>
-                <p className="text-xs text-muted-foreground">
-                  Se registró el {new Date(u.created_at).toLocaleDateString('es-ES')}
-                </p>
-              </div>
-              <ApproveButton userId={u.id} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+export default function AdminUsersPage() {
+  redirect('/admin');
 }

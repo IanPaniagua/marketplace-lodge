@@ -1,14 +1,13 @@
 import { getServerProfile } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { UsersIcon, ShoppingBagIcon, FlagIcon, BarChart3Icon } from 'lucide-react';
+import { ShoppingBagIcon, FlagIcon, BarChart3Icon } from 'lucide-react';
 
 export default async function AdminPage() {
   const profile = await getServerProfile();
   if (!profile?.is_admin) redirect('/');
 
   const links = [
-    { href: '/admin/users', icon: UsersIcon, label: 'Usuarios pendientes', description: 'Aprobar nuevos registros' },
     { href: '/admin/listings', icon: ShoppingBagIcon, label: 'Anuncios pendientes', description: 'Aprobar o rechazar anuncios' },
     { href: '/admin/reports', icon: FlagIcon, label: 'Reportes', description: 'Revisar contenido reportado' },
     { href: '/admin/analytics', icon: BarChart3Icon, label: 'Analítica', description: 'KPIs y métricas de uso' },

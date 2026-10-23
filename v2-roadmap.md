@@ -20,7 +20,6 @@ Features ya implementadas localmente:
 - **Edge functions de Insforge (fan-out)**
   - `push-new-listing` — notifica a usuarios aprobados cuando un listing se publica por primera vez ([insforge-functions/push-new-listing/](insforge-functions/push-new-listing/))
   - `push-new-message` — notifica al destinatario de un nuevo mensaje de chat ([insforge-functions/push-new-message/](insforge-functions/push-new-message/))
-  - `push-admin-new-user` — notifica al admin de un nuevo signup pendiente ([insforge-functions/push-admin-new-user/](insforge-functions/push-admin-new-user/))
   - `push-admin-new-listing` — notifica al admin de un listing en review ([insforge-functions/push-admin-new-listing/](insforge-functions/push-admin-new-listing/))
   - Código compartido en [insforge-functions/_shared/](insforge-functions/_shared/)
 

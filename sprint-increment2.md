@@ -72,7 +72,7 @@
 
 *Zweck: operative Gesundheit — kürzere Bearbeitungszeit, der Admin wird nicht zum Engpass.*
 
-- [ ]  Bei einer neuen Nutzer-Registrierung (`is_approved = false`) wird der Admin benachrichtigt
+- [ ]  Neue Nutzerprofile sind nach der Registrierung sofort aktiv; es gibt keine Admin-Freigabe
 - [ ]  Bei einem neuen Inserat (Status „in Prüfung“) wird der Admin benachrichtigt
 - [ ]  Entscheidung getroffen: Koexistenz mit der bestehenden Admin-E-Mail (Epic 4) **oder** Ersatz
 - [ ]  Optional, nur bei geringem Aufwand: spezifischeres Admin-Badge, das „X Nutzer ausstehend“ von „Y Inserate ausstehend“ unterscheidet — sonst Backlog

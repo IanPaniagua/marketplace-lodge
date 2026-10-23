@@ -5,7 +5,7 @@ import { getAdminPendingCounts } from '@/lib/admin-counts';
 export async function GET() {
   const profile = await getServerProfile();
   if (!profile?.is_admin) {
-    return NextResponse.json({ users: 0, listings: 0, total: 0 }, { status: 403 });
+    return NextResponse.json({ listings: 0, total: 0 }, { status: 403 });
   }
 
   try {
@@ -14,6 +14,6 @@ export async function GET() {
       headers: { 'cache-control': 'no-store' },
     });
   } catch {
-    return NextResponse.json({ users: 0, listings: 0, total: 0 }, { status: 500 });
+    return NextResponse.json({ listings: 0, total: 0 }, { status: 500 });
   }
 }

@@ -41,8 +41,8 @@ El MVP cubre 9 epics agrupados en 3 themes:
 
 Features:
 - Signup (email + password + display name) + Login
-- Pantalla `/pending` para usuarios sin aprobar
-- Middleware que protege rutas `(app)/*` y redirige a `/pending` si no aprobado
+- Perfiles activos inmediatamente después del registro, sin aprobación manual
+- Middleware que protege rutas `(app)/*` y exige sesión y perfil no eliminado
 - Flags `is_admin` + `is_approved` en `profiles`
 - RLS habilitada en las 8 tablas del schema
 - Service-role aislado al servidor (nunca en `NEXT_PUBLIC_*`)

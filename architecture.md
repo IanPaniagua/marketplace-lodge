@@ -54,7 +54,7 @@ reports: reporter → profiles, target =    │
 - Un comprador no puede ser también vendedor en la misma conversación (`buyer_id <> seller_id`)
 - Un listing tiene precio **o** está marcado como gift, nunca ambos ni ninguno
 - Una rating es editable solo durante 7 días (`now() < edit_locked_at`, enforced por RLS)
-- Solo aprobados pueden insertar listings / mensajes / ratings / reports (RLS via función `is_approved()`)
+- Solo perfiles activos pueden insertar listings / mensajes / ratings / reports (RLS via función `is_approved()`)
 
 ---
 
@@ -82,12 +82,12 @@ reports: reporter → profiles, target =    │
 
 Auth nativa de Insforge, email + password.
 
-1. **Signup** (`/signup`): Insforge SDK crea el `auth.user`. En la misma transacción cliente se inserta la fila en `profiles` con `is_approved = false`, `is_admin = false`.
+1. **Signup** (`/signup`): Insforge SDK crea el `auth.user`. A continuación se inserta la fila en `profiles`; la base de datos asigna `is_approved = true` por defecto e impide crearla como administradora.
 2. **Login** (`/login`): Insforge SDK estándar, devuelve sesión.
-3. **Approval gate**: `src/middleware.ts` corre en todas las rutas `(app)/*`, valida sesión vía Insforge SDK, lee `profiles` y si `is_approved = false` o `deleted_at != null` redirige a `/pending`.
-4. **Admin gate**: el mismo middleware extiende la regla en `/admin/*` exigiendo `is_admin = true`, si no redirige a `/`.
+3. **Profile gate**: `src/middleware.ts` corre en todas las rutas `(app)/*`, valida sesión vía Insforge SDK y exige un perfil existente que no esté eliminado.
+4. **Admin gate**: el mismo middleware extiende la regla en `/admin/*` exigiendo `is_admin = true`; si no, redirige a `/`.
 
-> El cliente nunca puede flippear `is_admin` ni `is_approved` directamente: el policy `profiles_update` permite update sobre la propia fila, pero las column-level checks viven en server routes (`/api/admin/users/[id]/approve`, `/api/admin/users/[id]/admin`) que usan el service-role y verifican que el caller es admin **antes** de tocar nada.
+> El cliente no puede modificar `is_admin` ni `is_approved`: los permisos por columna excluyen ambos campos y la política de inserción exige `is_admin = false` e `is_approved = true`.
 
 ### Realtime — Insforge directamente
 
@@ -100,7 +100,7 @@ Auth nativa de Insforge, email + password.
 
 | Capa | Qué bloquea |
 |---|---|
-| **Middleware** | Rutas `(app)/*` y `/admin/*` — redirige si no auth, no aprobado o no admin |
+| **Middleware** | Rutas `(app)/*` y `/admin/*` — redirige si no hay sesión, falta el perfil, está eliminado o la ruta exige admin |
 | **RLS** | Cada query directa del cliente — implementa visibilidad, propiedad, bloqueos, ventanas de edición, prevención de auto-rating |
 | **Server-only routes** (`/api/admin/*`) | Las únicas que usan el service-role. Verifican `is_admin` en la sesión antes de hacer la llamada con service-role. |
 | **Edge functions** (Insforge) | `notify-admin-new-listing` (email) — disparada desde un route handler post-insert, no desde un trigger DB |

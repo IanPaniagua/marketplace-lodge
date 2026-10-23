@@ -123,16 +123,15 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
       <section className="space-y-3">
         <SectionHeader title="Adopción" />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Stat
             label="Adopción en Lodge"
             value={formatPct(m.adoption.adoptionRate)}
-            sub={`${m.adoption.approvedUsers} de ${m.adoption.lodgeSize}`}
+            sub={`${m.adoption.activeUsers} de ${m.adoption.lodgeSize}`}
             accent
           />
           <Stat label="Nuevos registros" value={formatInt(m.adoption.newSignupsInWindow)} sub={windowSuffix} />
-          <Stat label="Aprobaciones pendientes" value={formatInt(m.adoption.pendingApprovals)} sub="esperando revisión" />
-          <Stat label="Usuarios aprobados" value={formatInt(m.adoption.approvedUsers)} sub="cuentas activas" />
+          <Stat label="Perfiles activos" value={formatInt(m.adoption.activeUsers)} sub="cuentas disponibles" />
         </div>
       </section>
 

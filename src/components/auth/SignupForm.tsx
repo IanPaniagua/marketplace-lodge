@@ -74,22 +74,14 @@ export default function SignupForm({ inviteToken }: Props) {
       return;
     }
 
-    let invitationClaimed = false;
     if (inviteToken) {
       const claim = await claimFriendInvite(inviteToken);
-      invitationClaimed = !claim.error;
       if (claim.error) {
         toast.warning('Tu cuenta se ha creado, pero la invitación no se pudo activar.');
       }
     }
 
-    fetch('/api/notify/new-user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: userId }),
-    }).catch(() => {});
-
-    window.location.href = invitationClaimed ? '/pending?invited=1' : '/pending';
+    window.location.href = '/';
   }
 
   return (

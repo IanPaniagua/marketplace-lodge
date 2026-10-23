@@ -10,10 +10,9 @@ export interface MetricsPayload {
   window: MetricsWindow;
   windowDays: number | null;
   adoption: {
-    approvedUsers: number;
+    activeUsers: number;
     lodgeSize: number;
     adoptionRate: number;
-    pendingApprovals: number;
     newSignupsInWindow: number;
   };
   engagement: {
@@ -73,16 +72,9 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
   const cutoff7 = cutoffISO(7)!;
   const cutoff30 = cutoffISO(30)!;
 
-  const approvedQ = admin.database
+  const activeUsersQ = admin.database
     .from('profiles')
     .select('id')
-    .eq('is_approved', true)
-    .is('deleted_at', null);
-
-  const pendingQ = admin.database
-    .from('profiles')
-    .select('id')
-    .eq('is_approved', false)
     .is('deleted_at', null);
 
   let newSignupsQ = admin.database
@@ -162,8 +154,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     .not('first_approved_at', 'is', null);
 
   const [
-    approvedRes,
-    pendingRes,
+    activeUsersRes,
     newSignupsRes,
     wauRes,
     mauRes,
@@ -180,8 +171,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     resolvedReportsRes,
     listingProcessingRes,
   ] = await Promise.all([
-    approvedQ,
-    pendingQ,
+    activeUsersQ,
     newSignupsQ,
     wauQ,
     mauQ,
@@ -199,8 +189,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     listingProcessingQ,
   ]);
 
-  const approvedUsers = (approvedRes.data ?? []).length;
-  const pendingApprovals = (pendingRes.data ?? []).length;
+  const activeUsers = (activeUsersRes.data ?? []).length;
   const newSignupsInWindow = (newSignupsRes.data ?? []).length;
   const wau = (wauRes.data ?? []).length;
   const mau = (mauRes.data ?? []).length;
@@ -253,10 +242,9 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     window,
     windowDays: days,
     adoption: {
-      approvedUsers,
+      activeUsers,
       lodgeSize: LODGE_SIZE,
-      adoptionRate: approvedUsers / LODGE_SIZE,
-      pendingApprovals,
+      adoptionRate: activeUsers / LODGE_SIZE,
       newSignupsInWindow,
     },
     engagement: {

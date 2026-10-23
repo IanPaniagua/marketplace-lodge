@@ -72,23 +72,17 @@ The admin UI (`/admin`) requires `is_admin = true` in the `profiles` table.
 ```sql
 -- Replace with the admin user's email
 UPDATE profiles
-SET is_admin = true, is_approved = true
+SET is_admin = true
 WHERE id = (SELECT id FROM auth.users WHERE email = 'your@email.com');
 ```
 
-**Via Table Editor:** Database → Table Editor → `profiles` → find your row → set `is_admin = true` and `is_approved = true`.
+**Via Table Editor:** Database → Table Editor → `profiles` → find your row → set `is_admin = true`.
 
 ---
 
-## Approving new users
+## New user access
 
-Unapproved users land on `/pending` after signing up.
-
-- **Via admin UI:** Log in as admin → `/admin/users` → click Approve.
-- **Via DB:**
-  ```sql
-  UPDATE profiles SET is_approved = true WHERE id = '<user-uuid>';
-  ```
+New profiles are active immediately after signup. There is no manual administrator approval step.
 
 ---
 
@@ -217,7 +211,6 @@ Because the service worker only registers in production (`NODE_ENV === 'producti
 | Problem | Fix |
 |---|---|
 | Missing env vars | Copy `.env.local.example` → `.env.local` and fill all three values |
-| Redirect loop on `/pending` | `is_approved = false` on your profile — approve via DB or `/admin/users` |
 | `/admin` redirects to `/` | `is_admin = false` on your profile — set via DB |
 | Realtime messages not arriving | Verify Insforge plan supports Realtime; check `NEXT_PUBLIC_INSFORGE_URL` |
 | `pnpm install` warns about build scripts | Run `pnpm approve-builds --all` (approves `sharp` + `unrs-resolver`) |
