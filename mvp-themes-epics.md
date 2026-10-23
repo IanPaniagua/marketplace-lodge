@@ -51,9 +51,9 @@ Features:
 **Goal:** Cada residente tiene un perfil público sin exponer datos privados.
 
 Features:
-- Editar perfil propio: display name, avatar, bio, room number
+- Editar perfil propio: display name, avatar y bio
 - Avatar upload con compresión client-side
-- Vista pública `/profile/[id]` (sin `room_number`, sin flags admin)
+- Vista pública `/profile/[id]` (sin flags admin)
 - `/profile/settings`: cambiar password, soft-delete account
 - TopBar con dropdown de avatar (perfil / logout)
 

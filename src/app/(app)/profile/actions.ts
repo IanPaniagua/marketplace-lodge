@@ -37,7 +37,6 @@ export async function updateProfile(
       .update({
         display_name: parsed.data.display_name,
         bio: parsed.data.bio ?? null,
-        room_number: parsed.data.room_number ?? null,
       })
       .eq('id', user.id);
 
@@ -84,7 +83,7 @@ export async function deleteMyAccount(): Promise<void> {
     const user = await getCurrentUser(client);
 
     // Soft-delete + anonymize personal fields so past chats no longer
-    // expose this user's name, avatar, bio, or room number to the other party.
+    // expose this user's name, avatar, or bio to the other party.
     await client.database
       .from('profiles')
       .update({
@@ -92,7 +91,6 @@ export async function deleteMyAccount(): Promise<void> {
         display_name: 'Deleted user',
         bio: null,
         avatar_url: null,
-        room_number: null,
       })
       .eq('id', user.id);
 

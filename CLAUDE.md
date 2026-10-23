@@ -58,7 +58,7 @@ All backend work goes through the **Insforge MCP**, never raw SQL files run by h
 ## Hard rules (do not violate)
 
 1. **Never bypass RLS by using the service-role client on routes the user can hit directly.** Service key is server-only and only for endpoints under `/api/admin/*` (which themselves verify `is_admin`).
-2. **Never expose private profile fields** (`room_number`, admin-only fields) on public profile views.
+2. **Never expose private admin-only fields** on public profile views.
 3. **Never invent product features.** If `tasks.md` doesn't list it, ask before building it.
 4. **Never paper over a failing AC.** If you can't satisfy an AC, stop, explain why, and propose options.
 5. **Never commit secrets.** Verify `.env.local` is gitignored before any commit.

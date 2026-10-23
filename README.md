@@ -158,7 +158,7 @@ Save dumps to a local folder **outside** this repository, e.g.:
   avatars/
 ```
 
-Never commit exports — they contain PII (names, email addresses, room numbers).
+Never commit exports — they contain PII (names and email addresses).
 
 ### Restore
 

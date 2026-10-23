@@ -67,7 +67,6 @@ export const RatingSchema = z.object({
 export const ProfileEditSchema = z.object({
   display_name: z.string().min(2).max(40),
   bio: z.string().max(200).optional(),
-  room_number: z.string().max(10).optional(),
 });
 
 export type SignupInput = z.infer<typeof SignupSchema>;

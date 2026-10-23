@@ -42,7 +42,6 @@ export default function ProfileEditForm({ profile }: Props) {
     defaultValues: {
       display_name: profile.display_name,
       bio: profile.bio ?? '',
-      room_number: profile.room_number ?? '',
     },
   });
 
@@ -190,24 +189,6 @@ export default function ProfileEditForm({ profile }: Props) {
                 <p className="text-xs text-muted-foreground">
                   {(field.value ?? '').length}/200
                 </p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="room_number"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Número de habitación</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="p. ej., 14"
-                    className="h-11 md:h-10"
-                  />
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

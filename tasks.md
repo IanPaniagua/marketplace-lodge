@@ -94,7 +94,7 @@ Before starting Phase 1, ask the user to claim the Insforge project at the print
 **Goal:** A logged-in user can view their own profile, edit it, view someone else's profile, and the feed page lists `live` listings (still empty — listings come in Phase 3).
 
 ### Tasks
-1. Build `/profile` (own) with edit form: display name, avatar, bio, room number.
+1. Build `/profile` (own) with edit form: display name, avatar and bio.
 2. Avatar upload: client-side compress, upload to `listing-photos` (or a separate `avatars` bucket — create one if convenient) at path `avatars/{user_id}.webp`. Store URL in `profiles.avatar_url`.
 3. Build `/profile/[id]` (other user's public view): name, avatar, bio, member since, average rating (placeholder until Phase 5), listings count.
 4. Build `/profile/settings` page: change password (Insforge SDK), delete my account button (calls a server route that soft-deletes).

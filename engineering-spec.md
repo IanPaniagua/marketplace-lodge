@@ -118,7 +118,6 @@ create table profiles (
   display_name text not null check (char_length(display_name) between 2 and 40),
   avatar_url text,
   bio text check (char_length(bio) <= 200),
-  room_number text check (char_length(room_number) <= 10),
   is_admin boolean not null default false,
   is_approved boolean not null default false,
   deleted_at timestamptz,

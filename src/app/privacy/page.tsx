@@ -7,7 +7,7 @@ export default function PrivacyPage() {
     <div className="mx-auto max-w-2xl space-y-8 px-4 py-10 md:py-16">
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight">Política de privacidad</h1>
-        <p className="text-sm text-muted-foreground">Última actualización: 06/05/2026</p>
+        <p className="text-sm text-muted-foreground">Última actualización: 23/10/2026</p>
       </header>
 
       <section className="space-y-3">
@@ -23,7 +23,7 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold tracking-tight">Qué datos recopilamos</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
           <li>Cuenta: correo electrónico, contraseña cifrada y nombre visible.</li>
-          <li>Perfil: foto, presentación y número de habitación (visible para otros residentes registrados).</li>
+          <li>Perfil: foto y presentación (visibles para otros residentes registrados).</li>
           <li>Anuncios: título, descripción, categoría, estado, precio y fotos.</li>
           <li>Mensajes: el texto de las conversaciones que mantienes con otros residentes.</li>
           <li>
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
             </strong>{' '}
             Solo lo harán al investigar un reporte o aplicar las normas.
           </li>
-          <li>Tu número de habitación, correo y contraseña nunca aparecen en tu perfil público.</li>
+          <li>Tu correo y contraseña nunca aparecen en tu perfil público.</li>
         </ul>
       </section>
 
@@ -71,8 +71,8 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold tracking-tight">Durante cuánto tiempo los conservamos</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
           Conservamos tus datos mientras tu cuenta esté activa. Al eliminarla, desactivamos tu perfil:
-          el nombre se sustituye por &ldquo;Usuario eliminado&rdquo;, se borran la foto, la presentación
-          y la habitación, y se ocultan tus anuncios. Los mensajes anteriores siguen visibles para la
+          el nombre se sustituye por &ldquo;Usuario eliminado&rdquo;, se borran la foto y la presentación,
+          y se ocultan tus anuncios. Los mensajes anteriores siguen visibles para la
           otra persona, pero aparecen enviados por &ldquo;Usuario eliminado&rdquo;, ya que borrarlos
           eliminaría también su copia de la conversación. Puedes solicitar la eliminación completa de
           tus mensajes anteriores contactando con el administrador.

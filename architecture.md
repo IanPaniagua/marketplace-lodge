@@ -12,7 +12,7 @@ Schema en PostgreSQL gestionado por Insforge. Todas las tablas viven en `public`
 
 | # | Tabla | Qué guarda |
 |---|---|---|
-| 1 | **profiles** | Datos del residente: `display_name`, `avatar_url`, `bio`, `room_number`, flags `is_admin` / `is_approved`, `deleted_at` (soft-delete). PK = `auth.users.id` (1:1 con el usuario de Auth). |
+| 1 | **profiles** | Datos del residente: `display_name`, `avatar_url`, `bio`, flags `is_admin` / `is_approved`, `deleted_at` (soft-delete). PK = `auth.users.id` (1:1 con el usuario de Auth). |
 | 2 | **listings** | Anuncio: `owner_id`, `title`, `description`, `price_eur` o `is_gift`, `category`, `condition`, `status` (`draft / pending / live / sold / archived`), `rejection_reason`, `first_approved_at` (anti-rebote en re-aprobaciones). |
 | 3 | **listing_photos** | Foto de un listing: `listing_id`, `storage_path`, `sort_order`. 1–5 por listing. Los binarios viven en Storage. |
 | 4 | **conversations** | Chat 1:1 sobre un listing: `listing_id`, `buyer_id`, `seller_id`, `last_message_at`. `UNIQUE(listing_id, buyer_id)` → un chat por (listing, comprador). |
@@ -209,7 +209,7 @@ WHERE id = (SELECT id FROM auth.users WHERE email = 'your@email.com');
 
 - DB: Insforge Dashboard → Database → Table Editor → Export CSV por tabla
 - Storage: Dashboard → Storage → descargar buckets `listing-photos` y `avatars`
-- Guardar fuera del repo (contienen PII: nombres, emails, room numbers)
+- Guardar fuera del repo (contienen PII: nombres y emails)
 - Cadencia recomendada: mensual o antes de cualquier cambio de schema
 
 ---

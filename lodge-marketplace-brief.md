@@ -68,7 +68,7 @@ Residents stay in the lodge for **6–24 months**. They arrive needing furniture
 5. Admin can delete any user at any time (soft-delete, listings/chats anonymized).
 
 ### 4.2 Profile
-- Fields: display name, avatar (optional), short bio (optional), room number (optional, private — admin only), `is_admin`, `is_approved`.
+- Fields: display name, avatar (optional), short bio (optional), `is_admin`, `is_approved`.
 - Public profile shows: name, avatar, average rating, total listings, "member since".
 - User can edit any field, or delete their own account.
 
@@ -129,7 +129,7 @@ Residents stay in the lodge for **6–24 months**. They arrive needing furniture
 
 | Table | Key fields |
 |---|---|
-| `profiles` | `id (= auth.users.id)`, display_name, avatar_url, bio, room_number, is_admin, is_approved, deleted_at, created_at |
+| `profiles` | `id (= auth.users.id)`, display_name, avatar_url, bio, is_admin, is_approved, deleted_at, created_at |
 | `listings` | id, owner_id, title, description, price_eur (nullable), is_gift, category, condition, status, rejection_reason, created_at, updated_at |
 | `listing_photos` | id, listing_id, storage_path, sort_order |
 | `conversations` | id, listing_id, buyer_id, seller_id, last_message_at, created_at |

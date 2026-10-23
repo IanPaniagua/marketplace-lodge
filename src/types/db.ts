@@ -11,7 +11,6 @@ export interface Profile {
   display_name: string;
   avatar_url: string | null;
   bio: string | null;
-  room_number: string | null;
   is_admin: boolean;
   is_approved: boolean;
   deleted_at: string | null;
