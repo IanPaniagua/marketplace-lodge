@@ -9,7 +9,7 @@ import { AlertCircle, Globe2, Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ListingGallery from '@/components/listing/ListingGallery';
 import OwnerActions from '@/components/listing/OwnerActions';
-import MessageSellerButton from '@/components/chat/MessageSellerButton';
+import ListingBuyerActions from '@/components/listing/ListingBuyerActions';
 import RateSellerButton from '@/components/listing/RateSellerButton';
 import type { Listing, ListingPhoto, Profile, ListingStatus, Rating } from '@/types/db';
 
@@ -47,16 +47,27 @@ export default async function ListingDetailPage({ params }: Props) {
 
   const { data: listingRaw } = await client.database
     .from('listings')
-    .select('id,owner_id,title,description,category,condition,visibility,is_gift,price_eur,status,rejection_reason,created_at')
+    .select(
+      'id,owner_id,title,description,category,condition,visibility,is_gift,price_eur,status,rejection_reason,created_at'
+    )
     .eq('id', id)
     .single();
 
   if (!listingRaw) notFound();
   const listing = listingRaw as Pick<
     Listing,
-    | 'id' | 'owner_id' | 'title' | 'description' | 'category'
-    | 'condition' | 'visibility' | 'is_gift' | 'price_eur' | 'status'
-    | 'rejection_reason' | 'created_at'
+    | 'id'
+    | 'owner_id'
+    | 'title'
+    | 'description'
+    | 'category'
+    | 'condition'
+    | 'visibility'
+    | 'is_gift'
+    | 'price_eur'
+    | 'status'
+    | 'rejection_reason'
+    | 'created_at'
   >;
 
   const { data: photosRaw } = await client.database
@@ -73,7 +84,10 @@ export default async function ListingDetailPage({ params }: Props) {
     .eq('id', listing.owner_id)
     .single();
 
-  const seller = sellerRaw as Pick<Profile, 'id' | 'display_name' | 'avatar_url' | 'created_at'> | null;
+  const seller = sellerRaw as Pick<
+    Profile,
+    'id' | 'display_name' | 'avatar_url' | 'created_at'
+  > | null;
 
   const insforgeUrl = process.env.NEXT_PUBLIC_INSFORGE_URL;
   const galleryPhotos = photos.map((p) => ({
@@ -83,13 +97,23 @@ export default async function ListingDetailPage({ params }: Props) {
 
   const isOwner = currentUserId === listing.owner_id;
   const status = listing.status as ListingStatus;
-  const timeAgo = formatDistanceToNow(new Date(listing.created_at), { addSuffix: true, locale: es });
+  const timeAgo = formatDistanceToNow(new Date(listing.created_at), {
+    addSuffix: true,
+    locale: es,
+  });
   const categoryLabels: Record<string, string> = {
-    furniture: 'Muebles', kitchen: 'Cocina', electronics: 'Electrónica',
-    books: 'Libros', clothes: 'Ropa', other: 'Otros',
+    furniture: 'Muebles',
+    kitchen: 'Cocina',
+    electronics: 'Electrónica',
+    books: 'Libros',
+    clothes: 'Ropa',
+    other: 'Otros',
   };
   const conditionLabels: Record<string, string> = {
-    new: 'Nuevo', like_new: 'Como nuevo', used: 'Usado', worn: 'Desgastado',
+    new: 'Nuevo',
+    like_new: 'Como nuevo',
+    used: 'Usado',
+    worn: 'Desgastado',
   };
 
   // Check if the current user (buyer) has a conversation with messages → show rate CTA
@@ -136,14 +160,20 @@ export default async function ListingDetailPage({ params }: Props) {
 
       {/* Status badge (visible to owner or if non-live) */}
       {(isOwner || status !== 'live') && (
-        <span className={`inline-block rounded-md px-2 py-0.5 text-xs font-medium ${STATUS_CLASSES[status]}`}>
+        <span
+          className={`inline-block rounded-md px-2 py-0.5 text-xs font-medium ${STATUS_CLASSES[status]}`}
+        >
           {STATUS_LABELS[status]}
         </span>
       )}
 
       {isOwner && (
         <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-          {listing.visibility === 'friends' ? <Users className="h-3 w-3" /> : <Globe2 className="h-3 w-3" />}
+          {listing.visibility === 'friends' ? (
+            <Users className="h-3 w-3" />
+          ) : (
+            <Globe2 className="h-3 w-3" />
+          )}
           {listing.visibility === 'friends' ? 'Solo amigos' : 'Visible para todos'}
         </span>
       )}
@@ -151,7 +181,7 @@ export default async function ListingDetailPage({ params }: Props) {
       {/* Rejection reason */}
       {isOwner && listing.rejection_reason && (
         <div className="flex gap-2 rounded-lg border border-destructive/30 bg-red-50 p-3">
-          <AlertCircle className="h-4 w-4 shrink-0 text-destructive mt-0.5" />
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
           <div>
             <p className="text-xs font-medium text-destructive">Motivo del rechazo</p>
             <p className="text-sm">{listing.rejection_reason}</p>
@@ -166,11 +196,11 @@ export default async function ListingDetailPage({ params }: Props) {
           {listing.is_gift ? 'Gratis' : `${listing.price_eur} €`}
         </p>
         <div className="flex items-center gap-2">
-          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             {categoryLabels[listing.category] ?? listing.category}
           </span>
           <span className="text-muted-foreground">·</span>
-          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             {conditionLabels[listing.condition] ?? listing.condition}
           </span>
           <span className="text-muted-foreground">·</span>
@@ -184,12 +214,12 @@ export default async function ListingDetailPage({ params }: Props) {
       {/* Owner actions */}
       {isOwner && <OwnerActions listingId={id} status={status} />}
 
-      {/* Seller card + message (non-owner) */}
+      {/* Seller card + buyer actions (non-owner) */}
       {!isOwner && seller && (
-        <div className="flex items-center justify-between rounded-lg border bg-card p-4">
+        <div className="space-y-4 rounded-lg border bg-card p-4 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:space-y-0">
           <Link
             href={`/profile/${seller.id}`}
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            className="flex min-w-0 items-center gap-3 transition-opacity hover:opacity-80"
           >
             <Avatar className="h-10 w-10">
               {seller.avatar_url && (
@@ -207,17 +237,25 @@ export default async function ListingDetailPage({ params }: Props) {
             </div>
           </Link>
 
-          <div className="flex items-center gap-2">
+          <div className="w-full space-y-2 sm:w-auto">
             {status === 'live' && (
-              <MessageSellerButton listingId={id} sellerId={seller.id} />
+              <ListingBuyerActions
+                listingId={id}
+                sellerId={seller.id}
+                listingTitle={listing.title}
+                price={listing.price_eur}
+                isGift={listing.is_gift}
+              />
             )}
             {canRateSeller && (
-              <RateSellerButton
-                rateeId={seller.id}
-                rateeName={seller.display_name}
-                listingId={id}
-                existingRating={existingRatingForSeller}
-              />
+              <div className="flex justify-end">
+                <RateSellerButton
+                  rateeId={seller.id}
+                  rateeName={seller.display_name}
+                  listingId={id}
+                  existingRating={existingRatingForSeller}
+                />
+              </div>
             )}
           </div>
         </div>

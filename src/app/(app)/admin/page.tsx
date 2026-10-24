@@ -5,7 +5,7 @@ import { ShoppingBagIcon, FlagIcon, BarChart3Icon } from 'lucide-react';
 
 export default async function AdminPage() {
   const profile = await getServerProfile();
-  if (!profile?.is_admin) redirect('/');
+  if (!profile?.is_admin) redirect('/friends');
 
   const links = [
     { href: '/admin/listings', icon: ShoppingBagIcon, label: 'Anuncios pendientes', description: 'Aprobar o rechazar anuncios' },

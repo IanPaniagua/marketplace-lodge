@@ -20,15 +20,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { token } = await params;
   const invitation = await getFriendInvitePreview(token);
 
-  if (!invitation) return { title: 'Invitación no disponible — Lodge Market' };
+  if (!invitation) return { title: 'Invitación no disponible — Círculo Market' };
 
   return {
-    title: `${invitation.display_name} te invita a Lodge Market`,
+    title: `${invitation.display_name} te invita a Círculo Market`,
     description: 'Regístrate con esta invitación y conecta automáticamente con tu amigo.',
     robots: { index: false, follow: false },
     openGraph: {
-      title: `${invitation.display_name} te invita a Lodge Market`,
-      description: 'El mercado privado para compartir entre residentes.',
+      title: `${invitation.display_name} te invita a Círculo Market`,
+      description: 'El marketplace personal para vender entre amigos.',
       type: 'website',
     },
   };
@@ -56,12 +56,12 @@ export default async function FriendInvitePage({ params }: Props) {
     <div className="min-h-dvh bg-background">
       <header className="border-b bg-background">
         <div className="mx-auto flex h-14 w-full max-w-4xl items-center justify-between px-4 md:px-6">
-          <Link href={currentUserId ? '/' : '/login'} className="text-lg font-semibold tracking-tight">
-            Lodge<span className="brand-gradient-text"> Market</span>
+          <Link href={currentUserId ? '/friends' : '/login'} className="text-lg font-semibold tracking-tight">
+            Círculo<span className="brand-gradient-text"> Market</span>
           </Link>
           {currentUserId ? (
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/">Ir a mis amigos</Link>
+              <Link href="/friends">Ir a mis amigos</Link>
             </Button>
           ) : (
             <Button variant="ghost" size="sm" asChild>
@@ -90,7 +90,7 @@ export default async function FriendInvitePage({ params }: Props) {
                 {invitation.display_name} te invita
               </h1>
               <p className="mt-2 max-w-md text-sm text-white/90 sm:text-base">
-                Únete a Lodge Market y conecta con {invitation.display_name} automáticamente.
+                Únete a Círculo Market y conecta con {invitation.display_name} automáticamente.
               </p>
             </div>
           </div>
@@ -99,7 +99,7 @@ export default async function FriendInvitePage({ params }: Props) {
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex gap-3 sm:block sm:text-center">
                 <Users className="h-5 w-5 shrink-0 text-primary sm:mx-auto sm:mb-2" />
-                <p className="text-sm font-medium">Conecta con vecinos</p>
+                <p className="text-sm font-medium">Conecta con amigos</p>
               </div>
               <div className="flex gap-3 sm:block sm:text-center">
                 <ShoppingBag className="h-5 w-5 shrink-0 text-primary sm:mx-auto sm:mb-2" />
@@ -119,7 +119,7 @@ export default async function FriendInvitePage({ params }: Props) {
                     Esta es tu invitación
                   </div>
                   <Button variant="outline" asChild>
-                    <Link href="/">Volver a mis amigos</Link>
+                    <Link href="/friends">Volver a mis amigos</Link>
                   </Button>
                 </div>
               ) : currentUserId ? (
@@ -142,7 +142,7 @@ export default async function FriendInvitePage({ params }: Props) {
             </div>
 
             <p className="rounded-lg bg-muted px-4 py-3 text-center text-xs text-muted-foreground">
-              Al crear tu perfil entrarás directamente en Lodge Market y la amistad quedará activada.
+              Al crear tu perfil entrarás directamente en Círculo Market y la amistad quedará activada.
             </p>
           </div>
         </section>

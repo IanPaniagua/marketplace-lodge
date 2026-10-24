@@ -22,8 +22,8 @@ if (!url || !serviceKey) {
   process.exit(1);
 }
 
-const SEED_EMAIL = 'ian@lodge.local';
-const SEED_PASSWORD = 'Lodge2025!';
+const SEED_EMAIL = 'admin@circulo.local';
+const SEED_PASSWORD = 'Circulo2026!';
 const SEED_DISPLAY_NAME = 'Ian';
 
 const admin = createClient({ baseUrl: url, edgeFunctionToken: serviceKey });
@@ -122,7 +122,7 @@ async function seedListings(ownerId: string): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  console.log('Seeding Lodge Marketplace…\n');
+  console.log('Seeding Círculo Market…\n');
 
   console.log('1. Auth user');
   const userId = await getOrCreateUser();

@@ -69,8 +69,8 @@ async function createInvitationImage(displayName: string): Promise<Blob | null> 
 
   context.fillStyle = '#0F172A';
   context.font = '600 52px system-ui, -apple-system, sans-serif';
-  context.fillText('Lodge', 150, 190);
-  const logoWidth = context.measureText('Lodge').width;
+  context.fillText('Círculo', 150, 190);
+  const logoWidth = context.measureText('Círculo').width;
   const logoGradient = context.createLinearGradient(150 + logoWidth, 0, 500, 0);
   logoGradient.addColorStop(0, '#2563EB');
   logoGradient.addColorStop(1, '#06B6D4');
@@ -91,12 +91,12 @@ async function createInvitationImage(displayName: string): Promise<Blob | null> 
   context.textBaseline = 'alphabetic';
   drawCenteredText(context, `${displayName} te invita`, 640, 780, 58);
   context.font = '600 58px system-ui, -apple-system, sans-serif';
-  context.fillText('a Lodge Market', 540, 712);
+  context.fillText('a Círculo Market', 540, 712);
 
   context.fillStyle = '#475569';
   context.font = '400 34px system-ui, -apple-system, sans-serif';
-  context.fillText('Únete al mercado privado de residentes,', 540, 808);
-  context.fillText('comparte lo que ya no usas y conecta.', 540, 854);
+  context.fillText('Únete a su círculo de confianza,', 540, 808);
+  context.fillText('descubre su catálogo y comparte el tuyo.', 540, 854);
 
   const buttonGradient = context.createLinearGradient(300, 0, 780, 0);
   buttonGradient.addColorStop(0, '#2563EB');
@@ -132,16 +132,16 @@ export default function InviteFriendsButton({
       }
 
       const url = `${window.location.origin}/invite/${invitation.token}`;
-      const text = `${displayName} te invita a Lodge Market. Regístrate con este enlace y seréis amigos automáticamente.`;
+      const text = `${displayName} te invita a Círculo Market. Regístrate con este enlace y seréis amigos automáticamente.`;
 
       try {
         const image = await createInvitationImage(displayName);
         const file = image
-          ? new File([image], 'invitacion-lodge-market.png', { type: 'image/png' })
+          ? new File([image], 'invitacion-circulo-market.png', { type: 'image/png' })
           : null;
 
         if (navigator.share) {
-          const shareData: ShareData = { title: 'Invitación a Lodge Market', text, url };
+          const shareData: ShareData = { title: 'Invitación a Círculo Market', text, url };
           if (file && navigator.canShare?.({ files: [file] })) shareData.files = [file];
           try {
             await navigator.share(shareData);

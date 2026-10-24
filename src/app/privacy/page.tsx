@@ -1,21 +1,20 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Privacidad — Lodge Market' };
+export const metadata = { title: 'Privacidad — Círculo Market' };
 
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-8 px-4 py-10 md:py-16">
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight">Política de privacidad</h1>
-        <p className="text-sm text-muted-foreground">Última actualización: 23/10/2026</p>
+        <p className="text-sm text-muted-foreground">Última actualización: 24/10/2026</p>
       </header>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Quién gestiona Lodge Market</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Quién gestiona Círculo Market</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Lodge Market es un mercado privado creado para los residentes de una residencia de estudiantes.
-          Lo gestiona el administrador de la residencia (Ian) en beneficio de sus residentes y no es un
-          servicio comercial. La plataforma no procesa pagos.
+          Círculo Market es un marketplace personal para comprar, vender y regalar entre amigos, con la
+          opción de compartir determinados productos mediante un enlace público. La plataforma no procesa pagos.
         </p>
       </section>
 
@@ -23,9 +22,9 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold tracking-tight">Qué datos recopilamos</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
           <li>Cuenta: correo electrónico, contraseña cifrada y nombre visible.</li>
-          <li>Perfil: foto y presentación (visibles para otros residentes registrados).</li>
+          <li>Perfil: foto y presentación (visibles para las personas con acceso a tu catálogo).</li>
           <li>Anuncios: título, descripción, categoría, estado, precio y fotos.</li>
-          <li>Mensajes: el texto de las conversaciones que mantienes con otros residentes.</li>
+          <li>Mensajes: el texto de las conversaciones que mantienes con otros usuarios.</li>
           <li>
             Moderación: reportes enviados, bloqueos y valoraciones dadas y recibidas.
           </li>
@@ -40,12 +39,16 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold tracking-tight">Quién puede ver tus datos</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted-foreground">
           <li>
-            Otros residentes registrados pueden ver tu perfil público (nombre visible, foto,
-            presentación y valoración media) y tus anuncios publicados.
+            Tus amigos registrados pueden ver tu perfil (nombre visible, foto, presentación y
+            valoración media) y los anuncios que hayas reservado para amigos.
+          </li>
+          <li>
+            Cualquier persona que reciba un enlace público puede ver los productos que hayas marcado
+            para todo el mundo. Los productos limitados a amigos no se muestran en ese enlace.
           </li>
           <li>
             La otra persona de una conversación puede ver los mensajes enviados en ella. Estos
-            mensajes nunca se muestran al resto de residentes.
+            mensajes nunca se muestran al resto de usuarios.
           </li>
           <li>
             <strong className="text-foreground">
@@ -82,7 +85,7 @@ export default function PrivacyPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">Tus derechos según el RGPD</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Como residente en la UE, tienes derecho a acceder, rectificar, eliminar, limitar y portar
+          Si resides en la UE, tienes derecho a acceder, rectificar, eliminar, limitar y portar
           tus datos, así como a oponerte a su tratamiento. Puedes ejercer estos derechos con las
           herramientas de edición del perfil, el botón &ldquo;Eliminar mi cuenta&rdquo; de Ajustes o
           contactando directamente con el administrador.
@@ -94,7 +97,7 @@ export default function PrivacyPage() {
         <p className="text-sm leading-relaxed text-muted-foreground">
           Tratamos tus datos sobre la base de tu consentimiento (art. 6.1.a del RGPD) al registrarte
           y del interés legítimo (art. 6.1.f del RGPD) para moderar, prevenir abusos y mantener segura
-          la comunidad de la residencia.
+          la comunidad.
         </p>
       </section>
 
@@ -102,7 +105,7 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold tracking-tight">Contacto</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
           Para cualquier consulta sobre privacidad o para ejercer tus derechos, contacta con el
-          administrador de la residencia en persona o por correo electrónico.
+          administrador de la plataforma por correo electrónico.
         </p>
       </section>
 

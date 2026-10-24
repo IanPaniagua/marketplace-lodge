@@ -29,7 +29,7 @@ export default function ClaimInviteButton({ token, inviterName }: Props) {
           ? `Ya eres amigo de ${inviterName}.`
           : `Ahora eres amigo de ${inviterName}.`,
       );
-      router.push(result.inviterId ? `/profile/${result.inviterId}` : '/');
+      router.push(result.inviterId ? `/profile/${result.inviterId}` : '/friends');
       router.refresh();
     });
   }

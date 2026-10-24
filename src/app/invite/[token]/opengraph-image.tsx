@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { getFriendInvitePreview } from '@/lib/friend-invites';
 
-export const alt = 'Invitación a Lodge Market';
+export const alt = 'Invitación a Círculo Market';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -42,13 +42,13 @@ export default async function OpenGraphImage({ params }: Props) {
           }}
         >
           <div style={{ color: '#0F172A', display: 'flex', fontSize: 38, fontWeight: 600 }}>
-            Lodge <span style={{ color: '#2563EB', marginLeft: 10 }}>Market</span>
+            Círculo <span style={{ color: '#2563EB', marginLeft: 10 }}>Market</span>
           </div>
           <div style={{ color: '#0F172A', display: 'flex', fontSize: 62, fontWeight: 600, marginTop: 56 }}>
             {displayName} te invita
           </div>
           <div style={{ color: '#475569', display: 'flex', fontSize: 30, marginTop: 18 }}>
-            Únete al mercado privado para compartir entre residentes
+            Únete al marketplace personal para vender entre amigos
           </div>
           <div
             style={{

@@ -8,7 +8,7 @@ import NotificationsToggle from '@/components/profile/NotificationsToggle';
 import LanguageSettings from '@/components/profile/LanguageSettings';
 import { getCurrentUserEmail } from '@/app/(app)/profile/actions';
 
-export const metadata = { title: 'Ajustes — Lodge Market' };
+export const metadata = { title: 'Ajustes — Círculo Market' };
 
 export default async function ProfileSettingsPage() {
   const email = await getCurrentUserEmail();

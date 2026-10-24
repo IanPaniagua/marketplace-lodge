@@ -1,12 +1,12 @@
-# Analytics — Lodge-Marketplace
+# Analytics — Círculo Market
 
 This document describes **what** we measure and **why**, followed by **how** it is
 implemented in the codebase. It is the single reference for the analytics dashboard
 that lives at `/admin/analytics`.
 
-The product is a private PWA for ~40 students in one lodge. The analytics scope is
-deliberately small: we only need to answer two questions on a weekly cadence —
-*is this app being used?* and *is the marketplace healthy?*
+The product is a personal marketplace built around trusted relationships and controlled sharing.
+The analytics scope answers three questions on a weekly cadence: *are new circles growing?*,
+*do products create real conversations?*, and *is the marketplace healthy?*
 
 No third-party analytics tool is used. No Google Analytics. No PostHog. No Vercel
 Analytics. All KPIs are derived from the existing application database.
@@ -20,17 +20,12 @@ this grouping. Every KPI that is window-sensitive (counts within a period) honou
 the window selector at the top of the page: `7d`, `30d`, `90d`, `all time`.
 Window-independent KPIs are explicitly noted.
 
-### 1. Adoption — *did the app reach its market?*
+### 1. Growth — *are new people joining?*
 
 | KPI | Meaning | Formula |
 |---|---|---|
-| **Lodge adoption** | Share of the lodge that signed up and was approved. The headline number. | `approved_users / 40` |
-| **Approved users** | Total active accounts (not soft-deleted, approved). | `count(profiles where is_approved AND deleted_at IS NULL)` |
-| **Pending approvals** | Backlog of signups awaiting admin review. | `count(profiles where NOT is_approved AND deleted_at IS NULL)` |
+| **Total users** | Total available accounts that have not been soft-deleted. | `count(profiles where deleted_at IS NULL)` |
 | **New signups** *(window)* | Registrations created inside the selected window. Tracks acquisition cadence. | `count(profiles where created_at ≥ cutoff)` |
-
-> Lodge size is hardcoded to **40**. Update `LODGE_SIZE` in `src/lib/metrics.ts`
-> if the building's actual capacity changes.
 
 ### 2. Engagement — *do people come back?*
 
@@ -181,9 +176,8 @@ The service-role key is never exposed: it is only read inside
 
 - All KPI numbers render in shadcn `Card` components with `tabular-nums` for
   alignment.
-- The dark red accent (`text-primary`) is reserved for the single headline KPI —
-  *Lodge adoption*. Other numbers stay neutral, matching the
-  `lodge-marketplace-ui` skill's rule of *one accent, used sparingly*.
+- The primary accent is reserved for the headline growth KPI. Other numbers stay
+  neutral, matching the `circulo-marketplace-ui` skill.
 - The grid collapses to two columns at 360px and expands to up to five columns
   on wide viewports.
 - Missing data (e.g. no sold listings yet) renders as `—` rather than `0` or
@@ -196,12 +190,12 @@ necessary later, add it as a follow-up phase, not as a side change.
 
 - **No charts or time-series.** Numbers only. Add `recharts` if a sparkline
   becomes valuable.
-- **No page-view or funnel tracking.** With 40 users, individual-event tracking
-  is overkill.
+- **No page-view or funnel tracking yet.** Add product events when the activation
+  funnel needs evidence beyond database outcomes.
 - **No delta-vs-previous-period indicators.** Easy to add by running the same
   queries against a shifted window.
 - **No external analytics integration.** No GA, no PostHog, no Vercel Analytics.
-  Keeps student data inside the project's database — no third party gets a copy.
+  Product data remains inside the project's database.
 - **No materialized views or pre-aggregation jobs.** All metrics are computed on
   request. Will be revisited if/when row counts grow.
 

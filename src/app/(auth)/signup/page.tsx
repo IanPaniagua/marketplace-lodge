@@ -4,7 +4,7 @@ interface Props {
   searchParams: Promise<{ invite?: string }>;
 }
 
-export const metadata = { title: 'Crear una cuenta — Lodge Market' };
+export const metadata = { title: 'Crear una cuenta — Círculo Market' };
 
 export default async function SignupPage({ searchParams }: Props) {
   const { invite } = await searchParams;

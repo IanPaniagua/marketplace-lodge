@@ -1,6 +1,6 @@
-# Lodge-Marketplace — Engineering Spec
+# Círculo Market — Engineering Spec
 
-> Companion to `lodge-marketplace-brief.md`. The brief defines **what** to build.
+> Companion to `product-brief.md`. The brief defines **what** to build and **why**.
 > This document defines **how** — exact schema, RLS, libraries, file structure,
 > and pre-resolved technical decisions so Claude Code doesn't improvise.
 
@@ -12,7 +12,7 @@
 lodge-marketplace/
 ├── CLAUDE.md                          # Permanent project instructions
 ├── README.md                          # How to run, deploy, claim Insforge
-├── lodge-marketplace-brief.md         # Product brief
+├── product-brief.md                   # Product brief
 ├── engineering-spec.md                # This file
 ├── tasks.md                           # Phased task list with AC/DoD
 ├── .mcp.json                          # Insforge MCP (created by add-mcp)
@@ -20,7 +20,7 @@ lodge-marketplace/
 ├── .env.local.example
 ├── .claude/
 │   └── skills/
-│       └── lodge-marketplace-ui/
+│       └── circulo-marketplace-ui/
 │           └── SKILL.md               # UI design system
 ├── public/
 │   ├── manifest.json
@@ -501,7 +501,7 @@ For the unread badge in `BottomNav`, subscribe to all `messages` where `conversa
 
 ## 8. PWA
 
-- `public/manifest.json` with `name`, `short_name: "Lodge"`, `theme_color: "#0A0A0A"`, `background_color: "#FFFFFF"`, `display: "standalone"`, `start_url: "/"`, icons 192/512/maskable.
+- `public/manifest.json` with `name: "Círculo Market"`, `short_name: "Círculo"`, `theme_color: "#2563EB"`, `background_color: "#FFFFFF"`, `display: "standalone"`, `start_url: "/"`, icons 192/512/maskable.
 - `public/sw.js`: cache-first for `/icons/*` and `/_next/static/*`, network-first for all else. No fancy offline mutations.
 - Register SW only in production.
 - Lighthouse PWA score must be ≥ 90.
@@ -617,7 +617,7 @@ Implement on the server using a simple in-memory token bucket per user (acceptab
 - Listing creation: 10 / day / user.
 - Reports: 5 / day / user.
 
-If the lodge grows past 200 users, swap for Insforge edge function + DB-backed counter.
+Before scaling across multiple server instances, replace the in-memory limiter with an Insforge edge function and DB-backed counter.
 
 ---
 

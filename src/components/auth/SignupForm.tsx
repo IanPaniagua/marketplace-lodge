@@ -31,7 +31,7 @@ export default function SignupForm({ inviteToken }: Props) {
     if (error) {
       if (error.error === 'ALREADY_EXISTS' || error.statusCode === 409) {
         toast.error('Ya existe una cuenta con este correo. Inicia sesión para aceptar la invitación.');
-        const next = inviteToken ? `/invite/${inviteToken}` : '/';
+        const next = inviteToken ? `/invite/${inviteToken}` : '/friends';
         router.push(`/login?next=${encodeURIComponent(next)}`);
         return;
       }
@@ -81,7 +81,7 @@ export default function SignupForm({ inviteToken }: Props) {
       }
     }
 
-    window.location.href = '/';
+    window.location.href = '/friends';
   }
 
   return (
@@ -91,7 +91,7 @@ export default function SignupForm({ inviteToken }: Props) {
         <p className="text-sm text-muted-foreground">
           {inviteToken
             ? 'Regístrate para aceptar la invitación y conectar automáticamente.'
-            : 'Solo para residentes de Lodge.'}
+            : 'Crea tu catálogo y compártelo a tu manera.'}
         </p>
       </div>
 

@@ -8,7 +8,7 @@ import RatingsList from '@/components/rating/RatingsList';
 import ShareCatalogButton from '@/components/profile/ShareCatalogButton';
 import InviteFriendsButton from '@/components/friends/InviteFriendsButton';
 
-export const metadata = { title: 'Mi perfil — Lodge Market' };
+export const metadata = { title: 'Mi perfil — Círculo Market' };
 
 export default async function ProfilePage() {
   const profile = await getServerProfile();

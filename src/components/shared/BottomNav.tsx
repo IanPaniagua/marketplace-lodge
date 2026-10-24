@@ -14,7 +14,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: '/', label: 'Amigos', Icon: Users },
+  { href: '/friends', label: 'Amigos', Icon: Users },
   { href: '/explore', label: 'Explorar', Icon: Compass },
   { href: '/listings/new', label: 'Publicar', Icon: PlusSquare },
   { href: '/chats', label: 'Mensajes', Icon: MessageCircle },
@@ -81,7 +81,7 @@ export default function BottomNav({ userId }: Props) {
     <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/70 bg-background/90 shadow-[0_-10px_30px_-22px_hsl(var(--foreground)/0.35)] backdrop-blur-xl md:hidden">
       <ul className="mx-auto flex h-16 max-w-2xl items-center justify-around px-2">
         {navItems.map(({ href, label, Icon }) => {
-          const active = href === '/' ? pathname === '/' : pathname.startsWith(href);
+          const active = pathname.startsWith(href);
           const isChats = href === '/chats';
 
           return (

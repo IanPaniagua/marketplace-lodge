@@ -41,7 +41,7 @@ export default function OwnerActions({ listingId, status }: Props) {
       const { error } = await deleteListing(listingId);
       if (error) { toast.error(error); return; }
       toast.success('Anuncio eliminado.');
-      router.push('/');
+      router.push('/friends');
     });
   }
 

@@ -1,6 +1,8 @@
-# Lodge Marketplace
+# Círculo Market
 
-Private PWA marketplace for the ~40 students living in a student lodge. Residents can post listings, chat with each other, and rate one another.
+A personal marketplace for selling, buying, and gifting among people who already know each other. Every listing can be shared with friends only or made visible to anyone with the public catalog link.
+
+The product strategy and current positioning live in [product-brief.md](product-brief.md).
 
 ## Stack
 
@@ -117,7 +119,7 @@ All application data lives in two places:
 
 ### Recommended cadence
 
-Monthly manual export is sufficient for ~40 residents. Do it before any major schema change or platform migration.
+Run regular exports according to traffic and always before a major schema change or platform migration.
 
 ### Exporting database tables
 
@@ -150,7 +152,7 @@ Copy the JSON result to a local file.
 Save dumps to a local folder **outside** this repository, e.g.:
 
 ```
-~/Documents/lodge-backups/YYYY-MM-DD/
+~/Documents/circulo-backups/YYYY-MM-DD/
   profiles.csv
   listings.csv
   ... (one file per table)
@@ -164,13 +166,13 @@ Never commit exports — they contain PII (names and email addresses).
 
 Restoring from a CSV export: **Database → Table Editor → Import CSV** in the Insforge dashboard, or use `run-raw-sql` with `INSERT` statements. Restore storage files by re-uploading to the relevant bucket via the dashboard.
 
-> **Privacy note:** Exports fall under the app's privacy policy. Only the admin (Ian) should handle them.
+> **Privacy note:** Exports fall under the app's privacy policy. Only authorized platform administrators should handle them.
 
 ---
 
 ## Seeding the database
 
-Creates Ian as admin + 2 sample listings. Safe to run multiple times (idempotent).
+Creates a local admin account and two sample listings. Safe to run multiple times (idempotent).
 
 ```bash
 pnpm tsx scripts/seed.ts
@@ -211,6 +213,6 @@ Because the service worker only registers in production (`NODE_ENV === 'producti
 | Problem | Fix |
 |---|---|
 | Missing env vars | Copy `.env.local.example` → `.env.local` and fill all three values |
-| `/admin` redirects to `/` | `is_admin = false` on your profile — set via DB |
+| `/admin` redirects to `/friends` | `is_admin = false` on your profile — set via DB |
 | Realtime messages not arriving | Verify Insforge plan supports Realtime; check `NEXT_PUBLIC_INSFORGE_URL` |
 | `pnpm install` warns about build scripts | Run `pnpm approve-builds --all` (approves `sharp` + `unrs-resolver`) |

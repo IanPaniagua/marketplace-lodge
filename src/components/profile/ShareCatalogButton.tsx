@@ -9,7 +9,7 @@ export default function ShareCatalogButton({ userId }: { userId: string }) {
     const url = `${window.location.origin}/catalog/${userId}`;
     try {
       if (navigator.share) {
-        await navigator.share({ title: 'Mi catálogo en Lodge Market', url });
+        await navigator.share({ title: 'Mi catálogo en Círculo Market', url });
       } else {
         await navigator.clipboard.writeText(url);
         toast.success('Enlace del catálogo copiado.');

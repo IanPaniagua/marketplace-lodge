@@ -1,7 +1,5 @@
 import { createAdminClient } from './insforge-server';
 
-export const LODGE_SIZE = 40;
-
 export const METRICS_WINDOWS = ['7d', '30d', '90d', 'all'] as const;
 export type MetricsWindow = (typeof METRICS_WINDOWS)[number];
 
@@ -9,10 +7,8 @@ export interface MetricsPayload {
   generatedAt: string;
   window: MetricsWindow;
   windowDays: number | null;
-  adoption: {
-    activeUsers: number;
-    lodgeSize: number;
-    adoptionRate: number;
+  growth: {
+    totalUsers: number;
     newSignupsInWindow: number;
   };
   engagement: {
@@ -72,7 +68,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
   const cutoff7 = cutoffISO(7)!;
   const cutoff30 = cutoffISO(30)!;
 
-  const activeUsersQ = admin.database
+  const totalUsersQ = admin.database
     .from('profiles')
     .select('id')
     .is('deleted_at', null);
@@ -154,7 +150,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     .not('first_approved_at', 'is', null);
 
   const [
-    activeUsersRes,
+    totalUsersRes,
     newSignupsRes,
     wauRes,
     mauRes,
@@ -171,7 +167,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     resolvedReportsRes,
     listingProcessingRes,
   ] = await Promise.all([
-    activeUsersQ,
+    totalUsersQ,
     newSignupsQ,
     wauQ,
     mauQ,
@@ -189,7 +185,7 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     listingProcessingQ,
   ]);
 
-  const activeUsers = (activeUsersRes.data ?? []).length;
+  const totalUsers = (totalUsersRes.data ?? []).length;
   const newSignupsInWindow = (newSignupsRes.data ?? []).length;
   const wau = (wauRes.data ?? []).length;
   const mau = (mauRes.data ?? []).length;
@@ -241,10 +237,8 @@ export async function getMetrics(window: MetricsWindow): Promise<MetricsPayload>
     generatedAt: new Date().toISOString(),
     window,
     windowDays: days,
-    adoption: {
-      activeUsers,
-      lodgeSize: LODGE_SIZE,
-      adoptionRate: activeUsers / LODGE_SIZE,
+    growth: {
+      totalUsers,
       newSignupsInWindow,
     },
     engagement: {

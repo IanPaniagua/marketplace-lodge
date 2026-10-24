@@ -1,4 +1,4 @@
-# Lodge-Marketplace — Architecture & Technical Overview
+# Círculo Market — Architecture & Technical Overview
 
 > Documentación técnica complementaria al MVP. Para la vista de producto ver [mvp-themes-epics.md](mvp-themes-epics.md), para detalle por fase ver [tasks.md](tasks.md), para la spec completa (RLS, edge functions, validaciones) ver [engineering-spec.md](engineering-spec.md).
 
@@ -12,8 +12,8 @@ Schema en PostgreSQL gestionado por Insforge. Todas las tablas viven en `public`
 
 | # | Tabla | Qué guarda |
 |---|---|---|
-| 1 | **profiles** | Datos del residente: `display_name`, `avatar_url`, `bio`, flags `is_admin` / `is_approved`, `deleted_at` (soft-delete). PK = `auth.users.id` (1:1 con el usuario de Auth). |
-| 2 | **listings** | Anuncio: `owner_id`, `title`, `description`, `price_eur` o `is_gift`, `category`, `condition`, `status` (`draft / pending / live / sold / archived`), `rejection_reason`, `first_approved_at` (anti-rebote en re-aprobaciones). |
+| 1 | **profiles** | Datos del usuario: `display_name`, `avatar_url`, `bio`, flags `is_admin` / `is_approved`, `deleted_at` (soft-delete). PK = `auth.users.id` (1:1 con el usuario de Auth). |
+| 2 | **listings** | Anuncio: `owner_id`, `title`, `description`, `price_eur` o `is_gift`, `category`, `condition`, `visibility` (`friends / everyone`), `status` (`draft / pending / live / sold / archived`), `rejection_reason`, `first_approved_at`. |
 | 3 | **listing_photos** | Foto de un listing: `listing_id`, `storage_path`, `sort_order`. 1–5 por listing. Los binarios viven en Storage. |
 | 4 | **conversations** | Chat 1:1 sobre un listing: `listing_id`, `buyer_id`, `seller_id`, `last_message_at`. `UNIQUE(listing_id, buyer_id)` → un chat por (listing, comprador). |
 | 5 | **messages** | Mensaje de chat: `conversation_id`, `sender_id`, `body` (1–2000 chars), `read_at`. Un trigger actualiza `conversations.last_message_at` en cada insert. |
@@ -114,7 +114,7 @@ Implementados con token bucket por usuario en memoria del servidor (suficiente p
 - Creación de listings: 10 / día / usuario
 - Reports: 5 / día / usuario
 
-Si la lodge crece > 200 usuarios, migrar a counter en DB o edge function.
+Antes de escalar horizontalmente, migrar el rate limit a un contador compartido en DB o edge function.
 
 ### Service-role isolation — la regla cero
 
@@ -132,13 +132,13 @@ Lo mismo aplica a `VAPID_PRIVATE_KEY` cuando entre V2.
 lodge-marketplace/
 ├── CLAUDE.md                           # Instrucciones permanentes del proyecto
 ├── README.md                           # Setup, deploy, claim Insforge, push setup
-├── lodge-marketplace-brief.md          # Product brief (el "qué")
+├── product-brief.md                    # Product brief (el "qué" y el "por qué")
 ├── engineering-spec.md                 # Spec técnica (el "cómo") — schema, RLS, libs
 ├── tasks.md                            # Plan por fases con AC/DoD
 ├── mvp-themes-epics.md                 # Vista de producto: 9 epics en 3 themes
 ├── v2-roadmap.md                       # Push notifications + badges (post-MVP)
 ├── architecture.md                     # Este documento
-├── .claude/skills/lodge-marketplace-ui/SKILL.md   # Design system
+├── .agents/skills/circulo-marketplace-ui/SKILL.md # Design system
 ├── public/
 │   ├── manifest.json
 │   ├── sw.js                           # Service worker

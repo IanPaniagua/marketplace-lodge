@@ -27,7 +27,7 @@ type CatalogListing = Pick<
 
 export const dynamic = 'force-dynamic';
 export const metadata = {
-  title: 'Catálogo compartido — Lodge Market',
+  title: 'Catálogo compartido — Círculo Market',
   robots: { index: false, follow: false },
 };
 
@@ -83,11 +83,11 @@ export default async function SharedCatalogPage({ params }: Props) {
     <div className="min-h-dvh bg-background">
       <header className="border-b bg-background">
         <div className="mx-auto flex h-14 w-full max-w-4xl items-center justify-between px-4 md:px-6">
-          <Link href={isSignedIn ? '/' : '/login'} className="text-lg font-semibold tracking-tight">
-            Lodge<span className="text-primary"> Market</span>
+          <Link href={isSignedIn ? '/friends' : '/login'} className="text-lg font-semibold tracking-tight">
+            Círculo<span className="text-primary"> Market</span>
           </Link>
           <Button variant={isSignedIn ? 'outline' : 'default'} size="sm" asChild>
-            <Link href={isSignedIn ? '/' : '/login'}>
+            <Link href={isSignedIn ? '/friends' : '/login'}>
               {isSignedIn ? <Users className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
               {isSignedIn ? 'Mis amigos' : 'Iniciar sesión'}
             </Link>
@@ -157,7 +157,7 @@ export default async function SharedCatalogPage({ params }: Props) {
             <div className="flex gap-3">
               <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">¿Sois amigos en Lodge Market?</p>
+                <p className="text-sm font-medium">¿Sois amigos en Círculo Market?</p>
                 <p className="text-sm text-muted-foreground">Inicia sesión para ver también los productos compartidos solo con amigos.</p>
               </div>
             </div>

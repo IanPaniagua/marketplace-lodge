@@ -5,7 +5,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
       <div className="relative mb-8 text-center">
         <span className="text-3xl font-semibold tracking-tight">
-          Lodge<span className="brand-gradient-text"> Market</span>
+          Círculo<span className="brand-gradient-text"> Market</span>
         </span>
       </div>
       <div className="surface-card relative w-full max-w-sm rounded-2xl p-6 md:p-8">{children}</div>

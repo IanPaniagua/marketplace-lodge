@@ -46,7 +46,7 @@ export default function LoginPage() {
       const requestedPath = new URLSearchParams(window.location.search).get('next');
       const nextPath = requestedPath?.startsWith('/') && !requestedPath.startsWith('//')
         ? requestedPath
-        : '/';
+        : '/friends';
       window.location.href = nextPath;
     } catch (e) {
       console.error('[login] unexpected error', e);

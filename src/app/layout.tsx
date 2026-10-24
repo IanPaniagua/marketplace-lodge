@@ -4,13 +4,13 @@ import ServiceWorkerRegistration from '@/components/shared/ServiceWorkerRegistra
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Lodge Market',
-  description: 'El mercado privado de los residentes de Lodge.',
+  title: 'Círculo Market',
+  description: 'Tu catálogo personal para vender entre amigos o compartir mediante enlace.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Lodge Market',
+    title: 'Círculo Market',
   },
   icons: {
     apple: '/icons/icon-192.png',

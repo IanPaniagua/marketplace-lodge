@@ -1,4 +1,4 @@
-# Lodge-Marketplace — MVP: Themes & Epics
+# Círculo Market — MVP: Themes & Epics
 
 > Vista de producto del MVP actual. Para detalle técnico por fase y acceptance criteria, ver [tasks.md](tasks.md).
 > Para features de la próxima versión (push notifications, badges), ver [v2-roadmap.md](v2-roadmap.md).
@@ -7,7 +7,7 @@
 
 ## Resumen
 
-PWA privada para los ~40 residentes del lodge para comprar, vender y regalar items entre vecinos — moderada, segura, gratis. Solo accesible por invitación + aprobación del admin.
+Marketplace personal para vender, comprar y regalar entre amigos. Cada producto puede limitarse a relaciones aceptadas o abrirse a cualquier persona que reciba el enlace público del catálogo.
 
 **Stack:** Next.js 15 (App Router) · Insforge (DB + Auth + Storage + Realtime + Edge Functions) · shadcn/ui · Tailwind · TypeScript strict · Vercel.
 
@@ -17,7 +17,7 @@ PWA privada para los ~40 residentes del lodge para comprar, vender y regalar ite
 
 El MVP cubre 9 epics agrupados en 3 themes:
 
-### Theme A — Acceso y comunidad cerrada
+### Theme A — Identidad y red de confianza
 - Epic 1: Onboarding & Access
 - Epic 2: Profile Management
 - Epic 8: PWA & Installability
@@ -37,7 +37,7 @@ El MVP cubre 9 epics agrupados en 3 themes:
 ## Epics
 
 ### Epic 1 — Onboarding & Access
-**Goal:** Solo residentes aprobados del lodge pueden entrar a la app.
+**Goal:** Cada persona accede con una identidad propia y construye una red de amigos con acceso controlado.
 
 Features:
 - Signup (email + password + display name) + Login
@@ -48,7 +48,7 @@ Features:
 - Service-role aislado al servidor (nunca en `NEXT_PUBLIC_*`)
 
 ### Epic 2 — Profile Management
-**Goal:** Cada residente tiene un perfil público sin exponer datos privados.
+**Goal:** Cada usuario tiene un catálogo personal sin exponer datos sensibles.
 
 Features:
 - Editar perfil propio: display name, avatar y bio
@@ -58,20 +58,23 @@ Features:
 - TopBar con dropdown de avatar (perfil / logout)
 
 ### Epic 3 — Listings Management
-**Goal:** Un residente aprobado puede vender o regalar cosas dentro del lodge.
+**Goal:** Un usuario puede vender o regalar cualquier tipo de objeto y decidir su audiencia.
 
 Features:
 - `/listings/new`: formulario con multi-foto (1–5), compresión WebP ≤300KB, drag-to-reorder
 - Categorías + condición + precio / "Free" toggle
+- Visibilidad por producto: `friends` o `everyone`
+- Catálogo público mediante enlace que nunca muestra productos limitados a amigos
 - `/listings/[id]`: photo gallery con swipe, seller mini-card, "Message seller"
 - `/listings/[id]/edit`: editar precio/fotos/título revierte status a `pending` automáticamente
 - "Mark as sold" para el dueño
 - Estados: `draft → pending → live → sold/archived`
-- Feed `/` con filtros por categoría + toggle "Free only"
+- Espacio `/friends` para acceder a catálogos de personas conocidas
+- Exploración de productos visibles en `/explore`
 - BottomNav con 4 secciones
 
 ### Epic 4 — Admin Moderation
-**Goal:** Ian (admin) puede moderar listings, usuarios y reportes.
+**Goal:** Un administrador puede moderar listings, usuarios y reportes.
 
 Features:
 - `/admin` shell con tabs: pending users · pending listings · reports · all users · all listings
@@ -95,7 +98,7 @@ Features:
 - Validación: 1–2000 chars con contador cerca del límite
 
 ### Epic 6 — Reporting & Safety
-**Goal:** Los residentes pueden reportar y bloquear; el admin lo resuelve.
+**Goal:** Los usuarios pueden reportar y bloquear; el administrador lo resuelve.
 
 Features:
 - Reportar conversación / usuario / listing
@@ -132,7 +135,7 @@ Features:
 Features:
 - `profiles.last_active_at` actualizado vía middleware (throttle 1/hora/usuario)
 - `/admin/analytics` con 5 secciones de KPIs:
-  - **Adoption:** % del lodge (aprobados / 40), nuevos signups, pendientes
+  - **Growth:** usuarios totales y nuevos registros
   - **Engagement:** WAU, MAU, stickiness (WAU/MAU)
   - **Marketplace:** live listings, sold, median time-to-sold, sell-through rate
   - **Conversation:** convs iniciadas, % listings con ≥1 conv, avg msgs/conv
@@ -147,7 +150,7 @@ Features:
 
 - Push notifications y app badges → ver [v2-roadmap.md](v2-roadmap.md)
 - In-app payments
-- Eventos del lodge / group chats
+- Eventos y chats de grupo
 - Charts, time-series, session replay, error monitoring externo
 - Multi-language
 - Multi-tenant

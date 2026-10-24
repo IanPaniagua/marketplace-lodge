@@ -71,7 +71,7 @@ export default function ServiceWorkerRegistration() {
         >
           <X className="h-4 w-4" />
         </button>
-        <p className="mb-3 text-sm font-medium">Instala Lodge Market en tu dispositivo</p>
+        <p className="mb-3 text-sm font-medium">Instala Círculo Market en tu dispositivo</p>
         <p className="mb-3 text-xs text-muted-foreground">
           Añádela a tu pantalla de inicio para disfrutar de la mejor experiencia.
         </p>
@@ -97,7 +97,7 @@ export default function ServiceWorkerRegistration() {
         >
           <X className="h-4 w-4" />
         </button>
-        <p className="mb-2 text-sm font-medium">Instala Lodge Market en iOS</p>
+        <p className="mb-2 text-sm font-medium">Instala Círculo Market en iOS</p>
         <p className="text-xs text-muted-foreground">
           Pulsa <strong>Compartir</strong> en Safari y elige{' '}
           <strong>Añadir a pantalla de inicio</strong>.

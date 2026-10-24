@@ -1,4 +1,4 @@
-# Lodge-Marketplace — V2 Roadmap
+# Círculo Market — V2 Roadmap
 
 > Features ya implementadas localmente pero **fuera del MVP actual**. Pendientes de commit, review y deploy a producción.
 > Para el alcance del MVP ya en GitHub, ver [mvp-themes-epics.md](mvp-themes-epics.md).
@@ -7,13 +7,13 @@
 
 ## Theme — Engagement & Re-activation
 
-El MVP cubre el flujo dentro de la app. V2 mete la app en la atención del residente cuando no la tiene abierta, para que no pierda mensajes ni listings nuevos relevantes.
+El MVP cubre el flujo dentro de la app. V2 vuelve a activar al usuario cuando no la tiene abierta, para que no pierda mensajes, invitaciones ni productos relevantes de sus amigos.
 
 ---
 
 ### Epic 10 — Push Notifications
 
-**Goal:** Avisar a residentes y admins de eventos relevantes sin tener la app abierta.
+**Goal:** Avisar a usuarios y administradores de eventos relevantes sin tener la app abierta.
 
 Features ya implementadas localmente:
 

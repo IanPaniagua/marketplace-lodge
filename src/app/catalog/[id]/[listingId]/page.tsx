@@ -19,7 +19,7 @@ type CatalogProfile = {
 
 export const dynamic = 'force-dynamic';
 export const metadata = {
-  title: 'Producto compartido — Lodge Market',
+  title: 'Producto compartido — Círculo Market',
   robots: { index: false, follow: false },
 };
 

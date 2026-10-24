@@ -24,7 +24,7 @@ interface TopBarProps {
 }
 
 const desktopNav = [
-  { href: '/', label: 'Amigos', Icon: Users },
+  { href: '/friends', label: 'Amigos', Icon: Users },
   { href: '/explore', label: 'Explorar', Icon: Compass },
   { href: '/listings/new', label: 'Publicar', Icon: PlusSquare },
   { href: '/chats', label: 'Mensajes', Icon: MessageCircle },
@@ -89,13 +89,13 @@ export default function TopBar({ profile, initialPendingCount = 0 }: TopBarProps
   return (
     <header className="sticky top-0 z-40 h-14 border-b border-white/70 bg-background/80 shadow-sm shadow-slate-950/[0.03] backdrop-blur-xl">
       <div className="mx-auto flex h-full max-w-4xl items-center justify-between px-4">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
-          Lodge<span className="brand-gradient-text"> Market</span>
+        <Link href="/friends" className="text-lg font-semibold tracking-tight">
+          Círculo<span className="brand-gradient-text"> Market</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
           {desktopNav.map(({ href, label, Icon }) => {
-            const active = href === '/' ? pathname === '/' : pathname.startsWith(href);
+            const active = pathname.startsWith(href);
             return (
               <Link
                 key={href}

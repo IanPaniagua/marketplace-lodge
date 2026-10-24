@@ -1,19 +1,19 @@
 ---
-name: lodge-marketplace-ui
+name: circulo-marketplace-ui
 description: >
-  Design system for the Lodge-Marketplace PWA. Use this skill whenever creating
+  Design system for the Círculo Market PWA. Use this skill whenever creating
   ANY UI for the app — pages, components, modals, forms, listing cards, chat
   bubbles, profile screens, admin views. Triggers on any frontend work in the
-  lodge-marketplace project: "build a page", "create a component", "style this",
+  Círculo Market project: "build a page", "create a component", "style this",
   "make a screen", or any shadcn/ui or Tailwind work in the repo. Defines the
   blue-to-cyan brand palette, modern mobile-first layout rules,
   typography, spacing scale, component patterns, and shadcn customizations.
   Always load and apply this skill — never default to generic shadcn defaults.
 ---
 
-# Lodge-Marketplace UI System
+# Círculo Market UI System
 
-A modern, clean, mobile-first design system for a private resident marketplace.
+A modern, clean, mobile-first design system for a personal marketplace built around friends and controlled sharing.
 The aesthetic is **fresh, calm, and approachable**: pale blue surfaces and white
 space do the heavy lifting, dark navy handles structure, and the blue-to-cyan
 gradient identifies primary actions and brand moments.
@@ -110,7 +110,7 @@ Apply every rule here without exception across the whole frontend.
 | `bg-background` / `text-foreground` | Default page surface and text |
 | `bg-card` + `border` | Cards, panels, listing tiles |
 | `bg-muted` / `text-muted-foreground` | Secondary surfaces, placeholder text, captions |
-| `brand-gradient` / `brand-gradient-text` | Primary CTAs and the Lodge Market wordmark |
+| `brand-gradient` / `brand-gradient-text` | Primary CTAs and the Círculo Market wordmark |
 | `bg-primary` / `text-primary` | Prices, links, active tab indicator, focus, "FREE" badge background |
 | `border-primary` | Selected / focused state on key elements only |
 | `bg-destructive` | Genuinely destructive actions only: Delete account, Block, Reject listing |

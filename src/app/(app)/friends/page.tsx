@@ -29,7 +29,7 @@ function relationshipState(
   return friendship.requester_id === currentUserId ? 'sent' : 'received';
 }
 
-export const metadata = { title: 'Amigos — Lodge Market' };
+export const metadata = { title: 'Amigos — Círculo Market' };
 
 export default async function FriendsHomePage({ searchParams }: Props) {
   const profile = await getServerProfile();
@@ -240,9 +240,9 @@ export default async function FriendsHomePage({ searchParams }: Props) {
       <section className="space-y-4 border-t pt-6">
         <div>
           <h2 className="text-xl font-semibold tracking-tight">Encontrar personas</h2>
-          <p className="text-sm text-muted-foreground">Busca por el nombre que utilizan en Lodge Market.</p>
+          <p className="text-sm text-muted-foreground">Busca por el nombre que utilizan en Círculo Market.</p>
         </div>
-        <form className="flex gap-2" action="/">
+        <form className="flex gap-2" action="/friends">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input name="q" defaultValue={query} minLength={2} placeholder="Buscar por nombre" className="h-11 pl-9 md:h-10" />

@@ -64,6 +64,10 @@ function redirectToLogin(request: NextRequest) {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // The marketing landing page is public.
+  if (pathname === '/') return NextResponse.next();
+
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   const refresh = request.cookies.get(REFRESH_COOKIE)?.value;
 
@@ -87,7 +91,7 @@ export async function middleware(request: NextRequest) {
 
   // Admin gate for /admin routes
   if (pathname.startsWith('/admin') && !profile.is_admin) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/friends', request.url));
   }
 
   const lastActiveMs = profile.last_active_at ? new Date(profile.last_active_at).getTime() : 0;

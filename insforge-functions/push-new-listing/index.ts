@@ -111,7 +111,7 @@ export default async function handler(req: Request): Promise<Response> {
       .insert(distinctIds.map((uid) => ({ recipient_id: uid, type: 'listing', ref_id: listing.id })));
   }
 
-  const payload = { type: 'listing', title: 'New item on Lodge Market', body: listing.title, url: `/listings/${listing.id}` };
+  const payload = { type: 'listing', title: 'Nuevo producto en Círculo Market', body: listing.title, url: `/listings/${listing.id}` };
   const expired: string[] = [];
   let sent = 0;
   await Promise.all(eligibleSubs.map(async (sub) => {

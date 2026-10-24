@@ -1,4 +1,4 @@
-# Lodge-Marketplace — Task List
+# Círculo Market — Task List
 
 > Phased build plan. Each **phase** is a complete, demoable slice of the app.
 > Do not start phase N+1 until every Acceptance Criterion (AC) and the
@@ -15,9 +15,9 @@ A phase is **Done** only when ALL of the following are true:
 - [ ] TypeScript compiles with **zero errors** (`npx tsc --noEmit`).
 - [ ] ESLint passes with zero errors (`npm run lint`).
 - [ ] The dev server runs without console errors on the affected pages.
-- [ ] All new UI follows the `lodge-marketplace-ui` skill (no exceptions).
+- [ ] All new UI follows the `circulo-marketplace-ui` skill (no exceptions).
 - [ ] No `any` types introduced (use `unknown` + narrow, or define the type).
-- [ ] No hardcoded text outside the supported English copy (no Spanish/German leftovers).
+- [ ] User-facing copy is clear, consistent Spanish unless the surface explicitly requires another language.
 - [ ] Mobile (360px viewport) verified: layout doesn't break, tap targets ≥ 44px.
 - [ ] No secrets committed (`.env.local` in `.gitignore`).
 - [ ] A short summary of what changed is reported to the user.
@@ -35,11 +35,11 @@ If any AC cannot be satisfied, **stop and ask** — don't paper over it.
 2. Provision a trial project via the Insforge `signup` flow. Persist `accessApiKey`, `projectUrl`, `claimUrl`.
 3. Run `npx @insforge/cli link --api-base-url <projectUrl> --api-key <accessApiKey> --template nextjs` to scaffold the app.
 4. `cd` into the scaffolded folder. Move/copy these files into the repo root:
-   - `lodge-marketplace-brief.md`
+   - `product-brief.md`
    - `engineering-spec.md`
    - `tasks.md`
    - `CLAUDE.md`
-   - `.claude/skills/lodge-marketplace-ui/SKILL.md`
+   - `.agents/skills/circulo-marketplace-ui/SKILL.md`
 5. Initialize shadcn/ui: `npx shadcn@latest init` with neutral base. Install: `button input textarea label form card dialog sheet dropdown-menu avatar badge tabs skeleton sonner`.
 6. Replace `app/globals.css` `:root` with the tokens from the UI skill §2.
 7. Configure `tailwind.config.ts` font stack from the UI skill §3.
@@ -100,7 +100,7 @@ Before starting Phase 1, ask the user to claim the Insforge project at the print
 4. Build `/profile/settings` page: change password (Insforge SDK), delete my account button (calls a server route that soft-deletes).
 5. Build the feed page `/(app)/page.tsx`: server component that queries `live` listings ordered by `created_at desc`, with category filter chips and a "Free only" toggle. Empty state component when no listings.
 6. BottomNav with 4 items wired to routes.
-7. TopBar with Lodge logo (text "Lodge." + dot in dark red) and a profile-avatar dropdown linking to `/profile` and Logout.
+7. TopBar with the Círculo Market wordmark and a profile-avatar dropdown linking to `/profile` and Logout.
 
 ### Acceptance Criteria
 - [ ] `/profile` shows current user's data and allows editing all editable fields.
@@ -224,13 +224,13 @@ Before starting Phase 1, ask the user to claim the Insforge project at the print
 ### Tasks
 1. Add `last_active_at timestamptz` + index to `profiles` via Insforge MCP. Update the `Profile` TS type.
 2. Update `src/middleware.ts` to PATCH `profiles.last_active_at` on every authenticated request, throttled to 1 write/hour per user.
-3. Build `src/lib/metrics.ts` with `getMetrics(window)` exposing the KPI payload (adoption, engagement, marketplace, conversation, health). All queries use the service-role admin client.
+3. Build `src/lib/metrics.ts` with `getMetrics(window)` exposing the KPI payload (growth, engagement, marketplace, conversation, health). All queries use the service-role admin client.
 4. Build `src/app/api/admin/metrics/route.ts` (GET, `?window=7d|30d|90d|all`) that verifies `is_admin` and returns the payload.
 5. Build `src/app/(app)/admin/analytics/page.tsx` (Server Component): grid of stat cards grouped into 5 sections, window selector via search params.
 6. Add an "Analytics" entry to `src/app/(app)/admin/page.tsx`.
 
 ### KPIs surfaced
-- **Adoption**: lodge adoption % (approved / 40), new signups in window, pending approvals, approved users.
+- **Growth**: total users and new signups in the selected window.
 - **Engagement**: WAU (7d), MAU (30d), stickiness (WAU/MAU).
 - **Marketplace**: live listings, new listings in window, sold in window, median time-to-sold, sell-through rate.
 - **Conversation**: conversations started in window, % of listings with ≥1 conversation, avg messages per conversation.

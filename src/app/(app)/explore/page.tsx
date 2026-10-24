@@ -101,7 +101,7 @@ function FeedSkeleton() {
   );
 }
 
-export const metadata = { title: 'Explorar — Lodge Market' };
+export const metadata = { title: 'Explorar — Círculo Market' };
 
 export default async function ExplorePage({ searchParams }: Props) {
   const resolvedSearchParams = await searchParams;

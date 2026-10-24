@@ -1,15 +1,15 @@
-# CLAUDE.md — Lodge-Marketplace
+# CLAUDE.md — Círculo Market
 
-You are working on **Lodge-Marketplace**, a private PWA marketplace for the ~40 students living in a student lodge. Read this file in full before doing anything else in this repo.
+You are working on **Círculo Market**, a personal marketplace where people sell among friends and can optionally share individual products through public links. Read this file in full before doing anything else in this repo.
 
 ---
 
 ## Read these first, in this order
 
-1. `lodge-marketplace-brief.md` — what we're building and for whom (the **what**).
+1. `product-brief.md` — what we're building, for whom, and why (the **what**).
 2. `engineering-spec.md` — exact schema, RLS, libraries, file structure (the **how**).
 3. `tasks.md` — phased build plan with Acceptance Criteria and Definition of Done. **This is your roadmap.** Work one phase at a time. Stop after each phase and ask the user to verify.
-4. `.claude/skills/lodge-marketplace-ui/SKILL.md` — the UI design system. Apply on every visual change.
+4. `.agents/skills/circulo-marketplace-ui/SKILL.md` — the UI design system. Apply on every visual change.
 
 If any of these files are missing, **stop and tell the user** — do not improvise.
 
@@ -37,10 +37,10 @@ All backend work goes through the **Insforge MCP**, never raw SQL files run by h
 
 ### Frontend — apply the UI skill
 
-- The skill at `.claude/skills/lodge-marketplace-ui/SKILL.md` is **authoritative** for any UI work.
+- The skill at `.agents/skills/circulo-marketplace-ui/SKILL.md` is **authoritative** for any UI work.
 - Use shadcn/ui primitives. Don't modify them; theme via the CSS variables defined in the skill.
 - Mobile-first: design for 360px, then enhance up.
-- One accent color (dark red `#8B1A1A`). Used sparingly.
+- Preserve the blue-to-cyan brand system defined by the UI skill.
 - No emojis in UI copy unless the user explicitly asks.
 
 ### Code conventions
@@ -62,7 +62,7 @@ All backend work goes through the **Insforge MCP**, never raw SQL files run by h
 3. **Never invent product features.** If `tasks.md` doesn't list it, ask before building it.
 4. **Never paper over a failing AC.** If you can't satisfy an AC, stop, explain why, and propose options.
 5. **Never commit secrets.** Verify `.env.local` is gitignored before any commit.
-6. **English only.** No leftover Spanish/German strings in UI, errors, comments, or commit messages.
+6. **Spanish product copy.** Keep user-facing copy in clear Spanish unless a specific surface requires another language.
 7. **No payments code.** Even scaffolding. Out of scope for V1.
 
 ---

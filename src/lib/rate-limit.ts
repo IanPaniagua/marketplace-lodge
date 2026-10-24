@@ -1,5 +1,5 @@
-// In-memory token bucket per user. Acceptable for ~40 users.
-// If the lodge grows, swap for a DB-backed counter.
+// In-memory token bucket per user. Suitable for the current early-stage traffic.
+// Move to a DB-backed counter before scaling across multiple server instances.
 
 interface Bucket {
   count: number;

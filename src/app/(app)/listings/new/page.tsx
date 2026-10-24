@@ -2,7 +2,7 @@ import { getServerProfile } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import ListingForm from '@/components/listing/ListingForm';
 
-export const metadata = { title: 'Publicar anuncio — Lodge Market' };
+export const metadata = { title: 'Publicar anuncio — Círculo Market' };
 
 export default async function NewListingPage() {
   const profile = await getServerProfile();

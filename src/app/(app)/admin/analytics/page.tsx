@@ -79,7 +79,7 @@ interface PageProps {
 
 export default async function AnalyticsPage({ searchParams }: PageProps) {
   const profile = await getServerProfile();
-  if (!profile?.is_admin) redirect('/');
+  if (!profile?.is_admin) redirect('/friends');
 
   const params = await searchParams;
   const window = parseWindow(params.window);
@@ -122,16 +122,15 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       </nav>
 
       <section className="space-y-3">
-        <SectionHeader title="Adopción" />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <SectionHeader title="Crecimiento" />
+        <div className="grid grid-cols-2 gap-3">
           <Stat
-            label="Adopción en Lodge"
-            value={formatPct(m.adoption.adoptionRate)}
-            sub={`${m.adoption.activeUsers} de ${m.adoption.lodgeSize}`}
+            label="Usuarios totales"
+            value={formatInt(m.growth.totalUsers)}
+            sub="cuentas disponibles"
             accent
           />
-          <Stat label="Nuevos registros" value={formatInt(m.adoption.newSignupsInWindow)} sub={windowSuffix} />
-          <Stat label="Perfiles activos" value={formatInt(m.adoption.activeUsers)} sub="cuentas disponibles" />
+          <Stat label="Nuevos registros" value={formatInt(m.growth.newSignupsInWindow)} sub={windowSuffix} />
         </div>
       </section>
 

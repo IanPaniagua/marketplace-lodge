@@ -22,7 +22,7 @@ type CatalogListing = Pick<
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
-  return { title: `Catálogo ${id} — Lodge Market` };
+  return { title: `Catálogo ${id} — Círculo Market` };
 }
 
 export default async function FriendCatalogPage({ params }: Props) {
