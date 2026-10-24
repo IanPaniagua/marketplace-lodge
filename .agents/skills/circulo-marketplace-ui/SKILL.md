@@ -341,7 +341,7 @@ These muted semantic colors are the **only** exception to the "no other colors" 
 - Theme color in manifest: `#0F172A` (dark navy, matching `--foreground`).
 - Background color in manifest: `#FFFFFF`.
 - Status bar style on iOS: `default`.
-- App icon: brand-blue background, white "L." monogram, optional cyan accent dot.
+- App icon: brand-blue background, white "C" monogram, optional cyan accent dot.
 - Splash screen: white background, centered logo.
 
 ---

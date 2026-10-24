@@ -1,13 +1,10 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
-import type { LucideIcon } from 'lucide-react';
 import {
   ArrowRight,
-  Armchair,
-  BookOpen,
   Check,
-  LampDesk,
-  Leaf,
+  LockKeyhole,
   MessageCircle,
   ShieldCheck,
   Sparkles,
@@ -25,19 +22,6 @@ export const metadata: Metadata = {
     type: 'website',
   },
 };
-
-const listings: Array<{
-  title: string;
-  price: string;
-  owner: string;
-  Icon: LucideIcon;
-  featured?: boolean;
-}> = [
-  { title: 'Lámpara de escritorio', price: '12 €', owner: 'Marta', Icon: LampDesk },
-  { title: 'Sillón de lectura', price: 'Gratis', owner: 'Leo', Icon: Armchair, featured: true },
-  { title: 'Pack de novelas', price: '8 €', owner: 'Sofía', Icon: BookOpen },
-  { title: 'Planta con maceta', price: '5 €', owner: 'Álex', Icon: Leaf },
-];
 
 const steps = [
   {
@@ -135,50 +119,24 @@ export default function LandingPage() {
           </div>
 
           <div className="relative mx-auto w-full max-w-xl lg:mx-0">
-            <div className="absolute -left-3 top-14 hidden rounded-lg border bg-card px-3 py-2 shadow-md sm:block lg:-left-8">
-              <p className="text-xs text-muted-foreground">Visibilidad</p>
-              <p className="text-sm font-medium text-foreground">Solo amigos</p>
-            </div>
-
-            <div className="surface-card relative overflow-hidden rounded-[1.25rem] p-3 sm:p-5">
-              <div className="mb-4 flex items-center justify-between px-1">
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Catálogo de Ana</p>
-                  <h2 className="mt-1 text-lg font-semibold tracking-tight">Lo que estoy vendiendo</h2>
-                </div>
-                <div className="flex -space-x-2" aria-label="Tres amigos con acceso">
-                  {['M', 'L', 'S'].map((letter, index) => (
-                    <span
-                      key={letter}
-                      className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-card bg-muted text-xs font-medium text-muted-foreground"
-                      style={{ zIndex: 3 - index }}
-                    >
-                      {letter}
-                    </span>
-                  ))}
-                </div>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] border bg-muted shadow-xl sm:aspect-[5/4]">
+              <Image
+                src="/images/landing/friends-lamp-handoff.jpg"
+                alt="Tres amigos compartiendo una lámpara en casa"
+                fill
+                priority
+                unoptimized
+                sizes="(min-width: 1024px) 560px, (min-width: 640px) 80vw, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-slate-950/55 to-transparent" />
+              <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md border border-white/60 bg-white/90 px-2.5 py-1.5 text-xs font-medium text-primary shadow-sm backdrop-blur sm:left-4 sm:top-4">
+                <LockKeyhole className="h-3.5 w-3.5" />
+                Compartido solo con amigos
               </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                {listings.map(({ title, price, owner, Icon, featured }) => (
-                  <article key={title} className="overflow-hidden rounded-lg border bg-card shadow-sm">
-                    <div className="relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-primary/10 to-cyan-400/10">
-                      <Icon className="h-10 w-10 text-primary/70 sm:h-12 sm:w-12" strokeWidth={1.6} />
-                      {featured && (
-                        <span className="brand-gradient absolute left-2 top-2 rounded-md px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
-                          GRATIS
-                        </span>
-                      )}
-                    </div>
-                    <div className="space-y-1 p-3">
-                      <h3 className="truncate text-sm font-medium">{title}</h3>
-                      <div className="flex items-end justify-between gap-2">
-                        <p className="text-sm font-semibold tabular-nums text-primary">{price}</p>
-                        <p className="text-[10px] text-muted-foreground">{owner}</p>
-                      </div>
-                    </div>
-                  </article>
-                ))}
+              <div className="absolute bottom-4 left-4 right-4 text-white sm:bottom-5 sm:left-5">
+                <p className="text-xs font-medium uppercase tracking-wider text-white/70">De Marta para Ana</p>
+                <p className="mt-1 max-w-sm text-lg font-semibold tracking-tight sm:text-xl">Una lámpara con historia encuentra otra casa.</p>
               </div>
             </div>
 
@@ -187,7 +145,7 @@ export default function LandingPage() {
                 <MessageCircle className="h-4 w-4" />
               </span>
               <div>
-                <p className="text-xs font-medium">¡Me interesa!</p>
+                <p className="text-xs font-medium">Ana: Me encanta, me la quedo</p>
                 <p className="text-[10px] text-muted-foreground">Conversación privada</p>
               </div>
             </div>
@@ -225,22 +183,19 @@ export default function LandingPage() {
       <section id="comunidad" className="py-20 sm:py-28">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8">
           <div className="relative order-2 lg:order-1">
-            <div className="overflow-hidden rounded-[1.25rem] bg-foreground p-7 text-background shadow-xl sm:p-10">
-              <p className="text-sm text-background/60">Dos formas de compartir. Siempre bajo tu control.</p>
-              <div className="mt-8 grid grid-cols-2 gap-6">
-                <div>
-                  <p className="text-2xl font-semibold tracking-tight">Amigos</p>
-                  <p className="mt-2 text-sm leading-6 text-background/60">Solo las personas que aceptes ven tus productos privados.</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold tracking-tight">Enlace público</p>
-                  <p className="mt-2 text-sm leading-6 text-background/60">Abre un producto y compártelo fuera de tu círculo cuando te convenga.</p>
-                </div>
-              </div>
-              <div className="mt-9 border-t border-background/15 pt-6">
-                <p className="max-w-md text-base leading-7 text-background/80">
-                  “No todo lo que vendes necesita acabar delante de miles de desconocidos.”
-                </p>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] border bg-muted shadow-xl">
+              <Image
+                src="/images/landing/friends-browsing-together.jpg"
+                alt="Un grupo de amigos compartiendo libros, ropa y una cámara"
+                fill
+                unoptimized
+                sizes="(min-width: 1024px) 520px, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-950/70 to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 text-white sm:bottom-7 sm:left-7">
+                <p className="text-xs font-medium uppercase tracking-wider text-white/70">Lo bueno empieza cerca</p>
+                <p className="mt-1 max-w-md text-xl font-semibold tracking-tight sm:text-2xl">Cosas que cambian de manos. Historias que siguen en el círculo.</p>
               </div>
             </div>
             <div className="brand-gradient absolute -bottom-3 -left-3 h-20 w-20 rounded-lg opacity-20 blur-xl" />
@@ -252,6 +207,18 @@ export default function LandingPage() {
             <p className="mt-5 text-base leading-7 text-muted-foreground">
               Las plataformas masivas te obligan a vender a desconocidos. Círculo Market pone primero tus relaciones: tu perfil funciona como un pequeño escaparate que puedes compartir con amigos, familia, compañeros o grupos privados.
             </p>
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-lg border bg-card p-4">
+                <LockKeyhole className="h-5 w-5 text-primary" />
+                <h3 className="mt-3 text-base font-medium">Solo amigos</h3>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">Las personas que aceptes ven tu catálogo privado.</p>
+              </div>
+              <div className="rounded-lg border bg-card p-4">
+                <Users className="h-5 w-5 text-primary" />
+                <h3 className="mt-3 text-base font-medium">Con enlace</h3>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">Abre solo el producto que quieras compartir fuera.</p>
+              </div>
+            </div>
             <ul className="mt-7 space-y-4">
               {[
                 'Vende ropa, muebles, tecnología, libros o cualquier otra cosa.',
@@ -272,25 +239,35 @@ export default function LandingPage() {
 
       <section id="seguridad" className="pb-20 sm:pb-28">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 rounded-[1.25rem] border bg-card p-7 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:p-12">
-            <div>
+          <div className="grid overflow-hidden rounded-[1.25rem] border bg-card lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+            <div className="relative min-h-80 bg-muted lg:min-h-[30rem]">
+              <Image
+                src="/images/landing/friends-trusted-handoff.jpg"
+                alt="Dos amigas intercambiando un casco de bicicleta con confianza"
+                fill
+                unoptimized
+                sizes="(min-width: 1024px) 480px, 100vw"
+                className="object-cover object-center"
+              />
+            </div>
+            <div className="p-7 sm:p-10 lg:flex lg:flex-col lg:justify-center lg:p-12">
               <span className="flex h-11 w-11 items-center justify-center rounded-md bg-primary/10 text-primary">
                 <ShieldCheck className="h-6 w-6" />
               </span>
-              <h2 className="mt-5 text-2xl font-semibold tracking-tight sm:text-3xl">Privacidad que se entiende.</h2>
-            </div>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <h3 className="text-base font-medium">Tu círculo, tus decisiones</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Acepta a tus amigos y reserva para ellos los productos que no quieres publicar fuera.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-base font-medium">Público cuando tú quieras</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Cada producto puede abrirse mediante enlace sin convertir todo tu perfil en público.
-                </p>
+              <p className="mt-6 text-xs font-medium uppercase tracking-wider text-primary">La confianza cambia la experiencia</p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">Vender se siente distinto cuando sabes quién está al otro lado.</h2>
+              <p className="mt-4 text-base leading-7 text-muted-foreground">
+                Tú decides si algo se queda entre amigos o viaja más lejos mediante un enlace. Sin exponer todo tu catálogo y sin perder el control.
+              </p>
+              <div className="mt-7 grid gap-5 border-t pt-7 sm:grid-cols-2">
+                <div>
+                  <h3 className="text-base font-medium">Tu círculo, tus decisiones</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">Acepta a tus amigos y reserva para ellos lo que prefieras mantener cerca.</p>
+                </div>
+                <div>
+                  <h3 className="text-base font-medium">Público cuando tú quieras</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">Comparte una pieza concreta sin convertir todo tu perfil en público.</p>
+                </div>
               </div>
             </div>
           </div>
